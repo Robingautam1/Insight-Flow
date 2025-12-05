@@ -1,0 +1,8 @@
+Date,Order ID,Customer,Amount,Status,Channel,Category
+2024-12-01,ORD-9001,Wayne Enterprises,15000,Paid,Website,Electronics
+2024-12-02,ORD-9002,Stark Industries,25000,Paid,Marketplace,Electronics
+2024-12-03,ORD-9003,Acme Corp,5000,Pending,Offline,Office
+2024-12-04,ORD-9004,Cyberdyne Systems,12000,Paid,Website,Software
+2024-12-05,ORD-9005,Massive Dynamic,8000,Refunded,Mobile App,Services
+2024-11-28,ORD-9006,Hooli,45000,Paid,Website,Server
+2024-11-25,ORD-9007,Pied Piper,200,Paid,Mobile App,Software

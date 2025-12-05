@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - InsightFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo logo">
+                <i data-feather="activity"></i>
+                Insight<span>Flow</span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="dashboard.html" class="sidebar-item">
+                    <i data-feather="grid"></i> Dashboard
+                </a>
+                <a href="analytics.html" class="sidebar-item active">
+                    <i data-feather="bar-chart-2"></i> Analytics
+                </a>
+                <a href="data.html" class="sidebar-item">
+                    <i data-feather="database"></i> Data Sources
+                </a>
+                <a href="settings.html" class="sidebar-item">
+                    <i data-feather="settings"></i> Settings
+                </a>
+                <a href="support.html" class="sidebar-item">
+                    <i data-feather="help-circle"></i> Support
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 class="text-xl font-bold">Analytics & Reports</h2>
+                <div class="flex items-center gap-lg">
+                    <div class="user-menu">
+                        <div class="avatar">JD</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Saved Reports -->
+            <section class="mb-8">
+                <h3 class="text-lg font-bold mb-4">Saved Reports</h3>
+                <div class="grid grid-cols-3 gap-md">
+                    <div class="card flex flex-col gap-sm">
+                        <div class="flex justify-between items-start">
+                            <div class="p-2 bg-primary-light text-primary rounded"><i data-feather="file-text"></i>
+                            </div>
+                            <button class="icon-btn"><i data-feather="more-vertical"></i></button>
+                        </div>
+                        <h4 class="font-bold">Q4 Revenue Analysis</h4>
+                        <p class="text-sm text-muted">Last updated 2 days ago</p>
+                    </div>
+                    <div class="card flex flex-col gap-sm">
+                        <div class="flex justify-between items-start">
+                            <div class="p-2 bg-primary-light text-primary rounded"><i data-feather="users"></i></div>
+                            <button class="icon-btn"><i data-feather="more-vertical"></i></button>
+                        </div>
+                        <h4 class="font-bold">Customer Retention 2024</h4>
+                        <p class="text-sm text-muted">Last updated 1 week ago</p>
+                    </div>
+                    <div class="card flex justify-center items-center border-dashed"
+                        style="border-style: dashed; background: transparent; cursor: pointer;">
+                        <div class="text-center text-muted">
+                            <i data-feather="plus" class="mb-2"></i>
+                            <p>Create New Report</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Analysis -->
+            <section>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold">Deep Dive</h3>
+                    <div class="flex gap-sm">
+                        <button class="btn btn-secondary btn-sm"><i data-feather="calendar"></i> This Year</button>
+                        <button class="btn btn-secondary btn-sm"><i data-feather="filter"></i> Filter</button>
+                    </div>
+                </div>
+
+                <div class="card mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h4 class="font-bold">Revenue vs Orders</h4>
+                        <div class="flex gap-sm text-sm">
+                            <span class="flex items-center gap-xs"><span
+                                    style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%;"></span>
+                                Revenue</span>
+                            <span class="flex items-center gap-xs"><span
+                                    style="width: 8px; height: 8px; background: var(--success); border-radius: 50%;"></span>
+                                Orders</span>
+                        </div>
+                    </div>
+                    <div style="height: 300px; width: 100%;">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-lg">
+                    <div class="card">
+                        <h4 class="font-bold mb-4">Cohort Retention</h4>
+                        <!-- Simplified Cohort Table Visualization -->
+                        <div style="overflow-x: auto;">
+                            <table class="w-full text-sm" style="width: 100%; text-align: center;">
+                                <thead>
+                                    <tr class="text-muted">
+                                        <th class="text-left p-2">Cohort</th>
+                                        <th class="p-2">Month 1</th>
+                                        <th class="p-2">Month 2</th>
+                                        <th class="p-2">Month 3</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-left p-2 font-medium">Oct 2024</td>
+                                        <td class="p-2 bg-primary text-white rounded">100%</td>
+                                        <td class="p-2 bg-primary-light text-primary rounded">65%</td>
+                                        <td class="p-2 bg-primary-light text-primary rounded" style="opacity: 0.7;">45%
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left p-2 font-medium">Nov 2024</td>
+                                        <td class="p-2 bg-primary text-white rounded">100%</td>
+                                        <td class="p-2 bg-primary-light text-primary rounded">68%</td>
+                                        <td class="p-2 text-muted">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left p-2 font-medium">Dec 2024</td>
+                                        <td class="p-2 bg-primary text-white rounded">100%</td>
+                                        <td class="p-2 text-muted">-</td>
+                                        <td class="p-2 text-muted">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h4 class="font-bold mb-4">Summary</h4>
+                        <p class="text-muted mb-4">
+                            Your retention rates have improved by <strong>3%</strong> in the last quarter.
+                            The November cohort is showing particularly strong engagement, likely due to the Black
+                            Friday campaign.
+                        </p>
+                        <div class="p-4 bg-bg-body rounded border border-border">
+                            <h5 class="font-bold text-sm mb-2">Recommendation</h5>
+                            <p class="text-sm text-muted">Consider extending the "Welcome Back" email sequence to the
+                                October cohort to boost Month 3 retention.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+
+</html>

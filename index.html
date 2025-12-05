@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsightFlow - Make sense of your business</title>
+    <meta name="description"
+        content="InsightFlow pulls your scattered business data into a simple dashboard you actually want to open.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Chart.js for the dashboard preview if needed, though mostly for app pages -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i data-feather="activity"></i>
+                Insight<span>Flow</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#use-cases" class="nav-link">Use Cases</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="dashboard.html" class="nav-link">Log In</a>
+                <a href="dashboard.html" class="btn btn-primary btn-sm">Get Started</a>
+            </div>
+            <!-- Mobile Menu Button (Hidden on Desktop) -->
+            <button class="icon-btn mobile-menu-btn" style="display: none;">
+                <i data-feather="menu"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="container hero-section">
+        <div class="hero-content">
+            <h1>All your key numbers in one clean view.</h1>
+            <p>InsightFlow pulls your scattered business data into a simple dashboard you actually want to open. No more
+                spreadsheet chaos.</p>
+            <div class="flex gap-md hero-buttons">
+                <a href="dashboard.html" class="btn btn-primary">View Live Demo</a>
+                <a href="#features" class="btn btn-secondary">Explore Features</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <!-- Placeholder for dashboard preview - using a div that looks like a browser window -->
+            <div
+                style="background: #f1f5f9; padding: 1rem; border-bottom: 1px solid #e2e8f0; display: flex; gap: 0.5rem; align-items: center;">
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: #ef4444;"></div>
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: #f59e0b;"></div>
+                <div style="width: 12px; height: 12px; border-radius: 50%; background: #10b981;"></div>
+                <div
+                    style="background: white; flex: 1; margin-left: 1rem; height: 24px; border-radius: 4px; border: 1px solid #e2e8f0;">
+                </div>
+            </div>
+            <img src="https://placehold.co/800x500/f8fafc/cbd5e1?text=Dashboard+Preview" alt="Dashboard Preview"
+                id="hero-dashboard-img">
+        </div>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="section" style="background-color: var(--bg-surface);">
+        <div class="container">
+            <div class="section-title">
+                <h2>Why InsightFlow?</h2>
+                <p>Everything you need to run your business with confidence.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-feather="trending-up"></i>
+                    </div>
+                    <h3>Revenue Tracking</h3>
+                    <p class="text-muted">Stay on top of revenue and cash flow with real-time updates from all your
+                        channels.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-feather="users"></i>
+                    </div>
+                    <h3>Customer Insights</h3>
+                    <p class="text-muted">Track orders, customer retention, and lifetime value in one unified place.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i data-feather="alert-circle"></i>
+                    </div>
+                    <h3>Smart Alerts</h3>
+                    <p class="text-muted">Spot trends before they become problems with automated anomaly detection.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Use Cases -->
+    <section id="use-cases" class="section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Built for every role</h2>
+                <p>Whether you're leading the ship or steering a department.</p>
+            </div>
+            <div class="grid grid-cols-3 gap-lg">
+                <div class="card">
+                    <h3 class="text-xl font-bold mb-2">For Founders</h3>
+                    <p class="text-muted">Get the bird's eye view. Wake up, check one dashboard, and know exactly how
+                        your business is performing without nagging your team.</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-bold mb-2">For Operations</h3>
+                    <p class="text-muted">Monitor order fulfillment, refund rates, and inventory velocity. Catch
+                        bottlenecks early and keep the engine running smooth.</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-xl font-bold mb-2">For Marketing</h3>
+                    <p class="text-muted">See which channels are actually driving revenue. Stop guessing with
+                        attribution and start doubling down on what works.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section" style="background-color: var(--bg-surface);">
+        <div class="container">
+            <div class="section-title">
+                <h2>Simple, transparent pricing</h2>
+                <p>Start small and scale as you grow.</p>
+            </div>
+            <div class="grid grid-cols-3 gap-lg">
+                <!-- Starter -->
+                <div class="card flex flex-col">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-medium">Starter</h3>
+                        <div class="text-3xl font-bold mt-2">$29<span class="text-sm text-muted font-normal">/mo</span>
+                        </div>
+                    </div>
+                    <ul class="flex-1 flex flex-col gap-sm mb-6 text-muted">
+                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
+                                style="width: 16px;"></i> 1 User</li>
+                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
+                                style="width: 16px;"></i> 3 Data Sources</li>
+                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
+                                style="width: 16px;"></i> Basic Support</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Start Free Trial</a>
+                </div>
+                <!-- Growth -->
+                <div class="card flex flex-col" style="border-color: var(--primary); box-shadow: var(--shadow-md);">
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-primary">Growth</h3>
+                            <span class="badge badge-success">Popular</span>
+                        </div>
+                        <div class="text-3xl font-bold mt-2">$79<span class="text-sm text-muted font-normal">/mo</span>
+                        </div>
+                    </div>
+                    <ul class="flex-1 flex flex-col gap-sm mb-6 text-muted">
+                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
+                                style="width: 16px;"></i> 5 Users</li>
+                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
+                                style="width: 16px;"></i> Unlimited Sources</li>
+                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
+                                style="width: 16px;"></i> Priority Support</li>
+                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
+                                style="width: 16px;"></i> Advanced Analytics</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary">Start Free Trial</a>
+                </div>
+                <!-- Business -->
+                <div class="card flex flex-col">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-medium">Business</h3>
+                        <div class="text-3xl font-bold mt-2">$199<span class="text-sm text-muted font-normal">/mo</span>
+                        </div>
+                    </div>
+                    <ul class="flex-1 flex flex-col gap-sm mb-6 text-muted">
+                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
+                                style="width: 16px;"></i> Unlimited Users</li>
+                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
+                                style="width: 16px;"></i> Custom Integrations</li>
+                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
+                                style="width: 16px;"></i> Dedicated Manager</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary">Contact Sales</a>
+                </div>
+            </div>
+            <p class="text-center text-muted text-sm mt-6">Note: This is a demo product for showcasing the interface.
+            </p>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+        <div class="container" style="max-width: 800px;">
+            <div class="section-title">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="flex flex-col gap-md">
+                <div class="card">
+                    <h4 class="font-bold mb-2">Is my data secure?</h4>
+                    <p class="text-muted">Absolutely. We use bank-level encryption (AES-256) for all data at rest and in
+                        transit. We never sell your data.</p>
+                </div>
+                <div class="card">
+                    <h4 class="font-bold mb-2">Can I connect my own database?</h4>
+                    <p class="text-muted">Yes, on the Business plan you can connect directly to PostgreSQL, MySQL, and
+                        BigQuery.</p>
+                </div>
+                <div class="card">
+                    <h4 class="font-bold mb-2">Is there a mobile app?</h4>
+                    <p class="text-muted">InsightFlow is fully responsive and works perfectly on your phone's browser. A
+                        dedicated native app is coming soon.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+        style="background-color: var(--bg-surface); border-top: 1px solid var(--border); padding: var(--spacing-2xl) 0;">
+        <div class="container">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-lg">
+                <div class="logo">
+                    <i data-feather="activity"></i>
+                    Insight<span>Flow</span>
+                </div>
+                <div class="flex gap-lg text-muted text-sm">
+                    <a href="#">About</a>
+                    <a href="#">Contact</a>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms</a>
+                </div>
+                <div class="text-muted text-sm">
+                    &copy; 2025 InsightFlow. All rights reserved.
+                </div>
+            </div>
+            <div class="text-center mt-8 text-xs text-light">
+                InsightFlow is a demo project created to showcase dashboard design.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        feather.replace();
+
+        // Simple script to inject a better looking dashboard image if we had one, 
+        // or we can generate one with the generate_image tool later if requested.
+        // For now, the placeholder is fine.
+    </script>
+</body>
+
+</html>

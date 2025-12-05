@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - InsightFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+
+<body>
+    <div class="app-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo logo">
+                <i data-feather="activity"></i>
+                Insight<span>Flow</span>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="dashboard.html" class="sidebar-item active">
+                    <i data-feather="grid"></i>
+                    Dashboard
+                </a>
+                <a href="analytics.html" class="sidebar-item">
+                    <i data-feather="bar-chart-2"></i>
+                    Analytics
+                </a>
+                <a href="data.html" class="sidebar-item">
+                    <i data-feather="database"></i>
+                    Data Sources
+                </a>
+                <a href="settings.html" class="sidebar-item">
+                    <i data-feather="settings"></i>
+                    Settings
+                </a>
+                <a href="support.html" class="sidebar-item">
+                    <i data-feather="help-circle"></i>
+                    Support
+                </a>
+            </nav>
+
+            <div class="mt-auto">
+                <div class="card" style="padding: 1rem; background-color: var(--bg-body); border: none;">
+                    <h5 class="font-bold mb-1">Pro Plan</h5>
+                    <p class="text-xs text-muted mb-2">You have 12 days left in your trial.</p>
+                    <button class="btn btn-primary btn-sm w-full"
+                        style="width: 100%; font-size: 0.8rem;">Upgrade</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="flex items-center gap-md">
+                    <button class="icon-btn" id="sidebar-toggle" style="display: none;">
+                        <i data-feather="menu"></i>
+                    </button>
+                    <h2 class="text-xl font-bold">Dashboard</h2>
+                </div>
+
+                <div class="flex items-center gap-lg">
+                    <div class="search-bar">
+                        <i data-feather="search" class="search-icon"></i>
+                        <input type="text" class="search-input" placeholder="Search...">
+                    </div>
+                    <div class="user-menu">
+                        <button class="icon-btn relative">
+                            <i data-feather="bell"></i>
+                            <span
+                                style="position: absolute; top: 5px; right: 5px; width: 8px; height: 8px; background: var(--danger); border-radius: 50%;"></span>
+                        </button>
+                        <div class="avatar">JD</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Filters -->
+            <div class="flex justify-between items-center mb-6 flex-wrap gap-md">
+                <div class="flex gap-sm">
+                    <button class="btn btn-secondary btn-sm filter-btn active" data-range="7d">7 days</button>
+                    <button class="btn btn-secondary btn-sm filter-btn" data-range="30d">30 days</button>
+                    <button class="btn btn-secondary btn-sm filter-btn" data-range="90d">90 days</button>
+                    <button class="btn btn-secondary btn-sm filter-btn" data-range="1y">1 year</button>
+                </div>
+                <div class="flex gap-sm">
+                    <select class="btn btn-secondary btn-sm" style="padding-right: 2rem;">
+                        <option>All Regions</option>
+                        <option>North</option>
+                        <option>South</option>
+                    </select>
+                    <button class="btn btn-primary btn-sm" id="export-btn">
+                        <i data-feather="download"></i> Export
+                    </button>
+                    <button class="btn btn-secondary btn-sm"
+                        onclick="document.getElementById('add-transaction-modal').style.display = 'flex'">
+                        <i data-feather="plus"></i> Add
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI Grid -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Total Revenue</div>
+                    <div class="kpi-value" id="kpi-revenue">₹12,45,000</div>
+                    <div class="kpi-trend trend-up">
+                        <i data-feather="arrow-up-right" style="width: 16px; height: 16px;"></i>
+                        <span>14% vs last month</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Active Customers</div>
+                    <div class="kpi-value" id="kpi-customers">1,240</div>
+                    <div class="kpi-trend trend-up">
+                        <i data-feather="arrow-up-right" style="width: 16px; height: 16px;"></i>
+                        <span>5% vs last month</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">New Orders</div>
+                    <div class="kpi-value" id="kpi-orders">356</div>
+                    <div class="kpi-trend trend-down">
+                        <i data-feather="arrow-down-right" style="width: 16px; height: 16px;"></i>
+                        <span>2% vs last month</span>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Refund Rate</div>
+                    <div class="kpi-value" id="kpi-refund">2.4%</div>
+                    <div class="kpi-trend trend-down" style="color: var(--text-muted);">
+                        <span>Stable</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="font-bold">Revenue Over Time</h3>
+                        <button class="icon-btn"><i data-feather="more-horizontal"></i></button>
+                    </div>
+                    <div style="flex: 1; position: relative;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <h3 class="font-bold">Orders by Channel</h3>
+                    </div>
+                    <div style="flex: 1; position: relative;">
+                        <canvas id="channelChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section: Table & Insights -->
+            <div class="grid grid-cols-3 gap-lg" style="grid-template-columns: 2fr 1fr;">
+                <!-- Recent Transactions -->
+                <div class="table-container" style="grid-column: span 2;">
+                    <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border);">
+                        <h3 class="font-bold">Recent Transactions</h3>
+                        <a href="#" class="text-primary text-sm font-medium">View All</a>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Insights Panel -->
+                <div class="flex flex-col gap-md">
+                    <div class="card bg-primary-light"
+                        style="background: linear-gradient(135deg, var(--bg-surface) 0%, var(--primary-light) 100%);">
+                        <div class="flex items-center gap-sm mb-3">
+                            <div style="padding: 6px; background: var(--primary); border-radius: 50%; color: white;">
+                                <i data-feather="zap" style="width: 16px; height: 16px;"></i>
+                            </div>
+                            <h3 class="font-bold">Smart Insights</h3>
+                        </div>
+                        <ul class="flex flex-col gap-md text-sm">
+                            <li class="flex gap-sm">
+                                <span class="text-success">●</span>
+                                <span>Revenue is up <strong>14%</strong> compared to the same period last month. Great
+                                    job!</span>
+                            </li>
+                            <li class="flex gap-sm">
+                                <span class="text-warning">●</span>
+                                <span>Refund rate for "Classic Hoodie" is slightly higher (5%) than average.</span>
+                            </li>
+                            <li class="flex gap-sm">
+                                <span class="text-primary">●</span>
+                                <span>Top performing channel this week: <strong>Instagram Ads</strong>.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="font-bold mb-3">Product Breakdown</h3>
+                        <div style="height: 200px; position: relative;">
+                            <canvas id="productChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Add Transaction Modal -->
+    <div id="add-transaction-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center;">
+        <div class="card" style="width: 400px; max-width: 90%;">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">Add Transaction</h3>
+                <button class="icon-btn"
+                    onclick="document.getElementById('add-transaction-modal').style.display = 'none'"><i
+                        data-feather="x"></i></button>
+            </div>
+            <form id="add-transaction-form">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Customer Name</label>
+                    <input type="text" name="customer" required class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Amount</label>
+                    <input type="number" name="amount" required class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Date</label>
+                    <input type="date" name="date" required class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Status</label>
+                    <select name="status" class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: white;">
+                        <option value="Paid">Paid</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Refunded">Refunded</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1">Channel</label>
+                    <select name="channel" class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: white;">
+                        <option value="Website">Website</option>
+                        <option value="Mobile App">Mobile App</option>
+                        <option value="Marketplace">Marketplace</option>
+                        <option value="Offline">Offline</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-full" style="width: 100%;">Add Transaction</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        feather.replace();
+    </script>
+</body>
+
+</html>

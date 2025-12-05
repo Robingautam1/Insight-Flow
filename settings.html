@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - InsightFlow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--bg-surface);
+            color: var(--text-main);
+        }
+
+        .form-input:focus {
+            outline: 2px solid var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--primary);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-logo logo">
+                <i data-feather="activity"></i>
+                Insight<span>Flow</span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="dashboard.html" class="sidebar-item">
+                    <i data-feather="grid"></i> Dashboard
+                </a>
+                <a href="analytics.html" class="sidebar-item">
+                    <i data-feather="bar-chart-2"></i> Analytics
+                </a>
+                <a href="data.html" class="sidebar-item">
+                    <i data-feather="database"></i> Data Sources
+                </a>
+                <a href="settings.html" class="sidebar-item active">
+                    <i data-feather="settings"></i> Settings
+                </a>
+                <a href="support.html" class="sidebar-item">
+                    <i data-feather="help-circle"></i> Support
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 class="text-xl font-bold">Settings</h2>
+                <div class="flex items-center gap-lg">
+                    <div class="user-menu">
+                        <div class="avatar">JD</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-3 gap-lg" style="grid-template-columns: 1fr 2fr;">
+                <!-- Settings Nav -->
+                <div class="flex flex-col gap-sm">
+                    <div class="card p-0 overflow-hidden">
+                        <div class="p-4 border-b" style="border-color: var(--border);">
+                            <h4 class="font-bold">Preferences</h4>
+                        </div>
+                        <div class="flex flex-col" id="settings-nav">
+                            <button
+                                class="text-left p-3 hover:bg-bg-body text-primary font-medium border-l-4 border-primary bg-primary-light nav-item"
+                                data-tab="profile">Profile</button>
+                            <button
+                                class="text-left p-3 hover:bg-bg-body text-muted border-l-4 border-transparent nav-item"
+                                data-tab="workspace">Workspace</button>
+                            <button
+                                class="text-left p-3 hover:bg-bg-body text-muted border-l-4 border-transparent nav-item"
+                                data-tab="team">Team Members</button>
+                            <button
+                                class="text-left p-3 hover:bg-bg-body text-muted border-l-4 border-transparent nav-item"
+                                data-tab="notifications">Notifications</button>
+                            <button
+                                class="text-left p-3 hover:bg-bg-body text-muted border-l-4 border-transparent nav-item"
+                                data-tab="billing">Billing</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Content -->
+                <div class="flex flex-col gap-lg">
+
+                    <!-- Profile Tab -->
+                    <div id="tab-profile" class="settings-tab">
+                        <div class="card">
+                            <h3 class="text-lg font-bold mb-6">User Profile</h3>
+                            <div class="flex items-center gap-lg mb-8">
+                                <div class="avatar" id="profile-avatar-preview"
+                                    style="width: 80px; height: 80px; font-size: 2rem;">JD</div>
+                                <div>
+                                    <button class="btn btn-secondary btn-sm mb-2">Change Avatar</button>
+                                    <p class="text-xs text-muted">JPG, GIF or PNG. Max size of 800K</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-md">
+                                <div class="form-group">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" id="setting-name" class="form-input" value="John Doe">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" id="setting-email" class="form-input"
+                                        value="john.doe@example.com">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Role</label>
+                                <input type="text" class="form-input" value="Administrator" disabled
+                                    style="background-color: var(--bg-body); color: var(--text-muted);">
+                            </div>
+
+                            <div class="border-t pt-6 mt-6" style="border-color: var(--border);">
+                                <h4 class="font-bold mb-4">Security</h4>
+                                <div class="grid grid-cols-2 gap-md">
+                                    <div class="form-group">
+                                        <label class="form-label">New Password</label>
+                                        <input type="password" class="form-input" placeholder="••••••••">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Confirm Password</label>
+                                        <input type="password" class="form-input" placeholder="••••••••">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end gap-sm mt-4">
+                                <button class="btn btn-primary" id="save-profile-btn">Save Profile</button>
+                            </div>
+                        </div>
+
+                        <div class="card mt-6">
+                            <h3 class="text-lg font-bold mb-4">Appearance</h3>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h4 class="font-medium">Dark Mode</h4>
+                                    <p class="text-sm text-muted">Switch between light and dark themes.</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="theme-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Workspace Tab -->
+                    <div id="tab-workspace" class="settings-tab" style="display: none;">
+                        <div class="card">
+                            <h3 class="text-lg font-bold mb-6">Workspace Settings</h3>
+                            <div class="form-group">
+                                <label class="form-label">Company Name</label>
+                                <input type="text" id="ws-name" class="form-input">
+                            </div>
+                            <div class="grid grid-cols-2 gap-md">
+                                <div class="form-group">
+                                    <label class="form-label">Currency</label>
+                                    <select id="ws-currency" class="form-input">
+                                        <option value="USD">USD ($)</option>
+                                        <option value="EUR">EUR (€)</option>
+                                        <option value="INR">INR (₹)</option>
+                                        <option value="GBP">GBP (£)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Timezone</label>
+                                    <select id="ws-timezone" class="form-input">
+                                        <option value="UTC">UTC</option>
+                                        <option value="EST">EST (New York)</option>
+                                        <option value="PST">PST (Los Angeles)</option>
+                                        <option value="IST">IST (New Delhi)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="flex justify-end gap-sm mt-4">
+                                <button class="btn btn-primary" id="save-ws-btn">Save Workspace</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Team Tab -->
+                    <div id="tab-team" class="settings-tab" style="display: none;">
+                        <div class="card">
+                            <div class="flex justify-between items-center mb-6">
+                                <div>
+                                    <h3 class="text-lg font-bold">Team Members</h3>
+                                    <p class="text-sm text-muted">Manage who has access to this workspace.</p>
+                                </div>
+                                <button class="btn btn-primary btn-sm"
+                                    onclick="document.getElementById('add-user-modal').style.display = 'flex'">
+                                    <i data-feather="user-plus"></i> Add User
+                                </button>
+                            </div>
+
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Role</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="team-list-body">
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Tab -->
+                    <div id="tab-notifications" class="settings-tab" style="display: none;">
+                        <div class="card">
+                            <h3 class="text-lg font-bold mb-4">Notifications</h3>
+                            <div class="flex flex-col gap-md">
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h4 class="font-medium">Weekly Summary</h4>
+                                        <p class="text-sm text-muted">Receive a weekly digest of your key metrics.</p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <div>
+                                        <h4 class="font-medium">Revenue Alerts</h4>
+                                        <p class="text-sm text-muted">Get notified if revenue drops by more than 10%.
+                                        </p>
+                                    </div>
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Billing Tab -->
+                    <div id="tab-billing" class="settings-tab" style="display: none;">
+                        <div class="card">
+                            <h3 class="text-lg font-bold mb-4">Current Plan</h3>
+                            <div
+                                class="flex justify-between items-center p-4 bg-bg-body rounded border border-border mb-6">
+                                <div>
+                                    <h4 class="font-bold text-primary">Growth Plan</h4>
+                                    <p class="text-sm text-muted">$79/month • Renews on Jan 1, 2026</p>
+                                </div>
+                                <span class="badge badge-success">Active</span>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-md mb-6">
+                                <div class="p-4 border rounded">
+                                    <div class="text-muted text-sm mb-1">Users</div>
+                                    <div class="font-bold text-xl">3 / 5</div>
+                                </div>
+                                <div class="p-4 border rounded">
+                                    <div class="text-muted text-sm mb-1">Storage</div>
+                                    <div class="font-bold text-xl">1.2 GB</div>
+                                </div>
+                                <div class="p-4 border rounded">
+                                    <div class="text-muted text-sm mb-1">API Calls</div>
+                                    <div class="font-bold text-xl">12k / 50k</div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end">
+                                <button class="btn btn-secondary">Manage Subscription</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="add-user-modal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center;">
+        <div class="card" style="width: 400px; max-width: 90%;">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">Invite Team Member</h3>
+                <button class="icon-btn" onclick="document.getElementById('add-user-modal').style.display = 'none'"><i
+                        data-feather="x"></i></button>
+            </div>
+            <form id="add-user-form">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Full Name</label>
+                    <input type="text" name="name" required class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Email</label>
+                    <input type="email" name="email" required class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1">Role</label>
+                    <select name="role" class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: white;">
+                        <option value="Admin">Admin</option>
+                        <option value="Editor">Editor</option>
+                        <option value="Viewer">Viewer</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-full" style="width: 100%;">Send Invite</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script>
+        feather.replace();
+
+        // --- Tab Switching Logic ---
+        const navItems = document.querySelectorAll('.nav-item');
+        const tabs = document.querySelectorAll('.settings-tab');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Deactivate all
+                navItems.forEach(nav => {
+                    nav.classList.remove('text-primary', 'border-primary', 'bg-primary-light');
+                    nav.classList.add('text-muted', 'border-transparent');
+                });
+                tabs.forEach(tab => tab.style.display = 'none');
+
+                // Activate clicked
+                item.classList.remove('text-muted', 'border-transparent');
+                item.classList.add('text-primary', 'border-primary', 'bg-primary-light');
+
+                const tabId = item.dataset.tab;
+                document.getElementById(`tab-${tabId}`).style.display = 'block';
+            });
+        });
+
+        // --- Theme Logic ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const currentTheme = store.data.settings.theme || 'light';
+
+        if (currentTheme === 'dark') {
+            body.classList.add('dark');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', () => {
+            const newTheme = themeToggle.checked ? 'dark' : 'light';
+            if (newTheme === 'dark') body.classList.add('dark');
+            else body.classList.remove('dark');
+
+            store.data.settings.theme = newTheme;
+            store.saveData(store.data);
+        });
+
+        // --- Profile Logic ---
+        const currentUser = store.getUsers()[0]; // Simulate logged in user as first user
+
+        // Load Profile
+        document.getElementById('setting-name').value = currentUser.name;
+        document.getElementById('setting-email').value = currentUser.email;
+        document.getElementById('profile-avatar-preview').textContent = currentUser.avatar;
+
+        document.getElementById('save-profile-btn').addEventListener('click', () => {
+            const newName = document.getElementById('setting-name').value;
+            const newEmail = document.getElementById('setting-email').value;
+
+            store.updateUser(currentUser.id, { name: newName, email: newEmail });
+
+            // Update UI immediately
+            document.getElementById('profile-avatar-preview').textContent = newName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            alert('Profile updated successfully!');
+
+            // Update header avatar if it exists (simple DOM check)
+            const headerAvatar = document.querySelector('.top-bar .avatar');
+            if (headerAvatar) headerAvatar.textContent = newName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+        });
+
+        // --- Workspace Logic ---
+        const ws = store.getWorkspace();
+        document.getElementById('ws-name').value = ws.name;
+        document.getElementById('ws-currency').value = ws.currency;
+        document.getElementById('ws-timezone').value = ws.timezone;
+
+        document.getElementById('save-ws-btn').addEventListener('click', () => {
+            store.updateWorkspace({
+                name: document.getElementById('ws-name').value,
+                currency: document.getElementById('ws-currency').value,
+                timezone: document.getElementById('ws-timezone').value
+            });
+            alert('Workspace settings saved!');
+        });
+
+        // --- Team Logic ---
+        function renderTeam() {
+            const users = store.getUsers();
+            const tbody = document.getElementById('team-list-body');
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>
+                        <div class="flex items-center gap-sm">
+                            <div class="avatar" style="width: 32px; height: 32px; font-size: 0.8rem;">${user.avatar}</div>
+                            <div>
+                                <div class="font-medium">${user.name}</div>
+                                <div class="text-xs text-muted">${user.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-neutral">${user.role}</span></td>
+                    <td><span class="badge badge-success">Active</span></td>
+                    <td>
+                        ${user.id !== currentUser.id ?
+                    `<button class="icon-btn text-danger" onclick="removeUser('${user.id}')"><i data-feather="trash-2" style="width: 16px;"></i></button>` :
+                    `<span class="text-xs text-muted">You</span>`
+                }
+                    </td>
+                </tr>
+            `).join('');
+            feather.replace();
+        }
+
+        renderTeam();
+
+        // Add User
+        document.getElementById('add-user-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            store.addUser({
+                name: formData.get('name'),
+                email: formData.get('email'),
+                role: formData.get('role')
+            });
+            document.getElementById('add-user-modal').style.display = 'none';
+            e.target.reset();
+            renderTeam();
+            alert('User invited successfully!');
+        });
+
+        // Remove User Global Function
+        window.removeUser = (id) => {
+            if (confirm('Are you sure you want to remove this user?')) {
+                store.removeUser(id);
+                renderTeam();
+            }
+        };
+
+    </script>
+</body>
+
+</html>
