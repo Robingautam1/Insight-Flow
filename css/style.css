@@ -589,6 +589,7 @@ select {
     margin-bottom: var(--spacing-lg);
     background: linear-gradient(to right, var(--text-main), var(--primary));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -711,4 +712,19 @@ select {
         display: none;
         /* Mobile menu to be implemented */
     }
+
+    #sidebar-toggle {
+        display: block !important;
+    }
+
+    .dashboard-bottom-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Custom Grid for Dashboard Bottom */
+.dashboard-bottom-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-lg);
 }
