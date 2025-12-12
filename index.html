@@ -112,12 +112,145 @@
     </header>
 
     <!-- Features Section -->
-    what’s working.</span></li>
-    </ul>
-    </div>
-    </div>
-    </div>
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <h2 class="section-title">Why InsightFlow?</h2>
+            <p class="section-lead" style="text-align: center; color: var(--text-muted); margin-bottom: 2rem;">
+                Everything you need to run your business with confidence.</p>
+
+            <div class="features-grid" role="list">
+                <article class="feature-card" role="listitem" tabindex="0">
+                    <div class="icon" aria-hidden="true">📈</div>
+                    <h3>Revenue tracking</h3>
+                    <p>See real-time revenue and cash-flow trends across channels so you never miss a drop in sales.</p>
+                </article>
+
+                <article class="feature-card" role="listitem" tabindex="0">
+                    <div class="icon" aria-hidden="true">👥</div>
+                    <h3>Customer insights</h3>
+                    <p>Understand repeat buyers, lifetime value and simple retention signals — all in one place.</p>
+                </article>
+
+                <article class="feature-card" role="listitem" tabindex="0">
+                    <div class="icon" aria-hidden="true">⚠️</div>
+                    <h3>Smart alerts</h3>
+                    <p>Automated alerts surface spikes and drops so you can act fast — before problems escalate.</p>
+                </article>
+            </div>
+
+            <div class="features-cta" style="justify-content: center; margin-bottom: 4rem;">
+                <a class="btn btn-primary" href="dashboard.html">View Live Demo</a>
+                <a class="btn btn-secondary btn-ghost" href="#pricing">Explore Plans</a>
+            </div>
+        </div>
     </section>
+
+    <style>
+        /* Feature Section Styles */
+        .features-section {
+            padding: 5rem 0;
+            background: var(--bg-body);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-surface);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: default;
+        }
+
+        .feature-card:focus,
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .feature-card .icon {
+            font-size: 2rem;
+            width: 3.5rem;
+            height: 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-light);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .feature-card p {
+            margin: 0;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .features-cta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--primary);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-cta {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .features-cta .btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+
+    <script>
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') window.location.href = 'dashboard.html';
+            });
+        });
+    </script>
+
 
     <!-- Pricing -->
     <section id="pricing" class="section" style="background-color: var(--bg-surface);">
@@ -204,8 +337,8 @@
                         <i data-feather="chevron-down" class="accordion-icon"></i>
                     </div>
                     <div class="accordion-content">
-                        <p class="text-muted pb-4">Absolutely. We use bank-level encryption (AES-256) for all data at
-                            rest and in transit. We never sell your data.</p>
+                        <p class="text-muted pb-4">We use industry-standard encryption for data in transit and at rest.
+                            This is a demo interface and does not connect to live production systems.</p>
                     </div>
                 </div>
                 <div class="accordion-item">
