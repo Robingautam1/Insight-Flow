@@ -389,9 +389,32 @@
         </div>
     </footer>
 
+    <!-- DEMO CONTACT MODAL -->
+    <div id="demoModal" class="modal" aria-hidden="true" role="dialog">
+        <div class="modal-backdrop" onclick="closeDemoModal()"></div>
+        <div class="modal-panel" role="document" aria-labelledby="demoTitle">
+            <button class="modal-close" onclick="closeDemoModal()" aria-label="Close">✕</button>
+            <h3 id="demoTitle">Request a demo</h3>
+            <form id="demoForm" action="https://formspree.io/f/xpwzzedn" method="POST">
+                <label><input name="name" placeholder="Your name" required></label>
+                <label><input name="email" type="email" placeholder="Email address" required></label>
+                <label><textarea name="message" rows="4"
+                        placeholder="Tell me about your use case (optional)"></textarea></label>
+                <button type="submit" class="btn primary">Request demo</button>
+                <p class="small">No spam — this is a demo site. I'll only use this to respond to your request.</p>
+            </form>
+        </div>
+    </div>
+    <button id="demoCTA" class="demo-cta" onclick="openDemoModal()" aria-label="Request demo">Request demo</button>
+
     <script src="js/main.js"></script>
     <script>
         feather.replace();
+
+        // Request Demo Modal Logic
+        function openDemoModal() { const m = document.getElementById('demoModal'); m.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
+        function closeDemoModal() { const m = document.getElementById('demoModal'); m.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDemoModal(); });
     </script>
 </body>
 
