@@ -209,10 +209,45 @@ function updateDashboard() {
     document.getElementById('kpi-refund').textContent = kpis.refundRate + '%';
 
     const chartData = store.getChartData(timeRange);
+
+    // --- Dynamic Demo Data Update ---
     if (revenueChart) {
-        // updateChart(revenueChart, chartData.revenue.labels, chartData.revenue.data);
-        // updateChart(channelChart, chartData.channels.labels, chartData.channels.data);
-        // updateChart(productChart, chartData.products.labels, chartData.products.data);
+        // defined in initCharts scope or globally? 
+        // We will define specific demo datasets here for simplicity in this context
+        const demoDataSets = {
+            '7d': {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                current: [12500, 18000, 15000, 22000, 26000, 31000, 29000],
+                previous: [10000, 14000, 12000, 18000, 22000, 24000, 21000]
+            },
+            '30d': {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+                current: [85000, 92000, 115000, 108000, 124000],
+                previous: [70000, 80000, 95000, 90000, 100000]
+            },
+            '90d': {
+                labels: ['Month 1', 'Month 2', 'Month 3'],
+                current: [320000, 410000, 450000],
+                previous: [280000, 310000, 380000]
+            },
+            '1y': {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                current: [800000, 850000, 920000, 1100000, 1050000, 1150000, 1200000, 1250000, 1340000, 1400000, 1550000, 1600000],
+                previous: [700000, 750000, 800000, 900000, 950000, 1000000, 1050000, 1100000, 1150000, 1200000, 1250000, 1300000]
+            }
+        };
+
+        const selectedData = demoDataSets[timeRange] || demoDataSets['30d'];
+
+        // Update Revenue Chart
+        revenueChart.data.labels = selectedData.labels;
+        revenueChart.data.datasets[0].data = selectedData.current; // Current Period
+        revenueChart.data.datasets[1].data = selectedData.previous; // Previous Period
+        revenueChart.update();
+
+        // Update values to match the chart data roughly (sum of current)
+        const totalRevenue = selectedData.current.reduce((a, b) => a + b, 0);
+        animateValue('kpi-revenue', totalRevenue, true);
     }
 
     updateTransactionsTable();
@@ -273,12 +308,10 @@ function initCharts() {
 
     // Gradient for Revenue
     const gradientRevenue = ctxRevenue.createLinearGradient(0, 0, 0, 400);
-    gradientRevenue.addColorStop(0, 'rgba(79, 70, 229, 0.2)'); // Indigo
-    gradientRevenue.addColorStop(1, 'rgba(79, 70, 229, 0)');
+    // Dynamic Gradient from Indigo to faint purple
+    gradientRevenue.addColorStop(0, 'rgba(79, 70, 229, 0.4)');
+    gradientRevenue.addColorStop(1, 'rgba(124, 58, 237, 0.05)');
 
-    // --- Hardcoded Demo Data ---
-    const demoMonths = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const demoRevenue = [800000, 920000, 1100000, 980000, 1245000, 1340000];
     const demoChannels = {
         Website: 55,
         'Mobile App': 25,
@@ -289,32 +322,57 @@ function initCharts() {
     revenueChart = new Chart(ctxRevenue, {
         type: 'line',
         data: {
-            labels: demoMonths,
-            datasets: [{
-                label: 'Revenue',
-                data: demoRevenue,
-                borderColor: '#4f46e5', // Indigo 600
-                backgroundColor: gradientRevenue,
-                borderWidth: 3,
-                tension: 0.4,
-                fill: true,
-                pointRadius: 4,
-                pointHoverRadius: 6
-            }]
+            // Initial Empty Data - will be filled by updateDashboard immediately
+            labels: [],
+            datasets: [
+                {
+                    label: 'Current Period',
+                    data: [],
+                    borderColor: '#4f46e5', // Indigo 600
+                    backgroundColor: gradientRevenue,
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#4f46e5',
+                    pointBorderWidth: 2
+                },
+                {
+                    label: 'Previous Period',
+                    data: [],
+                    borderColor: '#94a3b8', // Slate 400
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                    tension: 0.4,
+                    fill: false,
+                    pointRadius: 0, // Hide points for clean comparison
+                    pointHoverRadius: 4
+                }
+            ]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: {
+                duration: 2000,
+                easing: 'easeOutQuart' // Smooth imaginative entry
+            },
             plugins: {
-                legend: { display: false },
+                legend: {
+                    display: true, // Show legend now that we have two
+                    align: 'end',
+                    labels: { boxWidth: 10, usePointStyle: true }
+                },
                 tooltip: {
-                    backgroundColor: '#1e293b',
+                    backgroundColor: 'rgba(30, 41, 59, 0.9)',
                     padding: 12,
                     cornerRadius: 8,
-                    displayColors: false,
+                    displayColors: true,
                     callbacks: {
                         label: function (context) {
-                            return 'Revenue: ₹' + context.formattedValue;
+                            return context.dataset.label + ': ₹' + context.formattedValue;
                         }
                     }
                 }
@@ -322,7 +380,7 @@ function initCharts() {
             scales: {
                 y: {
                     beginAtZero: true,
-                    grid: { borderDash: [4, 4], color: '#e2e8f0' },
+                    grid: { borderDash: [4, 4], color: 'rgba(226, 232, 240, 0.6)' },
                     ticks: { callback: (val) => '₹' + val / 1000 + 'k' }
                 },
                 x: { grid: { display: false } }
@@ -334,6 +392,7 @@ function initCharts() {
         }
     });
 
+    // ... (channelChart remains mostly same, just slight touch up if needed)
     channelChart = new Chart(ctxChannel, {
         type: 'bar',
         data: {
@@ -341,14 +400,21 @@ function initCharts() {
             datasets: [{
                 label: 'Orders',
                 data: Object.values(demoChannels),
-                backgroundColor: ['#4f46e5', '#0ea5e9', '#10b981', '#f59e0b'],
-                borderRadius: 6,
-                borderSkipped: false
+                backgroundColor: [
+                    'rgba(79, 70, 229, 0.85)',
+                    'rgba(14, 165, 233, 0.85)',
+                    'rgba(16, 185, 129, 0.85)',
+                    'rgba(245, 158, 11, 0.85)'
+                ],
+                borderRadius: 8,
+                borderSkipped: false,
+                barThickness: 40
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            animation: { duration: 1500, delay: 500 },
             plugins: { legend: { display: false } },
             scales: {
                 y: { beginAtZero: true, grid: { borderDash: [4, 4], color: '#e2e8f0' } },
