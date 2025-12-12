@@ -30,10 +30,10 @@
     <div class="app-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
-            <div class="sidebar-logo logo">
+            <a href="index.html" class="sidebar-logo logo">
                 <i data-feather="activity"></i>
                 Insight<span>Flow</span>
-            </div>
+            </a>
 
             <nav class="sidebar-menu">
                 <a href="dashboard.html" class="sidebar-item active">
@@ -73,7 +73,7 @@
             <!-- Top Bar -->
             <header class="top-bar">
                 <div class="flex items-center gap-md">
-                    <button class="icon-btn" id="sidebar-toggle" style="display: none;">
+                    <button class="icon-btn mobile-menu-btn" id="sidebar-toggle">
                         <i data-feather="menu"></i>
                     </button>
                     <h2 class="text-xl font-bold">Dashboard</h2>
@@ -87,7 +87,7 @@
                     <div class="user-menu flex items-center gap-md">
                         <!-- Theme Toggle -->
                         <label class="flex items-center cursor-pointer relative">
-                            <input type="checkbox" id="theme-toggle" class="sr-only" style="display: none;">
+                            <input type="checkbox" id="theme-toggle" class="sr-only">
                             <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
                             <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
                                 <i data-feather="moon" style="width: 16px; height: 16px; color: var(--text-muted);"></i>

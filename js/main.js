@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Global Init ---
     initTheme();
     initMobileSidebar();
+    initLandingMenu();
 
     // --- Page Specific Init ---
     if (document.getElementById('revenueChart')) {
@@ -31,6 +32,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+function initLandingMenu() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+            // Change icon if needed, or simple toggle
+        });
+    }
+}
 
 // --- Theme Management ---
 function initTheme() {
