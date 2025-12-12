@@ -309,6 +309,12 @@ select {
     font-size: 0.75rem;
 }
 
+.page-subhead {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
 .text-lg {
     font-size: 1.125rem;
 }
