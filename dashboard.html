@@ -204,7 +204,51 @@
     <!-- Add Transaction Modal -->
     <div id="add-transaction-modal"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center;">
-        <!-- ... modal partial removed for brevity, keeping original position ... -->
+        <div class="card" style="width: 400px; max-width: 90%;">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="font-bold text-lg">Add Transaction</h3>
+                <button class="icon-btn"
+                    onclick="document.getElementById('add-transaction-modal').style.display = 'none'"><i
+                        data-feather="x"></i></button>
+            </div>
+            <form id="add-transaction-form">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Customer Name</label>
+                    <input type="text" name="customer" required class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Amount</label>
+                    <input type="number" name="amount" required class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Date</label>
+                    <input type="date" name="date" required class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium mb-1">Status</label>
+                    <select name="status" class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
+                        <option value="Paid">Paid</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Refunded">Refunded</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-1">Channel</label>
+                    <select name="channel" class="w-full p-2 border rounded"
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
+                        <option value="Website">Website</option>
+                        <option value="Mobile App">Mobile App</option>
+                        <option value="Marketplace">Marketplace</option>
+                        <option value="Offline">Offline</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-full" style="width: 100%;">Add Transaction</button>
+            </form>
+        </div>
     </div>
 
     <script>
@@ -254,52 +298,6 @@
             });
         })();
     </script>
-    <div class="card" style="width: 400px; max-width: 90%;">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="font-bold text-lg">Add Transaction</h3>
-            <button class="icon-btn"
-                onclick="document.getElementById('add-transaction-modal').style.display = 'none'"><i
-                    data-feather="x"></i></button>
-        </div>
-        <form id="add-transaction-form">
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Customer Name</label>
-                <input type="text" name="customer" required class="w-full p-2 border rounded"
-                    style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
-            </div>
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Amount</label>
-                <input type="number" name="amount" required class="w-full p-2 border rounded"
-                    style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
-            </div>
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Date</label>
-                <input type="date" name="date" required class="w-full p-2 border rounded"
-                    style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
-            </div>
-            <div class="mb-3">
-                <label class="block text-sm font-medium mb-1">Status</label>
-                <select name="status" class="w-full p-2 border rounded"
-                    style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
-                    <option value="Paid">Paid</option>
-                    <option value="Pending">Pending</option>
-                    <option value="Refunded">Refunded</option>
-                </select>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium mb-1">Channel</label>
-                <select name="channel" class="w-full p-2 border rounded"
-                    style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
-                    <option value="Website">Website</option>
-                    <option value="Mobile App">Mobile App</option>
-                    <option value="Marketplace">Marketplace</option>
-                    <option value="Offline">Offline</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary w-full" style="width: 100%;">Add Transaction</button>
-        </form>
-    </div>
-    </div>
 
     <!-- DEMO CONTACT MODAL -->
     <div id="demoModal" class="modal" aria-hidden="true" role="dialog">

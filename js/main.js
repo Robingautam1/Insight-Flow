@@ -73,7 +73,6 @@ function initTheme() {
         });
     }
 }
-}
 
 function initMobileSidebar() {
     const sidebarToggle = document.getElementById('sidebar-toggle');
