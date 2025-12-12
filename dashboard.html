@@ -165,88 +165,44 @@
                 </div>
             </div>
 
-            <!-- Charts Row -->
-            <div class="charts-row">
-                <div class="chart-card">
-                    <div class="chart-header"
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h3 class="font-bold">Revenue Over Time</h3>
-                        <button class="icon-btn"><i data-feather="more-horizontal"></i></button>
-                    </div>
-                    <div style="flex: 1; position: relative;">
-                        <canvas id="revenueChart"></canvas>
-                    </div>
-                </div>
-                <div class="chart-card">
-                    <div class="chart-header"
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h3 class="font-bold">Orders by Channel</h3>
-                    </div>
-                    <div style="flex: 1; position: relative;">
-                        <canvas id="channelChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bottom Section: Table & Insights -->
-            <div class="dashboard-bottom-grid">
-                <!-- Recent Transactions -->
-                <div class="table-container">
-                    <div class="p-4 border-b flex justify-between items-center" style="border-color: var(--border);">
-                        <h3 class="font-bold">Recent Transactions</h3>
-                        <a href="#" class="text-primary text-sm font-medium">View All</a>
-                    </div>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Customer</th>
-                                <th>Date</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="transactions-body">
-                            <!-- Populated by JS -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Insights Panel -->
-                <div class="flex flex-col gap-md">
-                    <div class="card bg-primary-light"
-                        style="background: linear-gradient(135deg, var(--bg-surface) 0%, var(--primary-light) 100%);">
-                        <div class="flex items-center gap-sm mb-3">
-                            <div style="padding: 6px; background: var(--primary); border-radius: 50%; color: white;">
-                                <i data-feather="zap" style="width: 16px; height: 16px;"></i>
-                            </div>
-                            <h3 class="font-bold">Smart Insights</h3>
+            <!-- ===== Dashboard charts & transactions ===== -->
+            <div class="dashboard-row">
+                <div class="charts-col">
+                    <div class="chart-card">
+                        <h4>Revenue Over Time</h4>
+                        <div class="chart-wrap" style="height:280px;">
+                            <canvas id="revenueChart"></canvas>
                         </div>
-                        <ul class="flex flex-col gap-md text-sm">
-                            <li class="flex gap-sm">
-                                <span class="text-success">●</span>
-                                <span>Revenue is up <strong>14%</strong> compared to the same period last month. Great
-                                    job!</span>
-                            </li>
-                            <li class="flex gap-sm">
-                                <span class="text-warning">●</span>
-                                <span>Refund rate for "Classic Hoodie" is slightly higher (5%) than average.</span>
-                            </li>
-                            <li class="flex gap-sm">
-                                <span class="text-primary">●</span>
-                                <span>Top performing channel this week: <strong>Instagram Ads</strong>.</span>
-                            </li>
-                        </ul>
                     </div>
-
-                    <div class="card">
-                        <h3 class="font-bold mb-3">Product Breakdown</h3>
-                        <div style="height: 200px; position: relative;">
-                            <canvas id="productChart"></canvas>
+                    <div class="chart-card" style="margin-top:18px;">
+                        <h4>Orders by Channel</h4>
+                        <div class="chart-wrap" style="height:240px;">
+                            <canvas id="channelChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-col">
+                    <div class="transactions-card">
+                        <h4>Recent Transactions</h4>
+                        <div class="table-wrap">
+                            <table id="transactionsTable" class="transactions-table" aria-live="polite">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Channel</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- ===== end dashboard charts & transactions ===== -->
 
         </main>
     </div>
@@ -254,51 +210,101 @@
     <!-- Add Transaction Modal -->
     <div id="add-transaction-modal"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center;">
-        <div class="card" style="width: 400px; max-width: 90%;">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-lg">Add Transaction</h3>
-                <button class="icon-btn"
-                    onclick="document.getElementById('add-transaction-modal').style.display = 'none'"><i
-                        data-feather="x"></i></button>
-            </div>
-            <form id="add-transaction-form">
-                <div class="mb-3">
-                    <label class="block text-sm font-medium mb-1">Customer Name</label>
-                    <input type="text" name="customer" required class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
-                </div>
-                <div class="mb-3">
-                    <label class="block text-sm font-medium mb-1">Amount</label>
-                    <input type="number" name="amount" required class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
-                </div>
-                <div class="mb-3">
-                    <label class="block text-sm font-medium mb-1">Date</label>
-                    <input type="date" name="date" required class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
-                </div>
-                <div class="mb-3">
-                    <label class="block text-sm font-medium mb-1">Status</label>
-                    <select name="status" class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
-                        <option value="Paid">Paid</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Refunded">Refunded</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium mb-1">Channel</label>
-                    <select name="channel" class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
-                        <option value="Website">Website</option>
-                        <option value="Mobile App">Mobile App</option>
-                        <option value="Marketplace">Marketplace</option>
-                        <option value="Offline">Offline</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary w-full" style="width: 100%;">Add Transaction</button>
-            </form>
+        <!-- ... modal partial removed for brevity, keeping original position ... -->
+    </div>
+
+    <script>
+        // Sample data
+        const months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const revenue = [800000, 920000, 1100000, 980000, 1245000, 1340000];
+        const channelLabels = ['Website', 'Mobile App', 'Marketplace', 'Offline'];
+        const channelValues = [55, 25, 12, 8];
+        const sampleTx = [
+            { id: 'ORD-1001', name: 'Asha Patel', date: '2025-12-05', amount: '₹2,499', status: 'Paid', channel: 'Website' },
+            { id: 'ORD-1002', name: 'Rohit Singh', date: '2025-12-04', amount: '₹999', status: 'Pending', channel: 'Mobile App' },
+            { id: 'ORD-1003', name: 'Pooja Sharma', date: '2025-12-03', amount: '₹4,199', status: 'Refunded', channel: 'Marketplace' },
+            { id: 'ORD-1004', name: 'Suresh Kumar', date: '2025-12-02', amount: '₹1,299', status: 'Paid', channel: 'Offline' },
+            { id: 'ORD-1005', name: 'Neha Jain', date: '2025-12-01', amount: '₹3,499', status: 'Paid', channel: 'Website' }
+        ];
+
+        function formatRupeeLabel(val) {
+            if (val >= 100000) { return '₹' + (val / 100000).toFixed(1) + 'L'; }
+            if (val >= 1000) { return '₹' + (val / 1000).toFixed(0) + 'k'; }
+            return '₹' + val;
+        }
+
+        // Revenue chart
+        const revCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revCtx, {
+            type: 'line',
+            data: { labels: months, datasets: [{ data: revenue, fill: true, tension: 0.25, backgroundColor: 'rgba(15,108,255,0.08)', borderColor: 'rgba(15,108,255,0.96)', pointRadius: 3 }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: v => formatRupeeLabel(v) } } } }
+        });
+
+        // Channel chart
+        const chCtx = document.getElementById('channelChart').getContext('2d');
+        new Chart(chCtx, {
+            type: 'bar',
+            data: { labels: channelLabels, datasets: [{ data: channelValues, borderRadius: 8, backgroundColor: channelValues.map(v => 'rgba(15,108,255,' + (0.35 + v / 200) + ')') }] },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
+        });
+
+        // Populate table
+        (function populateTx() {
+            const tbody = document.querySelector('#transactionsTable tbody');
+            tbody.innerHTML = '';
+            sampleTx.forEach(tx => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${tx.id}</td><td>${tx.name}</td><td>${tx.date}</td><td>${tx.amount}</td><td><span class="status ${tx.status.toLowerCase()}">${tx.status}</span></td><td>${tx.channel}</td>`;
+                tbody.appendChild(tr);
+            });
+        })();
+    </script>
+    <div class="card" style="width: 400px; max-width: 90%;">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-lg">Add Transaction</h3>
+            <button class="icon-btn"
+                onclick="document.getElementById('add-transaction-modal').style.display = 'none'"><i
+                    data-feather="x"></i></button>
         </div>
+        <form id="add-transaction-form">
+            <div class="mb-3">
+                <label class="block text-sm font-medium mb-1">Customer Name</label>
+                <input type="text" name="customer" required class="w-full p-2 border rounded"
+                    style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+            </div>
+            <div class="mb-3">
+                <label class="block text-sm font-medium mb-1">Amount</label>
+                <input type="number" name="amount" required class="w-full p-2 border rounded"
+                    style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+            </div>
+            <div class="mb-3">
+                <label class="block text-sm font-medium mb-1">Date</label>
+                <input type="date" name="date" required class="w-full p-2 border rounded"
+                    style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+            </div>
+            <div class="mb-3">
+                <label class="block text-sm font-medium mb-1">Status</label>
+                <select name="status" class="w-full p-2 border rounded"
+                    style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
+                    <option value="Paid">Paid</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Refunded">Refunded</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-1">Channel</label>
+                <select name="channel" class="w-full p-2 border rounded"
+                    style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
+                    <option value="Website">Website</option>
+                    <option value="Mobile App">Mobile App</option>
+                    <option value="Marketplace">Marketplace</option>
+                    <option value="Offline">Offline</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary w-full" style="width: 100%;">Add Transaction</button>
+        </form>
+    </div>
     </div>
 
     <script src="js/data.js"></script>

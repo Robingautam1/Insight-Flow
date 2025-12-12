@@ -967,3 +967,86 @@ a.sidebar-logo {
 a.sidebar-logo:hover {
     opacity: 0.9;
 }
+
+/* Dashboard Layout Updates */
+.dashboard-row {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+}
+
+.charts-col {
+    flex: 1.4;
+}
+
+.table-col {
+    flex: 1;
+    min-width: 300px;
+}
+
+.chart-card,
+.transactions-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+}
+
+.chart-wrap {
+    width: 100%;
+}
+
+.transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.transactions-table th,
+.transactions-table td {
+    text-align: left;
+    padding: 10px 8px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.transactions-table thead th {
+    color: #334e68;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+/* Status badges */
+.status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.status.paid {
+    background: #E6FFFA;
+    color: #046658;
+}
+
+.status.pending {
+    background: #FFF7E6;
+    color: #9a6b00;
+}
+
+.status.refunded {
+    background: #FFF1F2;
+    color: #9b2c2c;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+    .dashboard-row {
+        flex-direction: column;
+    }
+
+    .charts-col,
+    .table-col {
+        width: 100%;
+    }
+}
