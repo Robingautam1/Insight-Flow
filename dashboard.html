@@ -251,53 +251,7 @@
         </div>
     </div>
 
-    <script>
-        // Sample data
-        const months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const revenue = [800000, 920000, 1100000, 980000, 1245000, 1340000];
-        const channelLabels = ['Website', 'Mobile App', 'Marketplace', 'Offline'];
-        const channelValues = [55, 25, 12, 8];
-        const sampleTx = [
-            { id: 'ORD-1001', name: 'Asha Patel', date: '2025-12-05', amount: '₹2,499', status: 'Paid', channel: 'Website' },
-            { id: 'ORD-1002', name: 'Rohit Singh', date: '2025-12-04', amount: '₹999', status: 'Pending', channel: 'Mobile App' },
-            { id: 'ORD-1003', name: 'Pooja Sharma', date: '2025-12-03', amount: '₹4,199', status: 'Refunded', channel: 'Marketplace' },
-            { id: 'ORD-1004', name: 'Suresh Kumar', date: '2025-12-02', amount: '₹1,299', status: 'Paid', channel: 'Offline' },
-            { id: 'ORD-1005', name: 'Neha Jain', date: '2025-12-01', amount: '₹3,499', status: 'Paid', channel: 'Website' }
-        ];
 
-        function formatRupeeLabel(val) {
-            if (val >= 100000) { return '₹' + (val / 100000).toFixed(1) + 'L'; }
-            if (val >= 1000) { return '₹' + (val / 1000).toFixed(0) + 'k'; }
-            return '₹' + val;
-        }
-
-        // Revenue chart
-        const revCtx = document.getElementById('revenueChart').getContext('2d');
-        new Chart(revCtx, {
-            type: 'line',
-            data: { labels: months, datasets: [{ data: revenue, fill: true, tension: 0.25, backgroundColor: 'rgba(15,108,255,0.08)', borderColor: 'rgba(15,108,255,0.96)', pointRadius: 3 }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { callback: v => formatRupeeLabel(v) } } } }
-        });
-
-        // Channel chart
-        const chCtx = document.getElementById('channelChart').getContext('2d');
-        new Chart(chCtx, {
-            type: 'bar',
-            data: { labels: channelLabels, datasets: [{ data: channelValues, borderRadius: 8, backgroundColor: channelValues.map(v => 'rgba(15,108,255,' + (0.35 + v / 200) + ')') }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
-        });
-
-        // Populate table
-        (function populateTx() {
-            const tbody = document.querySelector('#transactionsTable tbody');
-            tbody.innerHTML = '';
-            sampleTx.forEach(tx => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${tx.id}</td><td>${tx.name}</td><td>${tx.date}</td><td>${tx.amount}</td><td><span class="status ${tx.status.toLowerCase()}">${tx.status}</span></td><td>${tx.channel}</td>`;
-                tbody.appendChild(tr);
-            });
-        })();
-    </script>
 
     <!-- DEMO CONTACT MODAL -->
     <div id="demoModal" class="modal" aria-hidden="true" role="dialog">
