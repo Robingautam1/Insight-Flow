@@ -281,10 +281,10 @@ function updateTransactionsTable(searchTerm = '') {
     }
 
     tbody.innerHTML = transactions.map(tx => {
-        let statusClass = 'badge-neutral';
-        if (tx.status === 'Paid') statusClass = 'badge-success';
-        if (tx.status === 'Pending') statusClass = 'badge-warning';
-        if (tx.status === 'Refunded') statusClass = 'badge-danger';
+        let statusClass = 'status badge-neutral'; // Default
+        if (tx.status === 'Paid') statusClass = 'status paid';
+        if (tx.status === 'Pending') statusClass = 'status pending';
+        if (tx.status === 'Refunded') statusClass = 'status refunded';
 
         return `
             <tr class="animate-fade-in">
@@ -292,7 +292,8 @@ function updateTransactionsTable(searchTerm = '') {
                 <td>${tx.name}</td>
                 <td class="text-muted">${tx.date}</td>
                 <td class="font-bold">₹${parseInt(tx.amount).toLocaleString()}</td>
-                <td><span class="badge ${statusClass}">${tx.status}</span></td>
+                <td><span class="${statusClass}">${tx.status}</span></td>
+                <td>${tx.channel}</td> <!-- Check if channel col exists in HTML, usually it does not or it is last -->
             </tr>
         `;
     }).join('');

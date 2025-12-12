@@ -278,6 +278,28 @@ select {
     color: var(--text-muted);
 }
 
+.status {
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.status.paid {
+    background: #E6FFFA;
+    color: #037d50;
+}
+
+.status.pending {
+    background: #FFF7E6;
+    color: #9a6b00;
+}
+
+.status.refunded {
+    background: #FFF1F2;
+    color: #9b2c2c;
+}
+
 /* Typography Utilities */
 .text-sm {
     font-size: 0.875rem;
@@ -866,6 +888,7 @@ body.dark .navbar {
     grid-template-columns: 2fr 1fr;
     gap: var(--spacing-lg);
 }
+
 /* Utility: Screen Reader Only */
 .sr-only {
     position: absolute;
