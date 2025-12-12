@@ -20,6 +20,12 @@ const DEFAULT_DATA = {
 
 // Generate initial dummy data if store is empty
 function generateInitialData() {
+    if (window.SEED_DATA && window.SEED_DATA.length > 0) {
+        console.log("Using Seed Data from CSV");
+        return window.SEED_DATA;
+    }
+
+    // ... Fallback to random generation if SEED_DATA is missing ...
     const transactions = [];
     const statuses = ['Paid', 'Pending', 'Refunded'];
     const channels = ['Website', 'Mobile App', 'Marketplace', 'Offline'];
