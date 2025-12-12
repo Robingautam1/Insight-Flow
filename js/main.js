@@ -46,30 +46,33 @@ function initLandingMenu() {
 }
 
 // --- Theme Management ---
+// --- Theme Management ---
 function initTheme() {
-    const savedTheme = localStorage.getItem('insight_theme') || 'light';
-    if (savedTheme === 'dark') {
-        document.body.classList.add('dark');
-    }
+    const toggle = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('insightflow-theme');
 
-    // Theme Toggle Logic (can be attached to any button with this ID)
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        themeToggle.checked = savedTheme === 'dark';
-        themeToggle.addEventListener('change', () => {
-            if (themeToggle.checked) {
-                document.body.classList.add('dark');
-                localStorage.setItem('insight_theme', 'dark');
-            } else {
-                document.body.classList.remove('dark');
-                localStorage.setItem('insight_theme', 'light');
-            }
-            // Update charts if they exist to reflect theme changes
-            if (revenueChart) {
-                updateChartColors();
-            }
+    // Apply saved theme or default
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+
+    // Set initial icon if toggle exists
+    if (toggle) {
+        toggle.textContent = document.documentElement.getAttribute('data-theme') === 'dark' ? '☀️' : '🌙';
+
+        toggle.addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', current);
+            localStorage.setItem('insightflow-theme', current);
+            toggle.textContent = current === 'dark' ? '☀️' : '🌙';
+
+            // Helper for existing body.dark styles if any remain
+            if (current === 'dark') document.body.classList.add('dark');
+            else document.body.classList.remove('dark');
+
+            // Update charts
+            if (typeof revenueChart !== 'undefined' && revenueChart) updateChartColors();
         });
     }
+}
 }
 
 function initMobileSidebar() {

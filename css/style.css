@@ -1,49 +1,33 @@
 :root {
-    /* Colors - Vibrant & Premium */
-    --bg-body: #f8fafc;
-    --bg-surface: #ffffff;
-    --bg-sidebar: #ffffff;
+    /* New Theme System */
+    --bg: #ffffff;
+    --card: #ffffff;
+    --text: #102a43;
+    --muted: #51677a;
+    --primary: #0f6cff;
+    --primary-hover: #0a52c6;
+    /* Derived for consistency */
+    --shadow: rgba(15, 23, 42, 0.06);
 
-    /* Primary: Vibrant Blue/Indigo */
-    --primary: #4f46e5;
-    /* Indigo 600 */
-    --primary-hover: #4338ca;
-    /* Indigo 700 */
-    --primary-light: #eef2ff;
-    /* Indigo 50 */
-
-    /* Secondary/Accent */
-    --accent: #0ea5e9;
-    /* Sky 500 */
-    --accent-light: #e0f2fe;
-
-    /* Text */
-    --text-main: #0f172a;
-    /* Slate 900 */
-    --text-muted: #64748b;
-    /* Slate 500 */
-    --text-light: #94a3b8;
-    /* Slate 400 */
-
-    /* UI Elements */
+    /* Legacy Helper Mappings (to maintain existing layouts) */
+    --bg-body: var(--bg);
+    --bg-surface: var(--card);
+    --bg-sidebar: var(--card);
+    --text-main: var(--text);
+    --text-muted: var(--muted);
     --border: #e2e8f0;
-    /* Slate 200 */
 
-    /* Status Colors */
+    /* Other constants */
+    --primary-light: #eef2ff;
+    --accent: #0ea5e9;
+    --accent-light: #e0f2fe;
+    --text-light: #94a3b8;
     --success: #10b981;
-    /* Emerald 500 */
     --success-bg: #ecfdf5;
-    /* Emerald 50 */
     --danger: #ef4444;
-    /* Red 500 */
     --danger-bg: #fef2f2;
-    /* Red 50 */
     --warning: #f59e0b;
-    /* Amber 500 */
     --warning-bg: #fffbeb;
-    /* Amber 50 */
-
-    /* Typography */
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
     /* Spacing */
@@ -54,13 +38,11 @@
     --spacing-xl: 2rem;
     --spacing-2xl: 3rem;
 
-    /* Shadows - Soft & layered */
+    /* Shadows & Radius */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-
-    /* Radius */
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
     --radius-sm: 0.375rem;
     --radius-md: 0.5rem;
     --radius-lg: 0.75rem;
@@ -72,29 +54,78 @@
     --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dark Mode Variables */
-body.dark {
-    --bg-body: #0f172a;
-    /* Slate 900 */
-    --bg-surface: #1e293b;
-    /* Slate 800 */
-    --bg-sidebar: #1e293b;
-    --text-main: #f8fafc;
-    /* Slate 50 */
-    --text-muted: #94a3b8;
-    /* Slate 400 */
-    --text-light: #64748b;
-    /* Slate 500 */
-    --border: #334155;
-    /* Slate 700 */
-    --primary-light: #312e81;
-    /* Indigo 900 */
-    --success-bg: #064e3b;
-    /* Emerald 900 */
-    --danger-bg: #7f1d1d;
-    /* Red 900 */
-    --warning-bg: #78350f;
-    /* Amber 900 */
+[data-theme="dark"] {
+    --bg: #071029;
+    --card: #071a2b;
+    --text: #e6f0ff;
+    --muted: #9fb6d6;
+    --primary: #60a5fa;
+    --primary-hover: #3b82f6;
+    --shadow: rgba(0, 0, 0, 0.6);
+
+    /* Legacy Mapping Updates for Dark */
+    --border: #1e3a8a;
+    /* adjusted border for dark mode */
+    --primary-light: rgba(96, 165, 250, 0.15);
+    --success-bg: rgba(16, 185, 129, 0.1);
+    --danger-bg: rgba(239, 68, 68, 0.1);
+    --warning-bg: rgba(245, 158, 11, 0.1);
+}
+
+/* Base Styles using new vars */
+body {
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.card {
+    background: var(--card);
+    box-shadow: 0 8px 22px var(--shadow);
+    color: var(--text);
+}
+
+.sidebar {
+    background-color: var(--card);
+    border-right: 1px solid var(--border);
+}
+
+.navbar {
+    background-color: var(--card);
+    border-bottom: 1px solid var(--border);
+}
+
+.feature-card {
+    background: var(--card);
+    border-color: var(--border);
+}
+
+.transactions-table th,
+.transactions-table td {
+    border-bottom: 1px solid var(--border);
+}
+
+.transactions-table thead th {
+    color: var(--muted);
+}
+
+/* Theme Toggle Button */
+#themeToggle {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+}
+
+#themeToggle:hover {
+    background: var(--primary-light);
 }
 
 /* Animations */
