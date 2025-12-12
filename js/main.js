@@ -197,59 +197,59 @@ function handleExport() {
 }
 
 function updateDashboard() {
+    // 1. Get Active Range
     const activeBtn = document.querySelector('.filter-btn.active');
     const timeRange = activeBtn ? activeBtn.dataset.range : '30d';
 
-    const kpis = store.getKPIs(timeRange);
+    // 2. Define Demo Data
+    const demoDataSets = {
+        '7d': {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            current: [15000, 21000, 18000, 24000, 28000, 32000, 29000],
+            previous: [12000, 15000, 14000, 19000, 23000, 25000, 22000]
+        },
+        '30d': {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
+            current: [85000, 92000, 115000, 108000, 124000],
+            previous: [70000, 80000, 95000, 90000, 100000]
+        },
+        '90d': {
+            labels: ['Month 1', 'Month 2', 'Month 3'],
+            current: [320000, 410000, 450000],
+            previous: [280000, 310000, 380000]
+        },
+        '1y': {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            current: [800000, 850000, 920000, 1100000, 1050000, 1150000, 1200000, 1250000, 1340000, 1400000, 1550000, 1600000],
+            previous: [700000, 750000, 800000, 900000, 950000, 1000000, 1050000, 1100000, 1150000, 1200000, 1250000, 1300000]
+        }
+    };
 
-    // Animate Numbers
-    animateValue('kpi-revenue', kpis.revenue, true);
-    animateValue('kpi-customers', kpis.customers);
-    animateValue('kpi-orders', kpis.orders);
-    document.getElementById('kpi-refund').textContent = kpis.refundRate + '%';
+    const selectedData = demoDataSets[timeRange] || demoDataSets['30d'];
 
-    const chartData = store.getChartData(timeRange);
-
-    // --- Dynamic Demo Data Update ---
-    if (revenueChart) {
-        // defined in initCharts scope or globally? 
-        // We will define specific demo datasets here for simplicity in this context
-        const demoDataSets = {
-            '7d': {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                current: [12500, 18000, 15000, 22000, 26000, 31000, 29000],
-                previous: [10000, 14000, 12000, 18000, 22000, 24000, 21000]
-            },
-            '30d': {
-                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
-                current: [85000, 92000, 115000, 108000, 124000],
-                previous: [70000, 80000, 95000, 90000, 100000]
-            },
-            '90d': {
-                labels: ['Month 1', 'Month 2', 'Month 3'],
-                current: [320000, 410000, 450000],
-                previous: [280000, 310000, 380000]
-            },
-            '1y': {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                current: [800000, 850000, 920000, 1100000, 1050000, 1150000, 1200000, 1250000, 1340000, 1400000, 1550000, 1600000],
-                previous: [700000, 750000, 800000, 900000, 950000, 1000000, 1050000, 1100000, 1150000, 1200000, 1250000, 1300000]
-            }
-        };
-
-        const selectedData = demoDataSets[timeRange] || demoDataSets['30d'];
-
-        // Update Revenue Chart
+    // 3. Update Revenue Chart (Priority)
+    if (typeof revenueChart !== 'undefined' && revenueChart) {
         revenueChart.data.labels = selectedData.labels;
-        revenueChart.data.datasets[0].data = selectedData.current; // Current Period
-        revenueChart.data.datasets[1].data = selectedData.previous; // Previous Period
+        revenueChart.data.datasets[0].data = selectedData.current;
+        revenueChart.data.datasets[1].data = selectedData.previous;
         revenueChart.update();
 
-        // Update values to match the chart data roughly (sum of current)
+        // Update Revenue KPI to match chart (Directly)
         const totalRevenue = selectedData.current.reduce((a, b) => a + b, 0);
         animateValue('kpi-revenue', totalRevenue, true);
     }
 
+    // 4. Update other KPIs from Store (safely)
+    try {
+        const kpis = store.getKPIs(timeRange);
+        animateValue('kpi-customers', kpis.customers);
+        animateValue('kpi-orders', kpis.orders);
+        document.getElementById('kpi-refund').textContent = kpis.refundRate + '%';
+    } catch (e) {
+        console.error("Store KPI error", e);
+    }
+
+    // 5. Update Table
     updateTransactionsTable();
 }
 
