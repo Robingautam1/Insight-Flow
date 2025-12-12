@@ -5,64 +5,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support - InsightFlow</title>
+    <meta name="description" content="Get help and support for InsightFlow.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="InsightFlow - Support">
+    <meta property="og:description" content="Get help and support for InsightFlow.">
+    <meta property="og:image" content="assets/images/og-screenshot.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://robingautam1.github.io/Insight-Flow/support.html">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
-    <style>
-        .help-article {
-            padding: 1rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            transition: all var(--transition-fast);
-            cursor: pointer;
-        }
+</head>
+<style>
+    .help-article {
+        padding: 1rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        transition: all var(--transition-fast);
+        cursor: pointer;
+    }
 
-        .help-article:hover {
-            border-color: var(--primary);
-            background-color: var(--bg-body);
-        }
-    </style>
+    .help-article:hover {
+        border-color: var(--primary);
+        background-color: var(--bg-body);
+    }
+</style>
 </head>
 
 <body>
     <div class="app-layout">
+        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-logo logo">
                 <i data-feather="activity"></i>
                 Insight<span>Flow</span>
             </div>
+
             <nav class="sidebar-menu">
                 <a href="dashboard.html" class="sidebar-item">
-                    <i data-feather="grid"></i> Dashboard
+                    <i data-feather="grid"></i>
+                    Dashboard
                 </a>
                 <a href="analytics.html" class="sidebar-item">
-                    <i data-feather="bar-chart-2"></i> Analytics
+                    <i data-feather="bar-chart-2"></i>
+                    Analytics
                 </a>
                 <a href="data.html" class="sidebar-item">
-                    <i data-feather="database"></i> Data Sources
+                    <i data-feather="database"></i>
+                    Data Sources
                 </a>
                 <a href="settings.html" class="sidebar-item">
-                    <i data-feather="settings"></i> Settings
+                    <i data-feather="settings"></i>
+                    Settings
                 </a>
                 <a href="support.html" class="sidebar-item active">
-                    <i data-feather="help-circle"></i> Support
+                    <i data-feather="help-circle"></i>
+                    Support
                 </a>
             </nav>
+
+            <div class="mt-auto">
+                <div class="card" style="padding: 1rem; background-color: var(--bg-body); border: none;">
+                    <h5 class="font-bold mb-1">Pro Plan</h5>
+                    <p class="text-xs text-muted mb-2">You have 12 days left in your trial.</p>
+                    <button class="btn btn-primary btn-sm w-full"
+                        style="width: 100%; font-size: 0.8rem;">Upgrade</button>
+                </div>
+            </div>
         </aside>
 
-        <main class="main-content">
+        <!-- Main Content -->
+        <main class="main-content animate-fade-in">
+            <!-- Top Bar -->
             <header class="top-bar">
-                <h2 class="text-xl font-bold">Help & Support</h2>
+                <div class="flex items-center gap-md">
+                    <button class="icon-btn" id="sidebar-toggle" style="display: none;">
+                        <i data-feather="menu"></i>
+                    </button>
+                    <h2 class="text-xl font-bold">Help & Support</h2>
+                </div>
+
                 <div class="flex items-center gap-lg">
-                    <div class="user-menu">
+                    <div class="user-menu flex items-center gap-md">
+                        <!-- Theme Toggle -->
+                        <label class="flex items-center cursor-pointer relative">
+                            <input type="checkbox" id="theme-toggle" class="sr-only" style="display: none;">
+                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                <i data-feather="moon" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                            </span>
+                        </label>
                         <div class="avatar">JD</div>
                     </div>
                 </div>
             </header>
 
-            <div class="grid grid-cols-2 gap-xl" style="grid-template-columns: 1fr 1fr;">
+            <div class="grid grid-cols-2 gap-xl" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
                 <!-- Left Column: Guides -->
                 <div class="flex flex-col gap-lg">
                     <section>
@@ -146,6 +192,8 @@
         </main>
     </div>
 
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
     <script>
         feather.replace();
 

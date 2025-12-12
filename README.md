@@ -1,45 +1,34 @@
 # InsightFlow
 
-A modern, responsive SaaS website and dashboard for business analytics.
-
-## Features
-
-- **Landing Page**: Complete marketing site with Hero, Features, Use Cases, Pricing, and FAQ.
-- **Dashboard**: Interactive dashboard with key metrics, charts, and transaction history.
-- **Analytics**: Advanced reporting views with cohort analysis and comparison charts.
-- **Data Sources**: Interface for managing data connections and file uploads.
-- **Settings**: User profile and application preferences (including Dark Mode).
-- **Support**: Help center and contact form.
+InsightFlow is a modern, responsive business dashboard demo designed to visualize sales, marketing, and customer data. It features a clean UI, interactive charts, and a seamless user experience.
 
 ## Tech Stack
 
-- **HTML5**: Semantic structure.
-- **CSS3**: Custom properties (variables), Flexbox, Grid, and responsive media queries. No frameworks used (Vanilla CSS).
-- **JavaScript**: ES6+ for logic, Chart.js for data visualization, Feather Icons for UI icons.
+-   **Frontend**: HTML5, CSS3 (Custom Variables), JavaScript (ES6+)
+-   **Charts**: Chart.js
+-   **Icons**: Feather Icons
+-   **Deployment**: GitHub Pages
 
-## How to Run
+## Features
 
-1.  Navigate to the project directory:
+-   **Interactive Dashboard**: Real-time visualization of revenue, orders, and customer metrics.
+-   **Dark/Light Mode**: Fully functional theme toggle with local storage persistence.
+-   **Responsive Design**: optimized for desktop, tablet, and mobile views.
+-   **Data Visualization**: Beautiful line, bar, and doughnut charts using Chart.js.
+-   **Clean UI**: Custom design system using modern CSS best practices (Flexbox, Grid, Variables).
+
+## How to Run Locally
+
+1.  Clone the repository:
     ```bash
-    cd /Users/robingautam/.gemini/antigravity/scratch/insight-flow
+    git clone https://github.com/robingautam1/Insight-Flow.git
     ```
-
-2.  Start a local server (e.g., using Python):
+2.  Navigate to the project directory:
     ```bash
-    python3 -m http.server 8087
+    cd Insight-Flow
     ```
+3.  Open `index.html` in your browser.
 
-3.  Open your browser and visit:
-    [http://localhost:8087](http://localhost:8087)
+## Live Demo
 
-## Project Structure
-
-- `index.html`: Landing page
-- `dashboard.html`: Main app dashboard
-- `analytics.html`: Analytics & Reports
-- `data.html`: Data Sources
-- `settings.html`: Settings & Profile
-- `support.html`: Help & Support
-- `css/style.css`: Main stylesheet
-- `js/main.js`: Main application logic
-- `js/data.js`: Dummy data generator
+[Check out the live demo here](https://robingautam1.github.io/Insight-Flow/)

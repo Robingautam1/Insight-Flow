@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://robingautam1.github.io/Insight-Flow/sitemap.xml

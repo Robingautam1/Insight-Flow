@@ -5,6 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - InsightFlow</title>
+    <meta name="description"
+        content="InsightFlow Dashboard: Track revenue, orders, and customer insights in real-time.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="InsightFlow - Dashboard">
+    <meta property="og:description" content="Real-time business analytics and insights.">
+    <meta property="og:image" content="assets/images/og-screenshot.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://robingautam1.github.io/Insight-Flow/dashboard.html">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -56,7 +69,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="main-content animate-fade-in">
             <!-- Top Bar -->
             <header class="top-bar">
                 <div class="flex items-center gap-md">
@@ -71,7 +84,16 @@
                         <i data-feather="search" class="search-icon"></i>
                         <input type="text" class="search-input" placeholder="Search...">
                     </div>
-                    <div class="user-menu">
+                    <div class="user-menu flex items-center gap-md">
+                        <!-- Theme Toggle -->
+                        <label class="flex items-center cursor-pointer relative">
+                            <input type="checkbox" id="theme-toggle" class="sr-only" style="display: none;">
+                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                <i data-feather="moon" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                            </span>
+                        </label>
+
                         <button class="icon-btn relative">
                             <i data-feather="bell"></i>
                             <span
@@ -144,7 +166,8 @@
             <!-- Charts Row -->
             <div class="charts-row">
                 <div class="chart-card">
-                    <div class="chart-header">
+                    <div class="chart-header"
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                         <h3 class="font-bold">Revenue Over Time</h3>
                         <button class="icon-btn"><i data-feather="more-horizontal"></i></button>
                     </div>
@@ -153,7 +176,8 @@
                     </div>
                 </div>
                 <div class="chart-card">
-                    <div class="chart-header">
+                    <div class="chart-header"
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
                         <h3 class="font-bold">Orders by Channel</h3>
                     </div>
                     <div style="flex: 1; position: relative;">
@@ -254,7 +278,7 @@
                 <div class="mb-3">
                     <label class="block text-sm font-medium mb-1">Status</label>
                     <select name="status" class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: white;">
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
                         <option value="Paid">Paid</option>
                         <option value="Pending">Pending</option>
                         <option value="Refunded">Refunded</option>
@@ -263,7 +287,7 @@
                 <div class="mb-4">
                     <label class="block text-sm font-medium mb-1">Channel</label>
                     <select name="channel" class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: white;">
+                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
                         <option value="Website">Website</option>
                         <option value="Mobile App">Mobile App</option>
                         <option value="Marketplace">Marketplace</option>

@@ -5,86 +5,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings - InsightFlow</title>
+    <meta name="description" content="Manage workspace and user settings.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="InsightFlow - Settings">
+    <meta property="og:description" content="Manage workspace and user settings.">
+    <meta property="og:image" content="assets/images/og-screenshot.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://robingautam1.github.io/Insight-Flow/settings.html">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
-    <style>
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
+</head>
+<style>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
 
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            font-size: 0.875rem;
-        }
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        font-size: 0.875rem;
+    }
 
-        .form-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-md);
-            background: var(--bg-surface);
-            color: var(--text-main);
-        }
+    .form-input {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        background: var(--bg-surface);
+        color: var(--text-main);
+    }
 
-        .form-input:focus {
-            outline: 2px solid var(--primary-light);
-            border-color: var(--primary);
-        }
+    .form-input:focus {
+        outline: 2px solid var(--primary-light);
+        border-color: var(--primary);
+    }
 
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 24px;
-        }
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+    }
 
-        .toggle-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
 
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--border);
-            transition: .4s;
-            border-radius: 34px;
-        }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--border);
+        transition: .4s;
+        border-radius: 34px;
+    }
 
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
 
-        input:checked+.slider {
-            background-color: var(--primary);
-        }
+    input:checked+.slider {
+        background-color: var(--primary);
+    }
 
-        input:checked+.slider:before {
-            transform: translateX(20px);
-        }
-    </style>
+    input:checked+.slider:before {
+        transform: translateX(20px);
+    }
+</style>
 </head>
 
 <body>
     <div class="app-layout">
+        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-logo logo">
                 <i data-feather="activity"></i>
@@ -92,28 +107,58 @@
             </div>
             <nav class="sidebar-menu">
                 <a href="dashboard.html" class="sidebar-item">
-                    <i data-feather="grid"></i> Dashboard
+                    <i data-feather="grid"></i>
+                    Dashboard
                 </a>
                 <a href="analytics.html" class="sidebar-item">
-                    <i data-feather="bar-chart-2"></i> Analytics
+                    <i data-feather="bar-chart-2"></i>
+                    Analytics
                 </a>
                 <a href="data.html" class="sidebar-item">
-                    <i data-feather="database"></i> Data Sources
+                    <i data-feather="database"></i>
+                    Data Sources
                 </a>
                 <a href="settings.html" class="sidebar-item active">
-                    <i data-feather="settings"></i> Settings
+                    <i data-feather="settings"></i>
+                    Settings
                 </a>
                 <a href="support.html" class="sidebar-item">
-                    <i data-feather="help-circle"></i> Support
+                    <i data-feather="help-circle"></i>
+                    Support
                 </a>
             </nav>
+
+            <div class="mt-auto">
+                <div class="card" style="padding: 1rem; background-color: var(--bg-body); border: none;">
+                    <h5 class="font-bold mb-1">Pro Plan</h5>
+                    <p class="text-xs text-muted mb-2">You have 12 days left in your trial.</p>
+                    <button class="btn btn-primary btn-sm w-full"
+                        style="width: 100%; font-size: 0.8rem;">Upgrade</button>
+                </div>
+            </div>
         </aside>
 
-        <main class="main-content">
+        <!-- Main Content -->
+        <main class="main-content animate-fade-in">
+            <!-- Top Bar -->
             <header class="top-bar">
-                <h2 class="text-xl font-bold">Settings</h2>
+                <div class="flex items-center gap-md">
+                    <button class="icon-btn" id="sidebar-toggle" style="display: none;">
+                        <i data-feather="menu"></i>
+                    </button>
+                    <h2 class="text-xl font-bold">Settings</h2>
+                </div>
+
                 <div class="flex items-center gap-lg">
-                    <div class="user-menu">
+                    <div class="user-menu flex items-center gap-md">
+                        <!-- Theme Toggle -->
+                        <label class="flex items-center cursor-pointer relative">
+                            <input type="checkbox" id="theme-toggle" class="sr-only" style="display: none;">
+                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                <i data-feather="moon" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                            </span>
+                        </label>
                         <div class="avatar">JD</div>
                     </div>
                 </div>
@@ -195,20 +240,6 @@
 
                             <div class="flex justify-end gap-sm mt-4">
                                 <button class="btn btn-primary" id="save-profile-btn">Save Profile</button>
-                            </div>
-                        </div>
-
-                        <div class="card mt-6">
-                            <h3 class="text-lg font-bold mb-4">Appearance</h3>
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <h4 class="font-medium">Dark Mode</h4>
-                                    <p class="text-sm text-muted">Switch between light and dark themes.</p>
-                                </div>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="theme-toggle">
-                                    <span class="slider"></span>
-                                </label>
                             </div>
                         </div>
                     </div>
@@ -383,6 +414,7 @@
     </div>
 
     <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
     <script>
         feather.replace();
 
@@ -406,25 +438,6 @@
                 const tabId = item.dataset.tab;
                 document.getElementById(`tab-${tabId}`).style.display = 'block';
             });
-        });
-
-        // --- Theme Logic ---
-        const themeToggle = document.getElementById('theme-toggle');
-        const body = document.body;
-        const currentTheme = store.data.settings.theme || 'light';
-
-        if (currentTheme === 'dark') {
-            body.classList.add('dark');
-            themeToggle.checked = true;
-        }
-
-        themeToggle.addEventListener('change', () => {
-            const newTheme = themeToggle.checked ? 'dark' : 'light';
-            if (newTheme === 'dark') body.classList.add('dark');
-            else body.classList.remove('dark');
-
-            store.data.settings.theme = newTheme;
-            store.saveData(store.data);
         });
 
         // --- Profile Logic ---

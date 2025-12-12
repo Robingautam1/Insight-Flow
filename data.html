@@ -5,170 +5,186 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Sources - InsightFlow</title>
+    <meta name="description" content="Manage your data connections and sources.">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="InsightFlow - Data Sources">
+    <meta property="og:description" content="Manage your data connections and sources.">
+    <meta property="og:image" content="assets/images/og-screenshot.png">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://robingautam1.github.io/Insight-Flow/data.html">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
 </head>
 
 <body>
     <div class="app-layout">
+        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-logo logo">
                 <i data-feather="activity"></i>
                 Insight<span>Flow</span>
             </div>
+
             <nav class="sidebar-menu">
                 <a href="dashboard.html" class="sidebar-item">
-                    <i data-feather="grid"></i> Dashboard
+                    <i data-feather="grid"></i>
+                    Dashboard
                 </a>
                 <a href="analytics.html" class="sidebar-item">
-                    <i data-feather="bar-chart-2"></i> Analytics
+                    <i data-feather="bar-chart-2"></i>
+                    Analytics
                 </a>
                 <a href="data.html" class="sidebar-item active">
-                    <i data-feather="database"></i> Data Sources
+                    <i data-feather="database"></i>
+                    Data Sources
                 </a>
                 <a href="settings.html" class="sidebar-item">
-                    <i data-feather="settings"></i> Settings
+                    <i data-feather="settings"></i>
+                    Settings
                 </a>
                 <a href="support.html" class="sidebar-item">
-                    <i data-feather="help-circle"></i> Support
+                    <i data-feather="help-circle"></i>
+                    Support
                 </a>
             </nav>
+
+            <div class="mt-auto">
+                <div class="card" style="padding: 1rem; background-color: var(--bg-body); border: none;">
+                    <h5 class="font-bold mb-1">Pro Plan</h5>
+                    <p class="text-xs text-muted mb-2">You have 12 days left in your trial.</p>
+                    <button class="btn btn-primary btn-sm w-full"
+                        style="width: 100%; font-size: 0.8rem;">Upgrade</button>
+                </div>
+            </div>
         </aside>
 
-        <main class="main-content">
+        <!-- Main Content -->
+        <main class="main-content animate-fade-in">
+            <!-- Top Bar -->
             <header class="top-bar">
-                <h2 class="text-xl font-bold">Data Sources</h2>
+                <div class="flex items-center gap-md">
+                    <button class="icon-btn" id="sidebar-toggle" style="display: none;">
+                        <i data-feather="menu"></i>
+                    </button>
+                    <h2 class="text-xl font-bold">Data Sources</h2>
+                </div>
+
                 <div class="flex items-center gap-lg">
-                    <div class="user-menu">
+                    <div class="user-menu flex items-center gap-md">
+                        <!-- Theme Toggle -->
+                        <label class="flex items-center cursor-pointer relative">
+                            <input type="checkbox" id="theme-toggle" class="sr-only" style="display: none;">
+                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
+                            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                <i data-feather="moon" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                            </span>
+                        </label>
                         <div class="avatar">JD</div>
                     </div>
                 </div>
             </header>
 
-            <!-- Sync Status -->
-            <div class="card mb-8 flex justify-between items-center" style="border-left: 4px solid var(--success);">
-                <div class="flex items-center gap-md">
-                    <div class="p-2 bg-success-bg text-success rounded-full">
-                        <i data-feather="check"></i>
+            <!-- Content -->
+            <div class="flex flex-col gap-xl">
+                <!-- Connected Sources -->
+                <section>
+                    <h3 class="text-lg font-bold mb-4">Connected Sources</h3>
+                    <div class="grid grid-cols-2 gap-lg"
+                        style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                        <div class="card flex items-center justify-between">
+                            <div class="flex items-center gap-md">
+                                <div class="p-3 bg-bg-body rounded">
+                                    <i data-feather="shopping-cart" class="text-primary"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">Shopify Store</h4>
+                                    <p class="text-sm text-muted">Last synced: 10 mins ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-sm">
+                                <span class="badge badge-success">Active</span>
+                                <button class="icon-btn"><i data-feather="settings"></i></button>
+                            </div>
+                        </div>
+                        <div class="card flex items-center justify-between">
+                            <div class="flex items-center gap-md">
+                                <div class="p-3 bg-bg-body rounded">
+                                    <i data-feather="credit-card" class="text-primary"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold">Stripe</h4>
+                                    <p class="text-sm text-muted">Last synced: 1 hour ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-sm">
+                                <span class="badge badge-success">Active</span>
+                                <button class="icon-btn"><i data-feather="settings"></i></button>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <h4 class="font-bold">All systems operational</h4>
-                        <p class="text-sm text-muted">Last sync successful 15 minutes ago.</p>
+                </section>
+
+                <!-- Available Integrations -->
+                <section>
+                    <h3 class="text-lg font-bold mb-4">Available Integrations</h3>
+                    <div class="grid grid-cols-3 gap-lg"
+                        style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                        <div class="card hover-lift">
+                            <div class="mb-4 p-3 bg-bg-body rounded w-fit">
+                                <i data-feather="facebook"></i>
+                            </div>
+                            <h4 class="font-bold mb-2">Facebook Ads</h4>
+                            <p class="text-sm text-muted mb-4">Import ad spend and conversion data directly.</p>
+                            <button class="btn btn-secondary btn-sm w-full">Connect</button>
+                        </div>
+                        <div class="card hover-lift">
+                            <div class="mb-4 p-3 bg-bg-body rounded w-fit">
+                                <i data-feather="instagram"></i>
+                            </div>
+                            <h4 class="font-bold mb-2">Instagram</h4>
+                            <p class="text-sm text-muted mb-4">Track engagement and social commerce metrics.</p>
+                            <button class="btn btn-secondary btn-sm w-full">Connect</button>
+                        </div>
+                        <div class="card hover-lift">
+                            <div class="mb-4 p-3 bg-bg-body rounded w-fit">
+                                <i data-feather="mail"></i>
+                            </div>
+                            <h4 class="font-bold mb-2">Mailchimp</h4>
+                            <p class="text-sm text-muted mb-4">Sync email campaign performance and subscriber lists.</p>
+                            <button class="btn btn-secondary btn-sm w-full">Connect</button>
+                        </div>
                     </div>
-                </div>
-                <button class="btn btn-secondary btn-sm"><i data-feather="refresh-cw"></i> Sync Now</button>
+                </section>
+
+                <!-- File Upload -->
+                <section>
+                    <h3 class="text-lg font-bold mb-4">Manual Upload</h3>
+                    <div class="card border-dashed text-center p-8" id="file-upload-zone"
+                        style="border: 2px dashed var(--border); background: var(--bg-surface); cursor: pointer;">
+                        <div class="mb-4 text-primary">
+                            <i data-feather="upload-cloud" style="width: 48px; height: 48px;"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">Drop your CSV or Excel files here</h4>
+                        <p class="text-muted mb-6">or click to browse from your computer</p>
+                        <button class="btn btn-primary">Select Files</button>
+                        <input type="file" id="file-input" accept=".csv" style="display: none;">
+                    </div>
+                </section>
             </div>
-
-            <!-- Connect Data -->
-            <section class="mb-8">
-                <h3 class="text-lg font-bold mb-4">Connect New Source</h3>
-                <div class="grid grid-cols-4 gap-md"
-                    style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
-                    <!-- Upload -->
-                    <div
-                        class="card flex flex-col items-center text-center gap-sm hover:shadow-md cursor-pointer transition-all">
-                        <div class="p-3 bg-bg-body rounded-full mb-2">
-                            <i data-feather="upload-cloud" class="text-primary"></i>
-                        </div>
-                        <h4 class="font-bold">Upload File</h4>
-                        <p class="text-xs text-muted">CSV, Excel, or JSON</p>
-                    </div>
-                    <!-- Shopify -->
-                    <div
-                        class="card flex flex-col items-center text-center gap-sm hover:shadow-md cursor-pointer transition-all">
-                        <div class="p-3 bg-bg-body rounded-full mb-2">
-                            <i data-feather="shopping-bag" class="text-success"></i>
-                        </div>
-                        <h4 class="font-bold">Shopify</h4>
-                        <p class="text-xs text-muted">Orders & Customers</p>
-                    </div>
-                    <!-- Stripe -->
-                    <div
-                        class="card flex flex-col items-center text-center gap-sm hover:shadow-md cursor-pointer transition-all">
-                        <div class="p-3 bg-bg-body rounded-full mb-2">
-                            <i data-feather="credit-card" class="text-primary"></i>
-                        </div>
-                        <h4 class="font-bold">Stripe</h4>
-                        <p class="text-xs text-muted">Payments & Subscriptions</p>
-                    </div>
-                    <!-- Google Sheets -->
-                    <div
-                        class="card flex flex-col items-center text-center gap-sm hover:shadow-md cursor-pointer transition-all">
-                        <div class="p-3 bg-bg-body rounded-full mb-2">
-                            <i data-feather="grid" class="text-success"></i>
-                        </div>
-                        <h4 class="font-bold">Google Sheets</h4>
-                        <p class="text-xs text-muted">Live Data Sync</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Upload Area -->
-            <section class="mb-8">
-                <div id="file-upload-zone" class="card border-dashed flex flex-col items-center justify-center py-12"
-                    style="border-style: dashed; background-color: var(--bg-body); cursor: pointer;">
-                    <i data-feather="file" class="text-muted mb-4" style="width: 48px; height: 48px;"></i>
-                    <h4 class="font-bold mb-2">Drag and drop your CSV file here</h4>
-                    <p class="text-muted text-sm mb-4">or click to browse (Columns: Date, Amount, Customer, Status)</p>
-                    <button class="btn btn-secondary">Select File</button>
-                    <input type="file" id="file-input" accept=".csv" style="display: none;">
-                </div>
-            </section>
-
-            <!-- Data Preview -->
-            <section>
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-bold">Recent Uploads</h3>
-                    <button class="text-primary text-sm font-medium">View All History</button>
-                </div>
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>File Name</th>
-                                <th>Size</th>
-                                <th>Uploaded By</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="font-medium flex items-center gap-sm">
-                                    <i data-feather="file-text" class="text-muted" style="width: 16px;"></i>
-                                    sales_q3_2024.csv
-                                </td>
-                                <td class="text-muted">2.4 MB</td>
-                                <td>John Doe</td>
-                                <td class="text-muted">Oct 24, 2024</td>
-                                <td><span class="badge badge-success">Processed</span></td>
-                                <td><button class="icon-btn"><i data-feather="trash-2"
-                                            style="width: 16px;"></i></button></td>
-                            </tr>
-                            <tr>
-                                <td class="font-medium flex items-center gap-sm">
-                                    <i data-feather="file-text" class="text-muted" style="width: 16px;"></i>
-                                    inventory_update.xlsx
-                                </td>
-                                <td class="text-muted">856 KB</td>
-                                <td>Jane Smith</td>
-                                <td class="text-muted">Oct 22, 2024</td>
-                                <td><span class="badge badge-success">Processed</span></td>
-                                <td><button class="icon-btn"><i data-feather="trash-2"
-                                            style="width: 16px;"></i></button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
         </main>
     </div>
 
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
     <script>
         feather.replace();
     </script>
