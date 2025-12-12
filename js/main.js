@@ -103,10 +103,13 @@ function initMobileSidebar() {
 // --- Dashboard Logic ---
 function initDashboard() {
     // Simulate loading state
-    const charts = ['revenueChart', 'channelChart', 'productChart'];
+    const charts = ['revenueChart', 'channelChart'];
     charts.forEach(id => {
-        const ctx = document.getElementById(id).getContext('2d');
-        // Placeholder or skeleton could go here
+        const el = document.getElementById(id);
+        if (el) {
+            const ctx = el.getContext('2d');
+            // Placeholder logic
+        }
     });
 
     setTimeout(() => {
@@ -304,7 +307,6 @@ function updateTransactionsTable(searchTerm = '') {
 function initCharts() {
     const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
     const ctxChannel = document.getElementById('channelChart').getContext('2d');
-    const ctxProduct = document.getElementById('productChart').getContext('2d');
 
     Chart.defaults.font.family = "'Inter', sans-serif";
     Chart.defaults.color = '#64748b';
