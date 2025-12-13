@@ -121,7 +121,17 @@
         </aside>
 
         <!-- Main Content (React Root) -->
-        <main id="react-root" class="flex-1 relative flex flex-col h-full overflow-hidden bg-slate-50/50"></main>
+        <main id="react-root" class="flex-1 relative flex flex-col h-full overflow-hidden bg-slate-50/50">
+            <div class="flex items-center justify-center h-full">
+                <div class="text-center">
+                    <div
+                        class="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4">
+                    </div>
+                    <h2 class="text-xl font-semibold text-slate-700">Loading Dashboard...</h2>
+                    <p class="text-slate-500 mt-2">Initializing Analytics Engine</p>
+                </div>
+            </div>
+        </main>
     </div>
 
     <script>
@@ -684,8 +694,53 @@
             );
         };
 
-        const root = ReactDOM.createRoot(document.getElementById('react-root'));
-        root.render(<Dashboard />);
+        // Error Boundary Component
+        class ErrorBoundary extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { hasError: false, error: null };
+            }
+            static getDerivedStateFromError(error) {
+                return { hasError: true, error };
+            }
+            componentDidCatch(error, errorInfo) {
+                console.error("Dashboard Error:", error, errorInfo);
+            }
+            render() {
+                if (this.state.hasError) {
+                    return (
+                        <div className="flex items-center justify-center h-full flex-col p-8 text-center">
+                            <h2 className="text-2xl font-bold text-slate-800 mb-2">Something went wrong</h2>
+                            <p className="text-slate-500 mb-4 bg-red-50 p-4 rounded text-left font-mono text-sm border border-red-200">
+                                {this.state.error && this.state.error.toString()}
+                            </p>
+                            <button onClick={() => window.location.reload()} className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                                Reload Dashboard
+                            </button>
+                        </div>
+                    );
+                }
+                return this.props.children;
+            }
+        }
+
+        console.log("Mounting Dashboard...");
+        try {
+            const root = ReactDOM.createRoot(document.getElementById('react-root'));
+            root.render(
+                <ErrorBoundary>
+                    <Dashboard />
+                </ErrorBoundary>
+            );
+            console.log("Dashboard Mounted.");
+        } catch (e) {
+            console.error("Mount Error:", e);
+            document.getElementById('react-root').innerHTML = `
+                <div class="p-8 text-red-600 font-bold">
+                    Critical Mount Error: ${e.message}
+                </div>
+             `;
+        }
     </script>
 </body>
 
