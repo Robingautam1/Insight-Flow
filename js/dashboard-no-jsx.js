@@ -34,11 +34,14 @@ const Icon = ({ name, size = 18, className = "" }) => {
 };
 
 // --- Data Generation ---
-const generateData = () => {
+// --- Data Generation ---
+const generateData = (days = 30) => {
     const data = [];
+    const count = days === 'All' ? 90 : (parseInt(days) || 30);
     const start = new Date();
-    start.setDate(start.getDate() - 30);
-    for (let i = 0; i < 30; i++) {
+    start.setDate(start.getDate() - count);
+
+    for (let i = 0; i < count; i++) {
         const d = new Date(start);
         d.setDate(start.getDate() + i);
         data.push({
@@ -51,48 +54,23 @@ const generateData = () => {
     return data;
 };
 
-const initialTransactions = [
-    { id: '#ORD-9281', customer: 'Rajesh Kumar', amount: 24500, date: new Date().toISOString(), status: 'Paid', channel: 'Website', isNew: false },
-    { id: '#ORD-9280', customer: 'Priya Singh', amount: 8900, date: new Date(Date.now() - 3600000).toISOString(), status: 'Pending', channel: 'Mobile App', isNew: false },
-    { id: '#ORD-9279', customer: 'Amit Patel', amount: 14200, date: new Date(Date.now() - 7200000).toISOString(), status: 'Paid', channel: 'Marketplace', isNew: false }
-];
-
-const formatNumber = (val) => new Intl.NumberFormat('en-IN').format(val);
-
-// --- Components ---
-
-const MetricCard = ({ title, value, change, iconName, color, delay }) => {
-    return html`
-        <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer group animate-fade-in" style=${{ animationDelay: `${delay}ms` }}>
-            <div className="flex justify-between items-start mb-4">
-                <div className="p-3 rounded-xl bg-${color}-50 text-${color}-600 group-hover:scale-110 transition-transform">
-                    <${Icon} name=${iconName} size=${24} />
-                </div>
-                <span className="inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-slate-50 ${change.includes('+') ? 'text-green-600' : 'text-slate-500'}">
-                    ${change}
-                </span>
-            </div>
-            <div>
-                <p className="text-slate-500 font-medium text-sm mb-1">${title}</p>
-                <h3 className="text-2xl font-bold text-slate-800">${title.includes('Rate') ? value : (title.includes('Revenue') ? '₹' : '') + formatNumber(value)}</h3>
-            </div>
-             <div className="h-1 w-full bg-slate-100 rounded-full mt-4 overflow-hidden">
-                <div className="h-full bg-${color}-500 w-2/3 animate-pulse"></div>
-            </div>
-        </div>
-    `;
-};
+// ... initialTransactions ... (keep as is)
 
 const Dashboard = () => {
     const [transactions, setTransactions] = useState(initialTransactions);
-    const [chartData, setChartData] = useState(generateData());
     const [dates, setDates] = useState('30days');
+    const [chartData, setChartData] = useState(generateData(30));
     const [isRefreshing, setIsRefreshing] = useState(false);
+
+    // Update data when date range changes
+    useEffect(() => {
+        setChartData(generateData(dates));
+    }, [dates]);
 
     const refreshData = () => {
         setIsRefreshing(true);
         setTimeout(() => {
-            setChartData(generateData());
+            setChartData(generateData(dates));
             setIsRefreshing(false);
         }, 1000);
     };
