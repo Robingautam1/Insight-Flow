@@ -144,24 +144,35 @@
         // --- Robust Icon Component ---
         const Icon = ({ name, size = 18, className = "" }) => {
             const lucide = window.lucide || {};
+            // Safety check: if lucide.icons is missing, fail gracefully
             if (!lucide.icons) return null;
 
             const iconData = lucide.icons[name];
+            // Safety check: if specific icon is missing, fail gracefully
             if (!iconData) return null;
 
+            // Ensure iconData follows expected [tag, attrs, children] format
+            if (!Array.isArray(iconData) || iconData.length < 3) return null;
+
             const [tag, attrs, children] = iconData;
-            return React.createElement(
-                tag,
-                {
-                    ...attrs,
-                    width: size,
-                    height: size,
-                    className: `lucide lucide-${name} ${className}`,
-                },
-                children.map(([childTag, childAttrs], index) =>
-                    React.createElement(childTag, { ...childAttrs, key: index })
-                )
-            );
+
+            try {
+                return React.createElement(
+                    tag,
+                    {
+                        ...attrs,
+                        width: size,
+                        height: size,
+                        className: `lucide lucide-${name} ${className}`,
+                    },
+                    children.map(([childTag, childAttrs], index) =>
+                        React.createElement(childTag, { ...childAttrs, key: index })
+                    )
+                );
+            } catch (e) {
+                console.error("Icon render error:", name, e);
+                return null;
+            }
         };
 
         // Proxy to handle <IconName /> usage
