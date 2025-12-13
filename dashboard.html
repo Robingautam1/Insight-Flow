@@ -6,48 +6,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InsightFlow — Ultimate Dashboard</title>
 
-    <!-- inline styles to ensure visibility regardless of external CSS/JS -->
     <style>
         body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #fef08a;
-            /* Debug Yellow */
-            color: #333;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
         }
 
-        #loader {
+        .loading-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            z-index: 9999;
+            inset: 0;
+            background: #f8fafc;
+            z-index: 1000;
             display: flex;
             flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
         }
 
         .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #ccc;
-            border-top-color: #333;
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #3b82f6;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            0% {
+            from {
                 transform: rotate(0deg);
             }
 
-            100% {
+            to {
                 transform: rotate(360deg);
             }
+        }
+
+        .hidden {
+            display: none !important;
         }
     </style>
 
@@ -64,11 +60,9 @@
 <body>
 
     <!-- Loading Screen -->
-    <div id="loader">
+    <div id="loader" class="loading-overlay">
         <div class="spinner"></div>
-        <h2 style="margin-top: 20px;">InsightFlow Dashboard</h2>
-        <p id="status-text">Initializing...</p>
-        <small id="debug-text" style="color:red; margin-top: 10px;"></small>
+        <div class="mt-4 text-slate-500 font-medium text-sm">Initializing Dashboard...</div>
     </div>
 
     <!-- App Root -->
@@ -76,71 +70,50 @@
 
     <!-- Application Logic -->
     <script>
-        // Debug Logger
-        const debug = (msg) => {
-            console.log('[Dashboard]', msg);
-            const logEl = document.getElementById('debug-log');
-            if (logEl) logEl.textContent = msg;
-        };
-
-        debug("Starting Scripts...");
-
-        // Ensure dependencies
-        if (!window.React || !window.ReactDOM || !window.htm) {
-            alert("Critical Error: React dependencies failed to load. Please check your connection.");
-        }
-
-        const { useState, useEffect, useMemo } = React;
+        const { useState, useEffect } = React;
         const html = htm.bind(React.createElement);
 
-        // Safe Recharts Access
+        // Safe Recharts
         const RC = window.Recharts || {};
-        const {
-            AreaChart, Area, LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, ComposedChart,
-            XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
-        } = RC;
+        const { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } = RC;
 
-        // --- Icon Component ---
-        const Icon = ({ name, size = 18, color, className = "" }) => {
+        // Icon Component
+        const Icon = ({ name, size = 18, className = "" }) => {
             const lucide = window.lucide || {};
             if (!lucide.icons || !lucide.icons[name]) return null;
-
             const [tag, attrs, children] = lucide.icons[name];
-
-            const createKids = (list) => list.map(([t, a], i) => React.createElement(t, { ...a, key: i }));
-
-            return React.createElement(tag, {
-                ...attrs,
-                width: size,
-                height: size,
-                stroke: color || "currentColor",
-                className: `lucide lucide-${name} ${className}`
-            }, createKids(children));
+            return React.createElement(tag, { ...attrs, width: size, height: size, className: `lucide lucide-${name} ${className}` },
+                children.map(([t, a], i) => React.createElement(t, { ...a, key: i }))
+            );
         };
 
-        // --- Mock Data ---
-        const generateData = (count = 30) => Array.from({ length: count }, (_, i) => ({
-            date: new Date(Date.now() - (count - i) * 86400000).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
-            revenue: Math.floor(Math.random() * 20000) + 10000,
-            previous: Math.floor(Math.random() * 15000) + 8000
-        }));
+        // Metric Card with FIXED Tailwind Classes
+        const MetricCard = ({ title, value, change, icon, colorTheme }) => {
+            // Explicit maps for Tailwind scanner
+            const themes = {
+                blue: { bg: 'bg-blue-50', text: 'text-blue-600' },
+                green: { bg: 'bg-green-50', text: 'text-green-600' },
+                purple: { bg: 'bg-purple-50', text: 'text-purple-600' },
+                orange: { bg: 'bg-orange-50', text: 'text-orange-600' }
+            };
+            const theme = themes[colorTheme] || themes.blue;
 
-        // --- Components ---
-        const MetricCard = ({ title, value, change, icon, color }) => html`
-            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-3 rounded-xl bg-${color}-50 text-${color}-600">
-                        <${Icon} name=${icon} size=${24} />
+            return html`
+                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="p-3 rounded-xl ${theme.bg} ${theme.text}">
+                            <${Icon} name=${icon} size=${24} />
+                        </div>
+                        <span class="text-xs font-bold px-2 py-1 rounded-full bg-green-50 text-green-600">${change}</span>
                     </div>
-                    <span class="text-xs font-bold px-2 py-1 rounded-full bg-green-50 text-green-600">${change}</span>
+                    <div class="text-slate-500 text-sm font-medium mb-1">${title}</div>
+                    <div class="text-2xl font-bold text-slate-800">${value}</div>
                 </div>
-                <div class="text-slate-500 text-sm font-medium mb-1">${title}</div>
-                <div class="text-2xl font-bold text-slate-800">${value}</div>
-            </div>
-        `;
+            `;
+        };
 
         const Sidebar = () => html`
-            <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-20">
+            <aside class="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 h-full z-20">
                 <div class="p-6">
                     <div class="flex items-center gap-2 text-xl font-bold text-slate-800">
                         <div class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center">
@@ -159,53 +132,47 @@
         `;
 
         const Dashboard = () => {
-            const [data] = useState(generateData(30));
+            const [data] = useState(Array.from({ length: 30 }, (_, i) => ({
+                date: new Date(Date.now() - (30 - i) * 86400000).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
+                revenue: Math.floor(Math.random() * 20000) + 10000
+            })));
 
             return html`
-                <div class="flex h-full bg-slate-50/50 w-full">
+                <div class="flex h-screen w-full bg-slate-50/50">
                     <${Sidebar} />
                     <div class="flex-1 flex flex-col h-full overflow-hidden">
-                        <!-- Header -->
-                        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-10">
+                        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0">
                             <h1 class="text-lg font-bold text-slate-800">Dashboard</h1>
                             <div class="flex items-center gap-4">
-                                <button class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200"><${Icon} name="bell" size=${18} /></button>
                                 <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white flex items-center justify-center text-xs font-bold">JD</div>
                             </div>
                         </header>
 
-                        <!-- Content -->
                         <div class="flex-1 overflow-y-auto p-6">
-                            <!-- Metrics -->
                             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                                <${MetricCard} title="Total Revenue" value="₹12.4L" change="+12%" icon="dollar-sign" color="blue" />
-                                <${MetricCard} title="Active Users" value="1,240" change="+5%" icon="users" color="green" />
-                                <${MetricCard} title="New Orders" value="356" change="+8%" icon="shopping-bag" color="purple" />
-                                <${MetricCard} title="Bounce Rate" value="42%" change="-2%" icon="activity" color="orange" />
+                                <${MetricCard} title="Total Revenue" value="₹12.4L" change="+12%" icon="dollar-sign" colorTheme="blue" />
+                                <${MetricCard} title="Active Users" value="1,240" change="+5%" icon="users" colorTheme="green" />
+                                <${MetricCard} title="New Orders" value="356" change="+8%" icon="shopping-bag" colorTheme="purple" />
+                                <${MetricCard} title="Bounce Rate" value="42%" change="-2%" icon="activity" colorTheme="orange" />
                             </div>
 
-                            <!-- Chart -->
                             <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm mb-8 h-[400px]">
                                 <h3 class="text-lg font-bold text-slate-800 mb-4">Revenue Trends</h3>
-                                ${RC.AreaChart
-                    ? html`
-                                        <${ResponsiveContainer} width="100%" height="100%">
-                                            <${AreaChart} data=${data}>
-                                                <${RC.defs}>
-                                                    <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="5%" stopColor="#3B82F6" stopOpacity=${0.3}/>
-                                                        <stop offset="95%" stopColor="#3B82F6" stopOpacity=${0}/>
-                                                    </linearGradient>
-                                                </${RC.defs}>
-                                                <${CartesianGrid} strokeDasharray="3 3" vertical=${false} />
-                                                <${XAxis} dataKey="date" />
-                                                <${YAxis} />
-                                                <${Tooltip} />
-                                                <${Area} type="monotone" dataKey="revenue" stroke="#3B82F6" fill="url(#colorRev)" strokeWidth=${3} />
-                                            </${AreaChart}>
-                                        </${ResponsiveContainer}>`
-                    : html`<div class="flex items-center justify-center h-full text-red-500">Chart Library Failed to Load</div>`
-                }
+                                <${ResponsiveContainer} width="100%" height="100%">
+                                    <${AreaChart} data=${data}>
+                                        <${RC.defs || 'defs'}>
+                                            <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                                                <stop offset="5%" stopColor="#3B82F6" stopOpacity=${0.3}/>
+                                                <stop offset="95%" stopColor="#3B82F6" stopOpacity=${0}/>
+                                            </linearGradient>
+                                        </${RC.defs || 'defs'}>
+                                        <${CartesianGrid} strokeDasharray="3 3" vertical=${false} />
+                                        <${XAxis} dataKey="date" />
+                                        <${YAxis} />
+                                        <${Tooltip} />
+                                        <${Area} type="monotone" dataKey="revenue" stroke="#3B82F6" fill="url(#colorRev)" strokeWidth=${3} />
+                                    </${AreaChart}>
+                                </${ResponsiveContainer}>
                             </div>
                         </div>
                     </div>
@@ -213,22 +180,9 @@
             `;
         };
 
-        // --- Mount ---
-        debug("Mounting App...");
-        try {
-            const root = ReactDOM.createRoot(document.getElementById('react-root'));
-            root.render(html`<${Dashboard} />`);
-
-            // Hide loader after short delay to smooth transition
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-                debug("Mounted Successfully.");
-            }, 500);
-
-        } catch (e) {
-            debug("Error: " + e.message);
-            document.getElementById('react-root').innerHTML = `<div class="p-10 text-red-600 font-bold">App Crash: ${e.message}</div>`;
-        }
+        const root = ReactDOM.createRoot(document.getElementById('react-root'));
+        root.render(html`<${Dashboard} />`);
+        setTimeout(() => document.getElementById('loader').classList.add('hidden'), 500);
     </script>
 </body>
 
