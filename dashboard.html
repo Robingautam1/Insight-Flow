@@ -6,51 +6,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InsightFlow — Ultimate Dashboard</title>
 
-    <!-- CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- inline styles to ensure visibility regardless of external CSS/JS -->
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fef08a;
+            /* Debug Yellow */
+            color: #333;
         }
 
-        .loading-overlay {
+        #loader {
             position: fixed;
-            inset: 0;
-            background: #f8fafc;
-            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            z-index: 9999;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
 
         .spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #e2e8f0;
-            border-top-color: #3b82f6;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #ccc;
+            border-top-color: #333;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            from {
+            0% {
                 transform: rotate(0deg);
             }
 
-            to {
+            100% {
                 transform: rotate(360deg);
             }
         }
-
-        .hidden {
-            display: none !important;
-        }
     </style>
 
-    <!-- Dependencies (UMD) -->
+    <!-- Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
@@ -62,10 +64,11 @@
 <body>
 
     <!-- Loading Screen -->
-    <div id="loader" class="loading-overlay">
+    <div id="loader">
         <div class="spinner"></div>
-        <div class="mt-4 text-slate-500 font-medium text-sm">Initializing Dashboard...</div>
-        <div id="debug-log" class="mt-2 text-xs text-slate-400 font-mono"></div>
+        <h2 style="margin-top: 20px;">InsightFlow Dashboard</h2>
+        <p id="status-text">Initializing...</p>
+        <small id="debug-text" style="color:red; margin-top: 10px;"></small>
     </div>
 
     <!-- App Root -->
