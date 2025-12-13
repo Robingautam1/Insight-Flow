@@ -102,31 +102,10 @@ function initMobileSidebar() {
 
 // --- Dashboard Logic ---
 function initDashboard() {
-    // Simulate loading state
-    const charts = ['revenueChart', 'channelChart'];
-    charts.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            const ctx = el.getContext('2d');
-            // Placeholder logic
-        }
-    });
-
-    setTimeout(() => {
-        initCharts();
-        updateDashboard();
-
-        // Animate Cards
-        document.querySelectorAll('.kpi-card').forEach((card, index) => {
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-            setTimeout(() => {
-                card.style.transition = 'all 0.5s ease';
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, index * 100);
-        });
-    }, 100); // Slight delay for effect
+    initCharts();
+    initSparklines();
+    initTransactionTable();
+    updateDashboard();
 
     // Filter Logic
     document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -141,42 +120,270 @@ function initDashboard() {
         });
     });
 
-    // Search & Forms
-    const searchInput = document.querySelector('.search-input');
+    // Modal Logic
+    const addForm = document.getElementById('enhanced-add-form');
+    if (addForm) {
+        addForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const originalContent = btn.innerHTML;
+
+            // Loading State
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="animate-spin"></i> Saving...`;
+            lucide.createIcons();
+
+            setTimeout(() => {
+                handleAddTransaction(e);
+                // Success State
+                btn.innerHTML = `<i data-lucide="check"></i> Saved!`;
+                lucide.createIcons();
+
+                setTimeout(() => {
+                    document.getElementById('add-transaction-modal').style.display = 'none';
+                    btn.disabled = false;
+                    btn.innerHTML = originalContent;
+                    addForm.reset();
+                    lucide.createIcons();
+                }, 1000);
+            }, 800);
+        });
+    }
+}
+
+function initCharts() {
+    // 1. Revenue Area Chart
+    const revCtx = document.getElementById('mainRevenueChart');
+    if (revCtx) {
+        const gradient = revCtx.getContext('2d').createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(59, 130, 246, 0.2)');
+        gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+
+        revenueChart = new Chart(revCtx, {
+            type: 'line',
+            data: {
+                labels: [], // Populated later
+                datasets: [{
+                    label: 'Revenue',
+                    data: [],
+                    borderColor: '#3B82F6',
+                    backgroundColor: gradient,
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    pointHoverBackgroundColor: '#3B82F6',
+                    pointHoverBorderColor: '#fff',
+                    pointHoverBorderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        padding: 12,
+                        titleColor: '#fff',
+                        bodyColor: '#cbd5e1',
+                        displayColors: false,
+                        callbacks: {
+                            label: (context) => '₹' + context.parsed.y.toLocaleString()
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { maxTicksLimit: 7, color: '#94a3b8' }
+                    },
+                    y: {
+                        border: { display: false },
+                        grid: { color: '#f1f5f9' },
+                        ticks: {
+                            callback: (val) => '₹' + (val / 1000) + 'k',
+                            color: '#94a3b8',
+                            maxTicksLimit: 5
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // 2. Channel Donut Chart
+    const chanCtx = document.getElementById('channelDonutChart');
+    if (chanCtx) {
+        channelChart = new Chart(chanCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Website', 'Mobile', 'Marketplace', 'Offline'],
+                datasets: [{
+                    data: [45, 30, 20, 5],
+                    backgroundColor: ['#3B82F6', '#6366F1', '#A855F7', '#94a3b8'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+}
+
+function initSparklines() {
+    const createSparkline = (id, color, data) => {
+        const container = document.getElementById(id);
+        if (!container) return;
+
+        container.innerHTML = ''; // Clear prev
+        const canvas = document.createElement('canvas');
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        container.appendChild(canvas);
+
+        new Chart(canvas, {
+            type: 'line',
+            data: {
+                labels: ['1', '2', '3', '4', '5', '6', '7'],
+                datasets: [{
+                    data: data,
+                    borderColor: color,
+                    borderWidth: 2,
+                    fill: false,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                scales: { x: { display: false }, y: { display: false, min: Math.min(...data) - 10 } },
+                layout: { padding: 0 }
+            }
+        });
+    };
+
+    createSparkline('spark-revenue', '#3B82F6', [12, 15, 14, 18, 22, 24, 28]);
+    createSparkline('spark-customers', '#6366F1', [50, 55, 60, 58, 65, 70, 75]);
+    createSparkline('spark-orders', '#A855F7', [20, 18, 15, 12, 10, 8, 5]); // Down trend example
+    createSparkline('spark-refunds', '#F97316', [2, 2, 3, 2, 2, 1, 2]);
+}
+
+// Table State
+let tableState = {
+    currentPage: 1,
+    rowsPerPage: 10,
+    searchQuery: '',
+    data: []
+};
+
+function initTransactionTable() {
+    // Generate sample data if needed
+    if (!store.getTransactions().length) {
+        store.saveData({
+            ...store.loadData(),
+            transactions: generateInitialData() // fallback
+        });
+    }
+
+    // Initial Render
+    renderTable();
+
+    // Search Listener
+    const searchInput = document.querySelector('input[placeholder="Search orders..."]');
     if (searchInput) {
-        searchInput.addEventListener('input', (e) => updateTransactionsTable(e.target.value));
+        searchInput.addEventListener('input', (e) => {
+            tableState.searchQuery = e.target.value.toLowerCase();
+            tableState.currentPage = 1;
+            renderTable();
+        });
+    }
+}
+
+function renderTable() {
+    const tbody = document.getElementById('tx-table-body');
+    if (!tbody) return;
+
+    let allData = store.getTransactions();
+
+    // Filter
+    if (tableState.searchQuery) {
+        allData = allData.filter(t =>
+            t.customer.toLowerCase().includes(tableState.searchQuery) ||
+            t.id.toLowerCase().includes(tableState.searchQuery)
+        );
     }
 
-    const addTxForm = document.getElementById('add-transaction-form');
-    if (addTxForm) {
-        addTxForm.addEventListener('submit', handleAddTransaction);
-    }
+    // Paginate
+    const start = (tableState.currentPage - 1) * tableState.rowsPerPage;
+    const end = start + tableState.rowsPerPage;
+    const pageData = allData.slice(start, end);
 
-    const exportBtn = document.getElementById('export-btn');
-    if (exportBtn) exportBtn.addEventListener('click', handleExport);
+    tbody.innerHTML = pageData.map(t => {
+        let statusColor = 'bg-slate-100 text-slate-600';
+        if (t.status === 'Paid') statusColor = 'bg-green-50 text-green-700';
+        if (t.status === 'Pending') statusColor = 'bg-yellow-50 text-yellow-700';
+        if (t.status === 'Refunded') statusColor = 'bg-red-50 text-red-700';
+
+        let channelIcon = 'globe';
+        if (t.channel === 'Mobile App') channelIcon = 'smartphone';
+        if (t.channel === 'Marketplace') channelIcon = 'shopping-bag';
+        if (t.channel === 'Offline') channelIcon = 'credit-card';
+
+        return `
+        <tr class="hover:bg-slate-50 transition-colors group border-b border-slate-50 last:border-none text-slate-600">
+            <td class="px-6 py-4 font-mono text-xs font-semibold text-slate-500">${t.id}</td>
+            <td class="px-6 py-4 font-medium text-slate-900">${t.customer}</td>
+            <td class="px-6 py-4 text-xs">${new Date(t.date).toLocaleDateString()}</td>
+            <td class="px-6 py-4 font-medium text-slate-900">₹${t.amount.toLocaleString()}</td>
+            <td class="px-6 py-4">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColor}">
+                   <span class="w-1.5 h-1.5 rounded-full bg-current mr-1.5 opacity-60"></span> ${t.status}
+                </span>
+            </td>
+            <td class="px-6 py-4">
+                 <div class="flex items-center gap-2 text-xs">
+                    <i data-lucide="${channelIcon}" size="14" class="text-slate-400"></i> ${t.channel}
+                 </div>
+            </td>
+            <td class="px-6 py-4 text-right">
+                <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button class="p-1.5 text-slate-400 hover:text-indigo-600 rounded bg-white border border-slate-200 shadow-sm" title="View"><i data-lucide="eye" size="14"></i></button>
+                    <button class="p-1.5 text-slate-400 hover:text-indigo-600 rounded bg-white border border-slate-200 shadow-sm" title="Download Invoice"><i data-lucide="download" size="14"></i></button>
+                </div>
+            </td>
+        </tr>
+    `}).join('');
+
+    lucide.createIcons();
 }
 
 function handleAddTransaction(e) {
-    e.preventDefault();
+    // Logic reused from previous implementation but without preventDefault here as it's handled in listener
     const formData = new FormData(e.target);
     const newTx = {
-        id: `MAN-${Date.now()}`,
+        id: `ORD-${Math.floor(Math.random() * 90000) + 10000}`,
         customer: formData.get('customer'),
         amount: parseFloat(formData.get('amount')),
         date: new Date(formData.get('date')).toISOString(),
         status: formData.get('status'),
         channel: formData.get('channel'),
-        category: 'Manual'
+        category: formData.get('product') || 'General'
     };
 
     const currentData = store.loadData();
     currentData.transactions.unshift(newTx);
     store.saveData(currentData);
-
-    document.getElementById('add-transaction-modal').style.display = 'none';
-    e.target.reset();
     updateDashboard();
-    alert('Transaction added successfully!');
+    renderTable(); // Re-render table specifically
 }
 
 function handleExport() {

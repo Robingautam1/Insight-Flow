@@ -4,292 +4,521 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InsightFlow — Smart Business Dashboard</title>
-    <meta name="description"
-        content="InsightFlow — a clean interactive business dashboard demo for revenue, orders, channels and smart insights.">
+    <title>InsightFlow — Dashboard</title>
+    <meta name="description" content="Overview of your business metrics.">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="InsightFlow — Smart Business Dashboard">
-    <meta property="og:description" content="Make sense of your business in one clean dashboard.">
-    <meta property="og:image" content="assets/images/og-screenshot.png">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://robingautam1.github.io/Insight-Flow/dashboard.html">
-
+    <!-- Styles & Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
 <body>
+    <!-- Top Banner -->
+    <div id="top-banner" class="top-banner py-2 px-4 relative transform translate-y-0 text-sm font-medium z-50">
+        <div class="container mx-auto flex justify-between items-center text-white">
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-2"><i data-lucide="sparkles" size="16"></i> Pro Plan Trial</span>
+                <div class="hidden sm:flex items-center gap-2">
+                    <div class="w-24 h-1.5 bg-white/20 rounded-full overflow-hidden">
+                        <div class="h-full bg-white w-[85%]"></div>
+                    </div>
+                    <span class="text-xs opacity-90">12/14 days used</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button
+                    class="px-3 py-1 bg-white/20 hover:bg-white/30 rounded text-xs transition-colors backdrop-blur-sm">Upgrade
+                    Now</button>
+                <button onclick="document.getElementById('top-banner').classList.add('-translate-y-full', 'absolute')"
+                    class="opacity-80 hover:opacity-100"><i data-lucide="x" size="16"></i></button>
+            </div>
+        </div>
+    </div>
+
     <div class="app-layout">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <a href="index.html" class="sidebar-logo logo">
-                <i data-feather="activity"></i>
+                <i data-lucide="activity"></i>
                 Insight<span>Flow</span>
             </a>
 
             <nav class="sidebar-menu">
                 <a href="dashboard.html" class="sidebar-item active">
-                    <i data-feather="grid"></i>
+                    <i data-lucide="layout-grid"></i>
                     Dashboard
                 </a>
                 <a href="analytics.html" class="sidebar-item">
-                    <i data-feather="bar-chart-2"></i>
+                    <i data-lucide="bar-chart-2"></i>
                     Analytics
                 </a>
                 <a href="data.html" class="sidebar-item">
-                    <i data-feather="database"></i>
+                    <i data-lucide="database"></i>
                     Data Sources
                 </a>
                 <a href="settings.html" class="sidebar-item">
-                    <i data-feather="settings"></i>
+                    <i data-lucide="settings"></i>
                     Settings
                 </a>
                 <a href="support.html" class="sidebar-item">
-                    <i data-feather="help-circle"></i>
+                    <i data-lucide="help-circle"></i>
                     Support
                 </a>
             </nav>
 
             <div class="mt-auto">
-                <div class="card" style="padding: 1rem; background-color: var(--bg-body); border: none;">
-                    <h5 class="font-bold mb-1">Pro Plan</h5>
-                    <p class="text-xs text-muted mb-2">You have 12 days left in your trial.</p>
-                    <button class="btn btn-primary btn-sm w-full"
-                        style="width: 100%; font-size: 0.8rem;">Upgrade</button>
+                <div class="card bg-slate-50 border-none p-4">
+                    <h5 class="font-bold mb-1">Need help?</h5>
+                    <p class="text-xs text-muted mb-2">Check our docs or contact support.</p>
+                    <button class="btn btn-outline-secondary btn-sm w-full text-xs" onclick="openDemoModal()">Contact
+                        Support</button>
                 </div>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content animate-fade-in">
-            <!-- Top Bar -->
-            <header class="top-bar">
-                <div class="flex items-center gap-md">
-                    <button class="icon-btn mobile-menu-btn" id="sidebar-toggle">
-                        <i data-feather="menu"></i>
-                    </button>
-                    <h2 class="text-xl font-bold">Dashboard</h2>
-                    <p class="page-subhead">Your key metrics at a glance — revenue, orders, refunds and smart insights.
-                    </p>
-                </div>
+        <main class="main-content flex flex-col h-screen overflow-hidden">
 
-                <div class="flex items-center gap-lg">
-                    <div class="search-bar">
-                        <i data-feather="search" class="search-icon"></i>
-                        <input type="text" class="search-input" placeholder="Search...">
+            <!-- Sticky Filter Bar -->
+            <div class="sticky-filters px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4 shrink-0">
+                <div class="flex items-center gap-4 w-full md:w-auto overflow-x-auto no-scrollbar">
+                    <div class="flex bg-slate-100 p-1 rounded-lg">
+                        <button
+                            class="px-3 py-1 text-xs font-medium rounded-md bg-white shadow-sm text-indigo-600 transition-all">7
+                            Days</button>
+                        <button
+                            class="px-3 py-1 text-xs font-medium rounded-md text-slate-500 hover:text-indigo-600 transition-all">30
+                            Days</button>
+                        <button
+                            class="px-3 py-1 text-xs font-medium rounded-md text-slate-500 hover:text-indigo-600 transition-all">3
+                            Months</button>
                     </div>
-                    <div class="user-menu flex items-center gap-md">
-                        <!-- Theme Toggle -->
-                        <button id="themeToggle" aria-label="Toggle color theme">🌙</button>
 
-                        <button class="icon-btn relative">
-                            <i data-feather="bell"></i>
-                            <span
-                                style="position: absolute; top: 5px; right: 5px; width: 8px; height: 8px; background: var(--danger); border-radius: 50%;"></span>
-                        </button>
-                        <div class="avatar">JD</div>
+                    <div class="relative">
+                        <select
+                            class="appearance-none bg-white border border-slate-200 rounded-lg text-sm pl-9 pr-8 py-1.5 focus:outline-none focus:border-indigo-500 cursor-pointer text-slate-600 font-medium hover:bg-slate-50">
+                            <option>All Regions</option>
+                            <option>North America</option>
+                            <option>Europe</option>
+                            <option>Asia Pacific</option>
+                        </select>
+                        <i data-lucide="globe" size="14"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                        <i data-lucide="chevron-down" size="14"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
                     </div>
                 </div>
-            </header>
 
-            <!-- AI Insights -->
-            <div class="ai-insight">
-                <div class="ai-icon"><i data-feather="cpu"></i></div>
-                <div>
-                    <h4 class="font-bold mb-1" style="color: var(--primary);">AI Insight</h4>
-                    <p class="text-sm text-muted" id="ai-insight-text">Analyzing your data...</p>
-                </div>
-            </div>
-
-            <!-- Filters -->
-            <div class="flex justify-between items-center mb-6 flex-wrap gap-md">
-                <div class="flex gap-sm">
-                    <button class="btn btn-secondary btn-sm filter-btn active" data-range="7d">7 days</button>
-                    <button class="btn btn-secondary btn-sm filter-btn" data-range="30d">30 days</button>
-                    <button class="btn btn-secondary btn-sm filter-btn" data-range="90d">90 days</button>
-                    <button class="btn btn-secondary btn-sm filter-btn" data-range="1y">1 year</button>
-                </div>
-                <div class="flex gap-sm">
-                    <select class="btn btn-secondary btn-sm" style="padding-right: 2rem;">
-                        <option>All Regions</option>
-                        <option>North</option>
-                        <option>South</option>
-                    </select>
-                    <button class="btn btn-primary btn-sm" id="export-btn">
-                        <i data-feather="download"></i> Export
+                <div class="flex items-center gap-3">
+                    <span class="text-xs text-slate-400 hidden lg:flex items-center gap-1 mr-2">
+                        <i data-lucide="rotate-cw" size="12"></i> Updated 2m ago
+                    </span>
+                    <button class="btn btn-outline-secondary btn-sm flex items-center gap-2 group">
+                        <i data-lucide="download" size="14"
+                            class="group-hover:translate-y-0.5 transition-transform"></i> Export
                     </button>
-                    <button class="btn btn-secondary btn-sm"
+                    <button
+                        class="px-4 py-1.5 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm font-medium shadow-md hover:shadow-lg hover:brightness-110 transition-all flex items-center gap-2"
                         onclick="document.getElementById('add-transaction-modal').style.display = 'flex'">
-                        <i data-feather="plus"></i> Add
+                        <i data-lucide="plus" size="16"></i> Add New
                     </button>
                 </div>
             </div>
 
-            <!-- KPI Grid -->
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="kpi-label">Total Revenue</div>
-                    <div class="kpi-value" id="kpi-revenue">₹12,45,000</div>
-                    <div class="kpi-trend trend-up">
-                        <i data-feather="arrow-up-right" style="width: 16px; height: 16px;"></i>
-                        <span>14% vs last month</span>
-                    </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">Active Customers</div>
-                    <div class="kpi-value" id="kpi-customers">1,240</div>
-                    <div class="kpi-trend trend-up">
-                        <i data-feather="arrow-up-right" style="width: 16px; height: 16px;"></i>
-                        <span>5% vs last month</span>
-                    </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">New Orders</div>
-                    <div class="kpi-value" id="kpi-orders">356</div>
-                    <div class="kpi-trend trend-down">
-                        <i data-feather="arrow-down-right" style="width: 16px; height: 16px;"></i>
-                        <span>2% vs last month</span>
-                    </div>
-                </div>
-                <div class="kpi-card">
-                    <div class="kpi-label">Refund Rate</div>
-                    <div class="kpi-value" id="kpi-refund">2.4%</div>
-                    <div class="kpi-trend trend-down" style="color: var(--text-muted);">
-                        <span>Stable</span>
-                    </div>
-                </div>
-            </div>
+            <!-- Scrollable Dashboard Content -->
+            <div class="overflow-y-auto flex-1 p-8 space-y-8 no-scrollbar scroll-smooth">
 
-            <!-- ===== Dashboard charts & transactions ===== -->
-            <div class="dashboard-row">
-                <div class="charts-col">
-                    <div class="chart-card">
-                        <h4>Revenue Over Time</h4>
-                        <div class="chart-wrap" style="height:280px;">
-                            <canvas id="revenueChart"></canvas>
+                <!-- Metric Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Revenue -->
+                    <div class="metric-card group cursor-pointer border-l-4 border-l-blue-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-sm text-slate-500 font-medium mb-1">Total Revenue</div>
+                                <div class="text-3xl font-bold text-slate-900">₹12.45L</div>
+                            </div>
+                            <div
+                                class="p-2 bg-blue-50 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <i data-lucide="indian-rupee" size="20"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span
+                                class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                                <i data-lucide="trending-up" size="12" class="mr-1"></i> +14%
+                            </span>
+                            <span class="text-xs text-slate-400">vs last month</span>
+                        </div>
+                        <div class="metric-sparkline" id="spark-revenue">
+                            <!-- JS injected sparkline -->
                         </div>
                     </div>
-                    <div class="chart-card" style="margin-top:18px;">
-                        <h4>Orders by Channel</h4>
-                        <div class="chart-wrap" style="height:240px;">
-                            <canvas id="channelChart"></canvas>
+
+                    <!-- Customers -->
+                    <div class="metric-card group cursor-pointer border-l-4 border-l-indigo-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-sm text-slate-500 font-medium mb-1">Active Customers</div>
+                                <div class="text-3xl font-bold text-slate-900">1,240</div>
+                            </div>
+                            <div
+                                class="p-2 bg-indigo-50 rounded-lg text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                <i data-lucide="users" size="20"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span
+                                class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                                <i data-lucide="trending-up" size="12" class="mr-1"></i> +5.2%
+                            </span>
+                            <span class="text-xs text-slate-400">vs last month</span>
+                        </div>
+                        <div class="metric-sparkline" id="spark-customers"></div>
+                    </div>
+
+                    <!-- Orders -->
+                    <div class="metric-card group cursor-pointer border-l-4 border-l-purple-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-sm text-slate-500 font-medium mb-1">New Orders</div>
+                                <div class="text-3xl font-bold text-slate-900">356</div>
+                            </div>
+                            <div
+                                class="p-2 bg-purple-50 rounded-lg text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                                <i data-lucide="shopping-bag" size="20"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span
+                                class="flex items-center text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-full">
+                                <i data-lucide="trending-down" size="12" class="mr-1"></i> -2.1%
+                            </span>
+                            <span class="text-xs text-slate-400">vs last month</span>
+                        </div>
+                        <div class="metric-sparkline" id="spark-orders"></div>
+                    </div>
+
+                    <!-- Refunds -->
+                    <div class="metric-card group cursor-pointer border-l-4 border-l-orange-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-sm text-slate-500 font-medium mb-1">Refund Rate</div>
+                                <div class="text-3xl font-bold text-slate-900">2.4%</div>
+                            </div>
+                            <div
+                                class="p-2 bg-orange-50 rounded-lg text-orange-600 group-hover:bg-orange-600 group-hover:text-white transition-colors">
+                                <i data-lucide="alert-circle" size="20"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span
+                                class="flex items-center text-xs font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">
+                                <i data-lucide="minus" size="12" class="mr-1"></i> Stable
+                            </span>
+                            <span class="text-xs text-slate-400">vs last month</span>
+                        </div>
+                        <div class="metric-sparkline" id="spark-refunds"></div>
+                    </div>
+                </div>
+
+                <!-- Main Charts -->
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 card p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h3 class="font-bold text-slate-800">Revenue Trends</h3>
+                                <p class="text-sm text-slate-500">Daily revenue over the last 30 days</p>
+                            </div>
+                            <div class="p-1 bg-slate-100 rounded flex text-xs font-medium">
+                                <button class="px-2 py-1 bg-white shadow-sm rounded text-slate-800">Revenue</button>
+                                <button class="px-2 py-1 text-slate-500 hover:text-slate-700">Orders</button>
+                            </div>
+                        </div>
+                        <div class="h-72 w-full">
+                            <canvas id="mainRevenueChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="card p-6">
+                        <h3 class="font-bold text-slate-800 mb-2">Channel Distribution</h3>
+                        <p class="text-sm text-slate-500 mb-6">Where your orders are coming from</p>
+                        <div class="h-56 w-full relative">
+                            <canvas id="channelDonutChart"></canvas>
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="text-center mt-4">
+                                    <div class="text-2xl font-bold text-slate-800" id="total-orders-center">356</div>
+                                    <div class="text-[10px] text-slate-400 uppercase tracking-widest">Orders</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 space-y-3">
+                            <div class="flex justify-between items-center text-sm">
+                                <div class="flex items-center gap-2"><span
+                                        class="w-3 h-3 rounded-full bg-blue-500"></span> Website</div>
+                                <span class="font-medium text-slate-700">45%</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <div class="flex items-center gap-2"><span
+                                        class="w-3 h-3 rounded-full bg-indigo-500"></span> Mobile App</div>
+                                <span class="font-medium text-slate-700">30%</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <div class="flex items-center gap-2"><span
+                                        class="w-3 h-3 rounded-full bg-purple-500"></span> Marketplace</div>
+                                <span class="font-medium text-slate-700">20%</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm">
+                                <div class="flex items-center gap-2"><span
+                                        class="w-3 h-3 rounded-full bg-slate-400"></span> Offline</div>
+                                <span class="font-medium text-slate-700">5%</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="table-col">
-                    <div class="transactions-card">
-                        <h4>Recent Transactions</h4>
-                        <div class="table-wrap">
-                            <table id="transactionsTable" class="transactions-table" aria-live="polite">
-                                <thead>
+
+                <!-- Recent Transactions & Widgets -->
+                <div class="grid lg:grid-cols-4 gap-6">
+                    <!-- Transactions Table (Span 3) -->
+                    <div class="lg:col-span-3 card p-0 overflow-hidden">
+                        <div
+                            class="p-6 border-b border-slate-100 flex flex-wrap gap-4 justify-between items-center bg-white sticky top-0">
+                            <div>
+                                <h3 class="font-bold text-slate-800">Recent Transactions</h3>
+                                <p class="text-sm text-slate-500">Manage your latest orders and payments</p>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <div class="relative">
+                                    <input type="text" placeholder="Search orders..."
+                                        class="pl-9 pr-4 py-1.5 rounded-lg border border-slate-200 text-sm focus:outline-none focus:border-indigo-500 w-48 transition-all focus:w-64">
+                                    <i data-lucide="search" size="16"
+                                        class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                                </div>
+                                <button class="p-2 hover:bg-slate-100 rounded-lg text-slate-500"><i data-lucide="filter"
+                                        size="18"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm" id="dashboard-table">
+                                <thead class="bg-slate-50 text-slate-500 font-medium">
                                     <tr>
-                                        <th>Order ID</th>
-                                        <th>Customer</th>
-                                        <th>Date</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
-                                        <th>Channel</th>
+                                        <th class="px-6 py-4 cursor-pointer hover:bg-slate-100">Order ID <i
+                                                data-lucide="arrow-up-down" size="12"
+                                                class="inline ml-1 opacity-50"></i></th>
+                                        <th class="px-6 py-4 cursor-pointer hover:bg-slate-100">Customer <i
+                                                data-lucide="arrow-up-down" size="12"
+                                                class="inline ml-1 opacity-50"></i></th>
+                                        <th class="px-6 py-4 cursor-pointer hover:bg-slate-100">Date <i
+                                                data-lucide="arrow-up-down" size="12"
+                                                class="inline ml-1 opacity-50"></i></th>
+                                        <th class="px-6 py-4 cursor-pointer hover:bg-slate-100">Amount <i
+                                                data-lucide="arrow-up-down" size="12"
+                                                class="inline ml-1 opacity-50"></i></th>
+                                        <th class="px-6 py-4">Status</th>
+                                        <th class="px-6 py-4">Channel</th>
+                                        <th class="px-6 py-4 text-right">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody></tbody>
+                                <tbody class="divide-y divide-slate-100" id="tx-table-body">
+                                    <!-- Populated JS -->
+                                </tbody>
                             </table>
+                        </div>
+                        <!-- Pagination -->
+                        <div
+                            class="p-4 border-t border-slate-100 flex justify-between items-center text-sm text-slate-500">
+                            <span>Showing 1-10 of 45 results</span>
+                            <div class="flex gap-2">
+                                <button
+                                    class="px-3 py-1 border border-slate-200 rounded hover:bg-slate-50 disabled:opacity-50"
+                                    disabled>Previous</button>
+                                <button
+                                    class="px-3 py-1 border border-slate-200 rounded hover:bg-slate-50">Next</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Sidebar Widgets (Span 1) -->
+                    <div class="flex flex-col gap-6">
+                        <!-- Quick Actions -->
+                        <div class="card p-5">
+                            <h4 class="font-bold text-slate-800 mb-4 text-sm uppercase tracking-wide">Quick Actions</h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button
+                                    class="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 transition-all border border-slate-100">
+                                    <i data-lucide="file-text" size="20" class="mb-2 text-slate-500"></i>
+                                    <span class="text-xs font-medium">Invoice</span>
+                                </button>
+                                <button
+                                    class="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 transition-all border border-slate-100">
+                                    <i data-lucide="user-plus" size="20" class="mb-2 text-slate-500"></i>
+                                    <span class="text-xs font-medium">Customer</span>
+                                </button>
+                                <button
+                                    class="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 transition-all border border-slate-100">
+                                    <i data-lucide="bar-chart" size="20" class="mb-2 text-slate-500"></i>
+                                    <span class="text-xs font-medium">Report</span>
+                                </button>
+                                <button
+                                    class="flex flex-col items-center justify-center p-3 rounded-lg bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 transition-all border border-slate-100"
+                                    onclick="window.location.href='analytics.html'">
+                                    <i data-lucide="trending-up" size="20" class="mb-2 text-slate-500"></i>
+                                    <span class="text-xs font-medium">Trends</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity -->
+                        <div class="card p-5 flex-1">
+                            <h4 class="font-bold text-slate-800 mb-4 text-sm uppercase tracking-wide">Activity Feed</h4>
+                            <div class="space-y-0">
+                                <div class="activity-feed-item">
+                                    <div class="activity-icon-point"></div>
+                                    <p class="text-sm font-medium text-slate-800">New order #ORD-10245</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">from Priya Singh • 5m ago</p>
+                                </div>
+                                <div class="activity-feed-item">
+                                    <div class="activity-icon-point border-green-500"></div>
+                                    <p class="text-sm font-medium text-slate-800">Payment received ₹5,200</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">Invoice #INV-209 • 12m ago</p>
+                                </div>
+                                <div class="activity-feed-item">
+                                    <div class="activity-icon-point border-blue-500"></div>
+                                    <p class="text-sm font-medium text-slate-800">New customer signup</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">Amit Patel • 23m ago</p>
+                                </div>
+                                <div class="activity-feed-item">
+                                    <div class="activity-icon-point border-yellow-500"></div>
+                                    <p class="text-sm font-medium text-slate-800">Stock alert: Headphones</p>
+                                    <p class="text-xs text-slate-500 mt-0.5">Low inventory (5 left) • 1h ago</p>
+                                </div>
+                            </div>
+                            <button class="w-full text-center text-xs text-indigo-600 hover:underline mt-2">View all
+                                activity</button>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- ===== end dashboard charts & transactions ===== -->
-
         </main>
     </div>
 
-    <!-- Add Transaction Modal -->
-    <div id="add-transaction-modal"
-        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center;">
-        <div class="card" style="width: 400px; max-width: 90%;">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-lg">Add Transaction</h3>
-                <button class="icon-btn"
-                    onclick="document.getElementById('add-transaction-modal').style.display = 'none'"><i
-                        data-feather="x"></i></button>
+    <!-- Enhanced Add Transaction Modal -->
+    <div id="add-transaction-modal" class="fixed inset-0 z-[100] hidden items-center justify-center">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-900/40 modal-overlay transition-opacity" onclick="closeAddModal()"></div>
+
+        <!-- Content -->
+        <div
+            class="bg-white rounded-2xl shadow-2xl w-full max-w-md relative z-10 modal-content overflow-hidden transform transition-all">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h3 class="font-bold text-lg text-slate-800">Add New Transaction</h3>
+                <button class="text-slate-400 hover:text-slate-600 transition-colors" onclick="closeAddModal()"><i
+                        data-lucide="x" size="20"></i></button>
             </div>
-            <form id="add-transaction-form">
-                <div class="mb-3">
-                    <label class="block text-sm font-medium mb-1">Customer Name</label>
-                    <input type="text" name="customer" required class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+
+            <form id="enhanced-add-form" class="p-6 space-y-4">
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Customer Details</label>
+                    <div class="relative">
+                        <i data-lucide="user" size="16"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" name="customer" placeholder="Customer Name" required
+                            class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-50 transition-all">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="block text-sm font-medium mb-1">Amount</label>
-                    <input type="number" name="amount" required class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Amount</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₹</span>
+                            <input type="number" name="amount" placeholder="0.00" required
+                                class="w-full pl-8 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-50 transition-all">
+                        </div>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Date</label>
+                        <input type="date" name="date" required
+                            class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-50 transition-all text-slate-600">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="block text-sm font-medium mb-1">Date</label>
-                    <input type="date" name="date" required class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md);">
+
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Product / Service</label>
+                    <div class="relative">
+                        <i data-lucide="shopping-cart" size="16"
+                            class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" name="product" placeholder="Enter product name..."
+                            class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-50 transition-all">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="block text-sm font-medium mb-1">Status</label>
-                    <select name="status" class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
-                        <option value="Paid">Paid</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Refunded">Refunded</option>
-                    </select>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Status</label>
+                        <select name="status"
+                            class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 cursor-pointer bg-white">
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Refunded">Refunded</option>
+                        </select>
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-slate-500 uppercase tracking-wide">Channel</label>
+                        <select name="channel"
+                            class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-indigo-500 cursor-pointer bg-white">
+                            <option value="Website">Website</option>
+                            <option value="Mobile App">Mobile App</option>
+                            <option value="Marketplace">Marketplace</option>
+                            <option value="Offline">Offline</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="mb-4">
-                    <label class="block text-sm font-medium mb-1">Channel</label>
-                    <select name="channel" class="w-full p-2 border rounded"
-                        style="width: 100%; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-surface);">
-                        <option value="Website">Website</option>
-                        <option value="Mobile App">Mobile App</option>
-                        <option value="Marketplace">Marketplace</option>
-                        <option value="Offline">Offline</option>
-                    </select>
+
+                <div class="pt-4">
+                    <button type="submit" id="submit-btn"
+                        class="w-full btn btn-primary py-2.5 shadow-lg shadow-indigo-100 flex items-center justify-center gap-2">
+                        <span>Save Transaction</span>
+                        <i data-lucide="arrow-right" size="16"></i>
+                    </button>
                 </div>
-                <button type="submit" class="btn btn-primary w-full" style="width: 100%;">Add Transaction</button>
             </form>
         </div>
     </div>
 
-
-
-    <!-- DEMO CONTACT MODAL -->
-    <div id="demoModal" class="modal" aria-hidden="true" role="dialog">
-        <div class="modal-backdrop" onclick="closeDemoModal()"></div>
-        <div class="modal-panel" role="document" aria-labelledby="demoTitle">
-            <button class="modal-close" onclick="closeDemoModal()" aria-label="Close">✕</button>
-            <h3 id="demoTitle">Request a demo</h3>
-            <form id="demoForm" action="https://formspree.io/f/xpwzzedn" method="POST">
-                <label><input name="name" placeholder="Your name" required></label>
-                <label><input name="email" type="email" placeholder="Email address" required></label>
-                <label><textarea name="message" rows="4"
-                        placeholder="Tell me about your use case (optional)"></textarea></label>
-                <button type="submit" class="btn primary">Request demo</button>
-                <p class="small">No spam — this is a demo site. I'll only use this to respond to your request.</p>
-            </form>
+    <!-- Demo Modal Script Wrapper -->
+    <div id="demoModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm" onclick="closeDemoModal()"></div>
+        <div class="bg-white p-6 rounded-xl shadow-2xl relative z-10 max-w-sm w-full mx-4">
+            <button class="absolute right-4 top-4 text-slate-400 hover:text-slate-600" onclick="closeDemoModal()"><i
+                    data-lucide="x"></i></button>
+            <h3 class="font-bold text-xl mb-4">Contact Support</h3>
+            <p class="text-slate-500 mb-4">This is a demo dashboard. Support checks are simulated.</p>
+            <button class="btn btn-primary w-full" onclick="closeDemoModal()">Got it</button>
         </div>
     </div>
-    <button id="demoCTA" class="demo-cta" onclick="openDemoModal()" aria-label="Request demo">Request demo</button>
 
     <script src="js/dataset.js"></script>
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
     <script>
-        feather.replace();
-
-        // Request Demo Modal Logic
-        function openDemoModal() { const m = document.getElementById('demoModal'); m.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
-        function closeDemoModal() { const m = document.getElementById('demoModal'); m.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDemoModal(); });
+        lucide.createIcons();
+        function closeAddModal() {
+            document.getElementById('add-transaction-modal').style.display = 'none';
+        }
+        function openDemoModal() {
+            document.getElementById('demoModal').style.display = 'flex';
+        }
+        function closeDemoModal() {
+            document.getElementById('demoModal').style.display = 'none';
+        }
     </script>
 </body>
 

@@ -1148,6 +1148,102 @@ button {
     padding: 1.5rem;
 }
 
+/* --- Dashboard Specifics --- */
+.metric-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.metric-icon-bg {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.metric-sparkline {
+    height: 40px;
+    width: 100%;
+    margin-top: 1rem;
+    opacity: 0.5;
+}
+
+.sticky-filters {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .sticky-filters {
+    background: rgba(15, 23, 42, 0.95);
+}
+
+.activity-feed-item {
+    position: relative;
+    padding-left: 2rem;
+    padding-bottom: 1.5rem;
+    border-left: 2px solid var(--border);
+}
+
+.activity-feed-item:last-child {
+    border-left-color: transparent;
+}
+
+.activity-icon-point {
+    position: absolute;
+    left: -9px;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--bg-surface);
+    border: 2px solid var(--primary);
+}
+
+/* Modal Enhancements */
+.modal-overlay {
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    animation: modalSlideUp 0.3s ease-out forwards;
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.top-banner {
+    background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+    color: white;
+    transition: transform 0.3s ease;
+}
+
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
