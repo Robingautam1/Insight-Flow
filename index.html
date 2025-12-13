@@ -1,460 +1,893 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InsightFlow — Smart Business Dashboard</title>
+    <title>InsightFlow — The Intelligence Engine for Your Business</title>
     <meta name="description"
-        content="InsightFlow: a clean, interactive demo dashboard for small & mid-sized businesses. Track revenue, orders, channels and get quick insights.">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+        content="InsightFlow unifies your sales, marketing, and customer data into one intelligent dashboard. AI-powered insights to help you grow faster.">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="InsightFlow — Smart Business Dashboard">
-    <meta property="og:description" content="Make sense of your business in one clean dashboard.">
-    <meta property="og:image" content="assets/images/og-screenshot.png">
+    <meta property="og:title" content="InsightFlow — The Intelligence Engine for Your Business">
+    <meta property="og:description" content="AI-powered business intelligence without the complexity.">
+    <meta property="og:image" content="assets/images/og-new.png">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://robingautam1.github.io/Insight-Flow/">
 
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://unpkg.com/feather-icons"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Google Analytics (GA4) - Optional
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-XXXXXXXXXX');
-    </script>
-    -->
 </head>
 
-<body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">
-                <i data-feather="activity"></i>
-                Insight<span>Flow</span>
+<body class="antialiased text-slate-800 bg-white selection:bg-indigo-100 selection:text-indigo-700">
+
+    <!-- Navigation -->
+    <nav class="navbar fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="logo flex items-center gap-2 text-2xl font-bold tracking-tight">
+                <i data-lucide="activity" class="text-indigo-600"></i>
+                <span>Insight<span class="text-indigo-600">Flow</span></span>
             </a>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="dashboard.html">Dashboard</a>
-                <a href="analytics.html">Analytics</a>
-                <a href="data.html">Data Sources</a>
-                <a href="settings.html">Settings</a>
-                <a href="support.html">Support</a>
+
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#features"
+                    class="nav-link text-sm font-medium hover:text-indigo-600 transition-colors">Features</a>
+                <a href="#how-it-works" class="nav-link text-sm font-medium hover:text-indigo-600 transition-colors">How
+                    it Works</a>
+                <a href="#pricing"
+                    class="nav-link text-sm font-medium hover:text-indigo-600 transition-colors">Pricing</a>
+                <a href="#testimonials"
+                    class="nav-link text-sm font-medium hover:text-indigo-600 transition-colors">Stories</a>
             </div>
-            <div class="nav-actions">
-                <button id="themeToggle" aria-label="Toggle color theme" style="margin-right: 1rem;">🌙</button>
-                <a href="dashboard.html" class="btn btn-sm btn-secondary">Log In</a>
-                <a href="dashboard.html" class="btn btn-sm btn-primary">Start Free Trial</a>
+
+            <div class="hidden md:flex items-center gap-4">
+                <button id="themeToggle" class="p-2 rounded-full hover:bg-slate-100 transition-colors text-slate-500">
+                    <i data-lucide="moon" size="20"></i>
+                </button>
+                <a href="dashboard.html"
+                    class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Sign In</a>
+                <a href="dashboard.html"
+                    class="btn btn-gradient text-white px-5 py-2.5 rounded-full text-sm font-medium shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-0.5 transition-all">
+                    Get Started
+                </a>
             </div>
-            <button class="menu-toggle" id="menu-toggle">
-                <i data-feather="menu"></i>
+
+            <button class="md:hidden p-2 text-slate-600" id="mobile-menu-btn">
+                <i data-lucide="menu"></i>
             </button>
         </div>
     </nav>
 
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu" id="mobile-menu">
-        <a href="index.html">Home</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="analytics.html">Analytics</a>
-        <a href="data.html">Data Sources</a>
-        <a href="settings.html">Settings</a>
-        <a href="support.html">Support</a>
+    <!-- Mobile Menu -->
+    <div class="fixed inset-0 z-40 bg-white/95 backdrop-blur-xl transform translate-x-full transition-transform duration-300 md:hidden"
+        id="mobile-menu">
+        <div class="flex flex-col h-full justify-center items-center gap-8 p-6">
+            <a href="#features" class="text-xl font-medium mobile-link">Features</a>
+            <a href="#how-it-works" class="text-xl font-medium mobile-link">How it Works</a>
+            <a href="#pricing" class="text-xl font-medium mobile-link">Pricing</a>
+            <a href="dashboard.html" class="btn btn-primary w-full max-w-xs text-center py-3 rounded-full text-lg">Get
+                Started Free</a>
+            <button class="absolute top-6 right-6 p-2" id="mobile-close-btn">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
     </div>
 
     <!-- Hero Section -->
-    <header class="hero">
-        <div class="hero-content animate-fade-in" style="padding-left: 2rem;">
-            <div class="badge-new">New: AI-Powered Insights</div>
-            <h1>Make sense of your business <br> in one <span>clean dashboard</span>.</h1>
-            <p class="hero-sub">Stop wrestling with spreadsheets. InsightFlow brings all your sales, marketing, and
-                customer data into one beautiful, real-time view.</p>
-            <div class="hero-btns animate-slide-up delay-200" style="display:flex; gap: 1rem;">
-                <a href="dashboard.html" class="btn btn-primary btn-lg">View Live Demo</a>
-                <a href="#features" class="btn btn-secondary btn-lg">Explore Features</a>
+    <section class="relative pt-32 pb-20 overflow-hidden hero-section">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 z-0 pointer-events-none">
+            <div
+                class="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-indigo-500/10 rounded-full blur-[100px]">
             </div>
-            <div class="hero-trust"
-                style="margin-top: 2rem; display: flex; gap: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
-                <span class="flex items-center gap-xs"><i data-feather="check" style="width:16px;"></i> No credit card
-                    required</span>
-                <span class="flex items-center gap-xs"><i data-feather="check" style="width:16px;"></i> 14-day free
-                    trial</span>
-            </div>
+            <div class="absolute top-20 right-0 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[80px]"></div>
         </div>
-        <div class="hero-image animate-slide-up delay-400" style="padding-right: 2rem;">
-            <div class="browser-window">
-                <div class="browser-header">
-                    <div class="browser-dot red"></div>
-                    <div class="browser-dot yellow"></div>
-                    <div class="browser-dot green"></div>
-                    <div
-                        style="margin-left: 1rem; background: var(--bg-body); padding: 4px 12px; border-radius: 6px; font-size: 12px; color: var(--text-muted); flex: 1; text-align: center;">
-                        insightflow.com/dashboard</div>
-                </div>
-                <div class="preview-body"
-                    style="background: var(--bg-body); padding: 1.5rem; display: flex; gap: 1rem;">
-                    <!-- Sidebar Mockup -->
-                    <div
-                        style="width: 60px; background: var(--bg-surface); border-radius: 8px; height: 300px; display: flex; flex-direction: column; gap: 1rem; align-items: center; padding-top: 1rem; border: 1px solid var(--border);">
-                        <div style="width: 32px; height: 32px; background: var(--primary-light); border-radius: 6px;">
+
+        <div class="container mx-auto px-6 relative z-10 text-center">
+
+            <!-- Badge -->
+            <a href="#features"
+                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-indigo-100 shadow-sm hover:shadow-md transition-all mb-8 group animate-fade-in-up">
+                <span class="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-100 text-indigo-600">
+                    <i data-lucide="sparkles" size="12"></i>
+                </span>
+                <span class="text-sm font-medium text-slate-600 group-hover:text-indigo-600 transition-colors">New:
+                    AI-Powered Insights Engine</span>
+                <i data-lucide="arrow-right" size="14"
+                    class="text-slate-400 group-hover:translate-x-0.5 transition-transform"></i>
+            </a>
+
+            <!-- Headline -->
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 animate-fade-in-up delay-100 font-display">
+                Make sense of your business <br>
+                in one <span class="gradient-text">intelligent dashboard</span>.
+            </h1>
+
+            <p class="text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-200">
+                Stop wrestling with spreadsheets. InsightFlow brings all your sales, marketing, and customer data into
+                one beautiful, real-time view fueled by AI.
+            </p>
+
+            <!-- CTAs -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12 animate-fade-in-up delay-300">
+                <a href="dashboard.html"
+                    class="btn btn-gradient text-white px-8 py-4 rounded-full text-lg font-semibold shadow-xl shadow-indigo-600/20 hover:shadow-indigo-600/40 hover:-translate-y-1 transition-all w-full sm:w-auto flex items-center justify-center gap-2">
+                    Start Free Trial <i data-lucide="arrow-right" size="20"></i>
+                </a>
+                <button onclick="openVideoModal()"
+                    class="btn bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-full text-lg font-semibold hover:bg-slate-50 hover:border-slate-300 transition-all w-full sm:w-auto flex items-center justify-center gap-2">
+                    <i data-lucide="play-circle" size="20" class="text-indigo-600"></i> Watch Demo
+                </button>
+            </div>
+
+            <!-- Trust Line -->
+            <div
+                class="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-sm text-slate-500 animate-fade-in-up delay-400">
+                <span class="flex items-center gap-1.5"><i data-lucide="check-circle-2" size="16"
+                        class="text-green-500"></i> No credit card required</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="check-circle-2" size="16"
+                        class="text-green-500"></i> 14-day free trial</span>
+                <span class="flex items-center gap-1.5"><i data-lucide="check-circle-2" size="16"
+                        class="text-green-500"></i> Cancel anytime</span>
+            </div>
+
+            <!-- Product Preview with Browser Mockup -->
+            <div class="mt-20 relative max-w-6xl mx-auto animate-fade-in-up delay-500 perspective-1000">
+                <div
+                    class="browser-window-mockup bg-white rounded-xl shadow-2xl border border-slate-200/60 overflow-hidden transform rotate-x-3 transition-transform duration-700 hover:rotate-x-0">
+                    <!-- Browser Header -->
+                    <div class="bg-slate-50 border-b border-slate-200 px-4 py-3 flex items-center gap-4">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-400"></div>
                         </div>
-                        <div style="width: 32px; height: 4px; background: var(--border); border-radius: 2px;"></div>
-                        <div style="width: 32px; height: 4px; background: var(--border); border-radius: 2px;"></div>
+                        <div class="flex-1 text-center">
+                            <div
+                                class="inline-flex items-center gap-2 px-3 py-1 bg-white border border-slate-200 rounded-md text-xs text-slate-400 shadow-sm font-mono">
+                                <i data-lucide="lock" size="10"></i> insightflow.com/app
+                            </div>
+                        </div>
                     </div>
-                    <!-- Main Content Mockup -->
-                    <div style="flex: 1; display: flex; flex-direction: column; gap: 1rem;">
-                        <!-- Top Bar -->
-                        <div style="display: flex; justify-content: space-between;">
-                            <div style="width: 120px; height: 24px; background: var(--bg-surface); border-radius: 6px;">
-                            </div>
-                            <div style="width: 32px; height: 32px; background: var(--bg-surface); border-radius: 50%;">
+                    <!-- Image -->
+                    <div class="relative group">
+                        <img src="https://ui.shadcn.com/placeholder.svg" data-src="assets/images/dashboard-mockup.png"
+                            alt="InsightFlow Dashboard" class="w-full h-auto bg-slate-50" id="hero-dashboard-img">
+                        <!-- Fallback/Placeholder Simulation in CSS if image missing -->
+                        <div class="h-[600px] w-full bg-slate-50 flex items-center justify-center text-slate-300">
+                            <div class="animate-pulse flex flex-col items-center">
+                                <i data-lucide="layout-dashboard" size="64" class="mb-4 opacity-50"></i>
+                                <span>Interactive Dashboard Preview Loading...</span>
                             </div>
                         </div>
-                        <!-- Charts -->
+
+                        <!-- Hover Floating Cards -->
                         <div
-                            style="height: 140px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border); position: relative; overflow: hidden;">
-                            <div
-                                style="position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: linear-gradient(to top, var(--primary-light), transparent); opacity: 0.5;">
+                            class="absolute -right-12 top-20 bg-white p-4 rounded-lg shadow-xl border border-slate-100 floating-card hidden md:block animate-float">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="p-2 bg-green-100 rounded-lg text-green-600">
+                                    <i data-lucide="trending-up" size="20"></i>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-slate-500">Revenue Growth</div>
+                                    <div class="text-lg font-bold text-slate-800">+124%</div>
+                                </div>
                             </div>
-                            <div
-                                style="position: absolute; bottom: 0; left: 20%; width: 10px; height: 40%; background: var(--primary);">
-                            </div>
-                            <div
-                                style="position: absolute; bottom: 0; left: 40%; width: 10px; height: 60%; background: var(--primary);">
-                            </div>
-                            <div
-                                style="position: absolute; bottom: 0; left: 60%; width: 10px; height: 30%; background: var(--primary);">
+                            <div class="h-1 w-32 bg-slate-100 rounded-full overflow-hidden">
+                                <div class="h-full bg-green-500 w-3/4"></div>
                             </div>
                         </div>
-                        <div style="display: flex; gap: 1rem;">
-                            <div
-                                style="flex: 1; height: 80px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border);">
-                            </div>
-                            <div
-                                style="flex: 1; height: 80px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border);">
+
+                        <div
+                            class="absolute -left-8 bottom-32 bg-white p-4 rounded-lg shadow-xl border border-slate-100 floating-card hidden md:block animate-float animation-delay-2000">
+                            <div class="flex items-center gap-3">
+                                <span class="relative flex h-3 w-3">
+                                    <span
+                                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                                </span>
+                                <div class="text-sm font-medium text-slate-700">AI Analysis Complete</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
 
-    <!-- Features Section -->
-    <!-- Features Section -->
-    <section id="features" class="features-section">
-        <div class="container">
-            <h2 class="section-title">Why InsightFlow?</h2>
-            <p class="section-lead"
-                style="text-align: center; color: var(--text-muted); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto; font-size: 1.125rem;">
-                Everything you need to run your business with confidence.</p>
-
-            <div class="features-grid" role="list">
-                <article class="feature-card" role="listitem" tabindex="0">
-                    <div class="icon" aria-hidden="true">📈</div>
-                    <h3>Revenue tracking</h3>
-                    <p>See real-time revenue and cash-flow trends across channels so you never miss a drop in sales.</p>
-                </article>
-
-                <article class="feature-card" role="listitem" tabindex="0">
-                    <div class="icon" aria-hidden="true">👥</div>
-                    <h3>Customer insights</h3>
-                    <p>Understand repeat buyers, lifetime value and simple retention signals — all in one place.</p>
-                </article>
-
-                <article class="feature-card" role="listitem" tabindex="0">
-                    <div class="icon" aria-hidden="true">⚠️</div>
-                    <h3>Smart alerts</h3>
-                    <p>Automated alerts surface spikes and drops so you can act fast — before problems escalate.</p>
-                </article>
-            </div>
-
-            <div class="features-cta" style="justify-content: center; margin-bottom: 4rem;">
-                <a class="btn btn-primary" href="dashboard.html">View Live Demo</a>
-                <a class="btn btn-secondary btn-ghost" href="#pricing">Explore Plans</a>
+            <!-- Social Proof -->
+            <div class="mt-24 pt-10 border-t border-slate-100">
+                <p class="text-sm font-medium text-slate-400 mb-8 uppercase tracking-wider">Trusted by 10,000+
+                    forward-thinking companies</p>
+                <div
+                    class="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                    <!-- Logos (Simulated with text/icons for now) -->
+                    <div class="flex items-center gap-2 text-xl font-bold font-display text-slate-600"><i
+                            data-lucide="hexagon" class="text-blue-600"></i> AcmeCorp</div>
+                    <div class="flex items-center gap-2 text-xl font-bold font-display text-slate-600"><i
+                            data-lucide="triangle" class="text-indigo-600"></i> Vertex</div>
+                    <div class="flex items-center gap-2 text-xl font-bold font-display text-slate-600"><i
+                            data-lucide="circle-dashed" class="text-purple-600"></i> Orbit</div>
+                    <div class="flex items-center gap-2 text-xl font-bold font-display text-slate-600"><i
+                            data-lucide="box" class="text-orange-600"></i> Layers</div>
+                    <div class="flex items-center gap-2 text-xl font-bold font-display text-slate-600"><i
+                            data-lucide="snowflake" class="text-cyan-600"></i> Chill</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <style>
-        /* Feature Section Styles */
-        .features-section {
-            padding: 5rem 0;
-            background: var(--bg-body);
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .feature-card {
-            background: var(--bg-surface);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: default;
-        }
-
-        .feature-card:focus,
-        .feature-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary);
-            outline: none;
-        }
-
-        .feature-card .icon {
-            font-size: 2rem;
-            width: 3.5rem;
-            height: 3.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--primary-light);
-            border-radius: 12px;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card h3 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .feature-card p {
-            margin: 0;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        .features-cta {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .btn-ghost {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--primary);
-        }
-
-        .btn-ghost:hover {
-            border-color: var(--primary);
-        }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .features-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .features-cta {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .features-cta .btn {
-                width: 100%;
-                text-align: center;
-            }
-        }
-    </style>
-
-    <script>
-        document.querySelectorAll('.feature-card').forEach(card => {
-            card.addEventListener('keydown', e => {
-                if (e.key === 'Enter' || e.key === ' ') window.location.href = 'dashboard.html';
-            });
-        });
-    </script>
-
-
-    <!-- Pricing -->
-    <section id="pricing" class="section" style="background-color: var(--bg-surface);">
-        <div class="container">
-            <div class="section-title">
-                <h2>Simple, transparent pricing</h2>
-                <p>Start small and scale as you grow.</p>
+    <!-- Why Section / Features -->
+    <section id="features" class="py-24 bg-slate-50 relative">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-20 section-header opacity-0">
+                <div
+                    class="inline-flex px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-4">
+                    Features</div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 font-display text-slate-900">Everything you need to <span
+                        class="gradient-text">scale smarter</span></h2>
+                <p class="text-lg text-slate-600">InsightFlow gives you the visibility you need to make decisions with
+                    confidence, not guesses.</p>
             </div>
-            <div class="grid grid-cols-3 gap-lg">
+
+            <!-- Main Feature Grid -->
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <!-- Card 1 -->
+                <div
+                    class="group bg-white rounded-2xl p-8 shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 feature-card opacity-0">
+                    <div
+                        class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="bar-chart-2" size="28"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">Revenue Tracking</h3>
+                    <p class="text-slate-500 mb-6 leading-relaxed">Visualize your cash flow in real-time. Segment by
+                        channel, product, or region with a single click.</p>
+                    <a href="#"
+                        class="inline-flex items-center text-blue-600 font-semibold text-sm hover:gap-2 transition-all group-hover:text-blue-700">
+                        Explore Analytics <i data-lucide="arrow-right" size="16" class="ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- Card 2 -->
+                <div
+                    class="group bg-white rounded-2xl p-8 shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 feature-card opacity-0 delay-100">
+                    <div
+                        class="w-14 h-14 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="users" size="28"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">Customer Insights</h3>
+                    <p class="text-slate-500 mb-6 leading-relaxed">Deep dive into customer behavior. Identify VIPs,
+                        at-risk accounts, and retention opportunities instantly.</p>
+                    <a href="#"
+                        class="inline-flex items-center text-indigo-600 font-semibold text-sm hover:gap-2 transition-all group-hover:text-indigo-700">
+                        View Customer Data <i data-lucide="arrow-right" size="16" class="ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- Card 3 -->
+                <div
+                    class="group bg-white rounded-2xl p-8 shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 feature-card opacity-0 delay-200">
+                    <div
+                        class="w-14 h-14 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="zap" size="28"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">Smart Alerts</h3>
+                    <p class="text-slate-500 mb-6 leading-relaxed">Never miss a beat. Get automated notifications for
+                        revenue spikes, failed payments, or new opportunities.</p>
+                    <a href="#"
+                        class="inline-flex items-center text-purple-600 font-semibold text-sm hover:gap-2 transition-all group-hover:text-purple-700">
+                        Setup Alerts <i data-lucide="arrow-right" size="16" class="ml-1"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Secondary Features -->
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="flex items-start gap-4 p-4 rounded-xl hover:bg-white hover:shadow-md transition-all">
+                    <div class="p-2 bg-slate-100 rounded-lg text-slate-600"><i data-lucide="mail"></i></div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-1">Automated Reports</h4>
+                        <p class="text-sm text-slate-500">Schedule daily, weekly, or monthly PDF reports sent directly
+                            to your inbox.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 rounded-xl hover:bg-white hover:shadow-md transition-all">
+                    <div class="p-2 bg-slate-100 rounded-lg text-slate-600"><i data-lucide="target"></i></div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-1">Goal Tracking</h4>
+                        <p class="text-sm text-slate-500">Set quarterly targets for your team and visualize progress
+                            with live meters.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 rounded-xl hover:bg-white hover:shadow-md transition-all">
+                    <div class="p-2 bg-slate-100 rounded-lg text-slate-600"><i data-lucide="puzzle"></i></div>
+                    <div>
+                        <h4 class="font-bold text-slate-900 mb-1">50+ Integrations</h4>
+                        <p class="text-sm text-slate-500">Connect seamlessly with Shopify, Stripe, Salesforce, Slack,
+                            and more.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works (Timeline) -->
+    <section id="how-it-works" class="py-24 bg-white overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-20 section-header">
+                <h2 class="text-4xl font-bold mb-6 font-display">From chaos to <span
+                        class="text-indigo-600">clarity</span> in minutes</h2>
+            </div>
+
+            <div class="relative max-w-5xl mx-auto">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-slate-100 z-0"></div>
+
+                <div class="grid md:grid-cols-4 gap-8 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="text-center group">
+                        <div
+                            class="w-24 h-24 mx-auto bg-white border-2 border-indigo-100 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:border-indigo-500 group-hover:shadow-lg transition-all duration-500 relative">
+                            <i data-lucide="database" size="32"
+                                class="text-slate-400 group-hover:text-indigo-600 transition-colors"></i>
+                            <div
+                                class="absolute -top-2 -right-2 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                                1</div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Connect Data</h3>
+                        <p class="text-slate-500 text-sm">Link your payment gateways, CRMs, and ad accounts in one
+                            click.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="text-center group">
+                        <div
+                            class="w-24 h-24 mx-auto bg-white border-2 border-indigo-100 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:border-indigo-500 group-hover:shadow-lg transition-all duration-500 relative">
+                            <i data-lucide="cpu" size="32"
+                                class="text-slate-400 group-hover:text-indigo-600 transition-colors"></i>
+                            <div
+                                class="absolute -top-2 -right-2 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                                2</div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">AI Analysis</h3>
+                        <p class="text-slate-500 text-sm">Our engine processes millions of points to find hidden
+                            patterns.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="text-center group">
+                        <div
+                            class="w-24 h-24 mx-auto bg-white border-2 border-indigo-100 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:border-indigo-500 group-hover:shadow-lg transition-all duration-500 relative">
+                            <i data-lucide="layout-dashboard" size="32"
+                                class="text-slate-400 group-hover:text-indigo-600 transition-colors"></i>
+                            <div
+                                class="absolute -top-2 -right-2 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                                3</div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Get Insights</h3>
+                        <p class="text-slate-500 text-sm">See your unified dashboard populated with actionable data.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="text-center group">
+                        <div
+                            class="w-24 h-24 mx-auto bg-white border-2 border-indigo-100 rounded-full flex items-center justify-center mb-6 shadow-sm group-hover:border-indigo-500 group-hover:shadow-lg transition-all duration-500 relative">
+                            <i data-lucide="rocket" size="32"
+                                class="text-slate-400 group-hover:text-indigo-600 transition-colors"></i>
+                            <div
+                                class="absolute -top-2 -right-2 w-8 h-8 bg-indigo-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                                4</div>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Take Action</h3>
+                        <p class="text-slate-500 text-sm">Make data-backed decisions and watch your business grow.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof (Testimonials) -->
+    <section id="testimonials" class="py-24 bg-slate-900 text-white">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-8 font-display">Loved by data-driven teams</h2>
+                    <p class="text-xl text-slate-400 mb-10 leading-relaxed">
+                        Join thousands of business owners who have transformed their operations with InsightFlow.
+                    </p>
+
+                    <div class="flex items-center gap-8 mb-12">
+                        <div>
+                            <div class="text-3xl font-bold text-white mb-1">10k+</div>
+                            <div class="text-sm text-slate-500">Active Users</div>
+                        </div>
+                        <div class="h-10 w-px bg-slate-700"></div>
+                        <div>
+                            <div class="text-3xl font-bold text-white mb-1">₹50M+</div>
+                            <div class="text-sm text-slate-500">Tracked Monthly</div>
+                        </div>
+                        <div class="h-10 w-px bg-slate-700"></div>
+                        <div>
+                            <div class="text-3xl font-bold text-white mb-1">4.9/5</div>
+                            <div class="text-sm text-slate-500">Average Rating</div>
+                        </div>
+                    </div>
+
+                    <a href="#pricing"
+                        class="btn btn-outline-white px-6 py-3 rounded-full border border-slate-600 hover:bg-white hover:text-slate-900 transition-colors inline-inline-flex items-center gap-2">
+                        Read Success Stories <i data-lucide="arrow-right" size="16"></i>
+                    </a>
+                </div>
+
+                <div class="relative">
+                    <!-- Carousel Container -->
+                    <div class="relative overflow-hidden rounded-2xl bg-slate-800 p-8 md:p-10 border border-slate-700 shadow-2xl h-[400px] flex flex-col justify-center"
+                        id="testimonial-slider">
+                        <!-- Slide 1 -->
+                        <div
+                            class="testimonial-slide absolute inset-0 p-10 flex flex-col justify-center transition-opacity duration-500 opacity-100">
+                            <div class="flex items-center gap-1 text-yellow-500 mb-6">
+                                <i data-lucide="star" size="18" fill="currentColor"></i>
+                                <i data-lucide="star" size="18" fill="currentColor"></i>
+                                <i data-lucide="star" size="18" fill="currentColor"></i>
+                                <i data-lucide="star" size="18" fill="currentColor"></i>
+                                <i data-lucide="star" size="18" fill="currentColor"></i>
+                            </div>
+                            <blockquote class="text-2xl font-light leading-relaxed mb-8">
+                                "InsightFlow replaced 5 different tools for us. I can finally see my exact ROI on
+                                marketing spend without calling my accountant."
+                            </blockquote>
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-indigo-500 rounded-full flex items-center justify-center font-bold">
+                                    SJ</div>
+                                <div>
+                                    <div class="font-bold text-white">Sarah Jenkins</div>
+                                    <div class="text-sm text-slate-400">CEO, TechFlow Inc.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Slide 2 -->
+                        <div
+                            class="testimonial-slide absolute inset-0 p-10 flex flex-col justify-center transition-opacity duration-500 opacity-0 pointer-events-none">
+                            <div class="flex items-center gap-1 text-yellow-500 mb-6">
+                                <i data-lucide="star" size="18" fill="currentColor"></i>
+                                <i data-lucide="star" size="18" fill="currentColor"></i>
+                                <i data-lucide="star" size="18" fill="currentColor"></i>
+                                <i data-lucide="star" size="18" fill="currentColor"></i>
+                                <i data-lucide="star" size="18" fill="currentColor"></i>
+                            </div>
+                            <blockquote class="text-2xl font-light leading-relaxed mb-8">
+                                "The automated reporting alone saves me 10 hours a week. It's like having a dedicated
+                                data analyst on the team for a fraction of the cost."
+                            </blockquote>
+                            <div class="flex items-center gap-4">
+                                <div
+                                    class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center font-bold">
+                                    MK</div>
+                                <div>
+                                    <div class="font-bold text-white">Mike Kogan</div>
+                                    <div class="text-sm text-slate-400">Founder, ScaleUp</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Controls -->
+                    <div class="flex gap-2 mt-4 justify-end">
+                        <button
+                            class="p-2 rounded-full border border-slate-700 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                            onclick="prevTestimonial()"><i data-lucide="chevron-left"></i></button>
+                        <button
+                            class="p-2 rounded-full border border-slate-700 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                            onclick="nextTestimonial()"><i data-lucide="chevron-right"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24 bg-slate-50">
+        <div class="container mx-auto px-6">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <h2 class="text-4xl font-bold mb-4 font-display">Simple, transparent pricing</h2>
+                <p class="text-slate-600 mb-8">Choose the perfect plan for your business needs.</p>
+
+                <!-- Toggle -->
+                <div class="flex items-center justify-center gap-4">
+                    <span class="text-sm font-medium text-slate-600">Monthly</span>
+                    <button id="pricing-toggle"
+                        class="w-14 h-8 bg-indigo-600 rounded-full relative transition-colors duration-300 focus:outline-none"
+                        onclick="togglePricing()">
+                        <div class="absolute left-1 top-1 w-6 h-6 bg-white rounded-full transition-transform duration-300"
+                            id="pricing-dot"></div>
+                    </button>
+                    <span class="text-sm font-medium text-slate-900">Annually <span
+                            class="bg-green-100 text-green-700 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ml-1">Save
+                            20%</span></span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Data Source for JS Toggle -->
+                <script>
+                    const pricingData = {
+                        starter: { mo: 29, yr: 24 },
+                        growth: { mo: 79, yr: 65 },
+                        business: { mo: 199, yr: 159 }
+                    };
+                </script>
+
                 <!-- Starter -->
-                <div class="card flex flex-col">
-                    <div class="mb-4">
-                        <h3 class="text-lg font-medium">Starter</h3>
-                        <div class="text-3xl font-bold mt-2">$29<span class="text-sm text-muted font-normal">/mo</span>
-                        </div>
-                    </div>
-                    <ul class="flex-1 flex flex-col gap-sm mb-6 text-muted">
-                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
-                                style="width: 16px;"></i> 1 User</li>
-                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
-                                style="width: 16px;"></i> 3 Data Sources</li>
-                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
-                                style="width: 16px;"></i> Basic Support</li>
+                <div
+                    class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 hover:shadow-lg transition-all flex flex-col">
+                    <h3 class="text-xl font-bold mb-2">Starter</h3>
+                    <p class="text-slate-500 text-sm mb-6">Perfect for solo founders.</p>
+                    <div class="text-4xl font-bold mb-6 text-slate-900">$<span id="price-starter">29</span><span
+                            class="text-base font-normal text-slate-500">/mo</span></div>
+                    <a href="dashboard.html"
+                        class="btn border border-indigo-200 text-indigo-600 w-full py-3 rounded-xl font-semibold hover:bg-indigo-50 transition-colors text-center mb-8">Start
+                        Free Trial</a>
+
+                    <ul class="space-y-4 text-sm text-slate-600 flex-1">
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> 1 User Account</li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> 3 Data Sources</li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> Basic Analytics</li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> Email Support</li>
                     </ul>
-                    <a href="dashboard.html" class="btn btn-secondary w-full">Start Free Trial</a>
                 </div>
-                <!-- Growth -->
-                <div class="card card-featured flex flex-col">
-                    <div class="mb-4">
-                        <div class="flex justify-between items-center">
-                            <h3 class="text-lg font-medium text-primary">Growth</h3>
-                            <span class="badge badge-primary"
-                                style="background: var(--primary); color: white;">Popular</span>
-                        </div>
-                        <div class="text-3xl font-bold mt-2">$79<span class="text-sm text-muted font-normal">/mo</span>
-                        </div>
-                    </div>
-                    <ul class="flex-1 flex flex-col gap-sm mb-6 text-muted">
-                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
-                                style="width: 16px;"></i> 5 Users</li>
-                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
-                                style="width: 16px;"></i> Unlimited Sources</li>
-                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
-                                style="width: 16px;"></i> Priority Support</li>
-                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
-                                style="width: 16px;"></i> Advanced Analytics</li>
+
+                <!-- Growth (Popular) -->
+                <div
+                    class="bg-white rounded-2xl p-8 shadow-xl border-2 border-indigo-600 relative transform md:-translate-y-4 flex flex-col z-10">
+                    <div
+                        class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-indigo-600 text-white px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
+                        Most Popular</div>
+                    <h3 class="text-xl font-bold mb-2">Growth</h3>
+                    <p class="text-slate-500 text-sm mb-6">For rapidly scaling teams.</p>
+                    <div class="text-4xl font-bold mb-6 text-slate-900">$<span id="price-growth">79</span><span
+                            class="text-base font-normal text-slate-500">/mo</span></div>
+                    <a href="dashboard.html"
+                        class="btn btn-gradient w-full py-3 rounded-xl font-semibold text-white shadow-lg hover:shadow-indigo-500/30 transition-all text-center mb-8">Start
+                        Free Trial</a>
+
+                    <ul class="space-y-4 text-sm text-slate-600 flex-1">
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> 5 User Accounts</li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> Unlimited Data Sources</li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> Advanced AI Insights</li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> Priority Support</li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> Automated Reports</li>
                     </ul>
-                    <a href="dashboard.html" class="btn btn-primary w-full">Start Free Trial</a>
                 </div>
+
                 <!-- Business -->
-                <div class="card flex flex-col">
-                    <div class="mb-4">
-                        <h3 class="text-lg font-medium">Business</h3>
-                        <div class="text-3xl font-bold mt-2">$199<span class="text-sm text-muted font-normal">/mo</span>
-                        </div>
-                    </div>
-                    <ul class="flex-1 flex flex-col gap-sm mb-6 text-muted">
-                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
-                                style="width: 16px;"></i> Unlimited Users</li>
-                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
-                                style="width: 16px;"></i> Custom Integrations</li>
-                        <li class="flex items-center gap-sm"><i data-feather="check" class="text-primary"
-                                style="width: 16px;"></i> Dedicated Manager</li>
+                <div
+                    class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 hover:shadow-lg transition-all flex flex-col">
+                    <h3 class="text-xl font-bold mb-2">Business</h3>
+                    <p class="text-slate-500 text-sm mb-6">For established companies.</p>
+                    <div class="text-4xl font-bold mb-6 text-slate-900">$<span id="price-business">199</span><span
+                            class="text-base font-normal text-slate-500">/mo</span></div>
+                    <a href="dashboard.html"
+                        class="btn border border-slate-200 text-slate-700 w-full py-3 rounded-xl font-semibold hover:bg-slate-50 transition-colors text-center mb-8">Contact
+                        Sales</a>
+
+                    <ul class="space-y-4 text-sm text-slate-600 flex-1">
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> Unlimited Users</li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> Dedicated Manager</li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> Custom Integrations</li>
+                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
+                                class="text-green-500 shrink-0"></i> SSO & Advanced Security</li>
                     </ul>
-                    <a href="#" class="btn btn-secondary w-full">Contact Sales</a>
                 </div>
             </div>
-            <p class="text-center text-muted text-sm mt-6">Note: This is a demo product for showcasing the interface.
-            </p>
         </div>
     </section>
 
     <!-- FAQ -->
-    <section class="section">
-        <div class="container" style="max-width: 800px;">
-            <div class="section-title">
-                <h2>Frequently Asked Questions</h2>
-            </div>
-            <div class="flex flex-col gap-sm">
-                <div class="accordion-item">
-                    <div class="accordion-header">
-                        Is my data secure?
-                        <i data-feather="chevron-down" class="accordion-icon"></i>
-                    </div>
-                    <div class="accordion-content">
-                        <p class="text-muted pb-4">We use industry-standard encryption for data in transit and at rest.
-                            This is a demo interface and does not connect to live production systems.</p>
-                    </div>
-                </div>
-                <div class="accordion-item">
-                    <div class="accordion-header">
-                        Can I connect my own database?
-                        <i data-feather="chevron-down" class="accordion-icon"></i>
-                    </div>
-                    <div class="accordion-content">
-                        <p class="text-muted pb-4">Yes, on the Business plan you can connect directly to PostgreSQL,
-                            MySQL, and BigQuery.</p>
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-6 max-w-3xl">
+            <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+
+            <div class="space-y-4" id="faq-container">
+                <!-- Item 1 -->
+                <div class="border border-slate-200 rounded-lg overflow-hidden group">
+                    <button
+                        class="w-full text-left px-6 py-4 flex justify-between items-center bg-white hover:bg-slate-50 transition-colors focus:outline-none"
+                        onclick="toggleFaq(this)">
+                        <span class="font-semibold text-slate-800">How long does setup take?</span>
+                        <i data-lucide="plus"
+                            class="text-slate-400 transition-transform duration-300 group-[.active]:rotate-45"></i>
+                    </button>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 px-6 bg-slate-50">
+                        <p class="py-4 text-slate-600 text-sm leading-relaxed">Most users are up and running in under 5
+                            minutes. InsightFlow connects directly to popular services like Stripe and Shopify with one
+                            click. No technical skills required.</p>
                     </div>
                 </div>
-                <div class="accordion-item">
-                    <div class="accordion-header">
-                        Is there a mobile app?
-                        <i data-feather="chevron-down" class="accordion-icon"></i>
+
+                <!-- Item 2 -->
+                <div class="border border-slate-200 rounded-lg overflow-hidden group">
+                    <button
+                        class="w-full text-left px-6 py-4 flex justify-between items-center bg-white hover:bg-slate-50 transition-colors focus:outline-none"
+                        onclick="toggleFaq(this)">
+                        <span class="font-semibold text-slate-800">Can I cancel anytime?</span>
+                        <i data-lucide="plus"
+                            class="text-slate-400 transition-transform duration-300 group-[.active]:rotate-45"></i>
+                    </button>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 px-6 bg-slate-50">
+                        <p class="py-4 text-slate-600 text-sm leading-relaxed">Yes, absolutely. There are no long-term
+                            contracts for monthly plans. You can cancel directly from your dashboard at any time.</p>
                     </div>
-                    <div class="accordion-content">
-                        <p class="text-muted pb-4">InsightFlow is fully responsive and works perfectly on your phone's
-                            browser. A dedicated native app is coming soon.</p>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="border border-slate-200 rounded-lg overflow-hidden group">
+                    <button
+                        class="w-full text-left px-6 py-4 flex justify-between items-center bg-white hover:bg-slate-50 transition-colors focus:outline-none"
+                        onclick="toggleFaq(this)">
+                        <span class="font-semibold text-slate-800">Is my data secure?</span>
+                        <i data-lucide="plus"
+                            class="text-slate-400 transition-transform duration-300 group-[.active]:rotate-45"></i>
+                    </button>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 px-6 bg-slate-50">
+                        <p class="py-4 text-slate-600 text-sm leading-relaxed">Security is our top priority. We use
+                            bank-level 256-bit encryption for all data transmission and storage. We are GDPR compliant
+                            and SOC 2 certified.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Bottom CTA -->
+    <section class="py-24 bg-gradient-to-br from-indigo-600 to-purple-700 text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('assets/images/grid-pattern.svg')] opacity-10"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 font-display">Ready to transform your business?</h2>
+            <p class="text-indigo-100 text-lg mb-10 max-w-2xl mx-auto">Join 10,000+ companies using InsightFlow to grow
+                revenue and customers.</p>
+
+            <form class="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
+                onsubmit="event.preventDefault(); window.location.href='dashboard.html'">
+                <input type="email" placeholder="Enter your work email"
+                    class="px-5 py-4 rounded-full text-slate-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400 w-full"
+                    required>
+                <button type="submit"
+                    class="bg-white text-indigo-600 px-8 py-4 rounded-full font-bold hover:bg-indigo-50 transition-colors shadow-lg whitespace-nowrap">
+                    Get Started
+                </button>
+            </form>
+            <p class="mt-6 text-xs text-indigo-200 opacity-80">No credit card required • 14-day free trial</p>
+        </div>
+    </section>
+
     <!-- Footer -->
-    <footer style="background-color: var(--bg-surface); border-top: 1px solid var(--border); padding: 4rem 0;">
-        <div class="container">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-lg">
-                <div class="logo">
-                    <i data-feather="activity"></i>
-                    Insight<span>Flow</span>
+    <footer class="bg-slate-900 border-t border-slate-800 pt-20 pb-10 text-slate-400 text-sm">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-16">
+                <div class="col-span-2 lg:col-span-2">
+                    <a href="#" class="flex items-center gap-2 text-2xl font-bold tracking-tight text-white mb-6">
+                        <i data-lucide="activity" class="text-indigo-500"></i>
+                        <span>Insight<span>Flow</span></span>
+                    </a>
+                    <p class="mb-6 max-w-xs">Data intelligence for modern businesses. We help you measure what matters.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="hover:text-white transition-colors"><i data-lucide="twitter"
+                                size="20"></i></a>
+                        <a href="#" class="hover:text-white transition-colors"><i data-lucide="linkedin"
+                                size="20"></i></a>
+                        <a href="#" class="hover:text-white transition-colors"><i data-lucide="github"
+                                size="20"></i></a>
+                    </div>
                 </div>
-                <div class="flex gap-lg text-muted text-sm">
-                    <a href="#">About</a>
-                    <a href="#">Contact</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms</a>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6">Product</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="hover:text-white transition-colors">Features</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Integrations</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Changelog</a></li>
+                    </ul>
                 </div>
-                <div class="text-muted text-sm">
-                    &copy; 2025 InsightFlow. All rights reserved.
+
+                <div>
+                    <h4 class="text-white font-bold mb-6">Resources</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="hover:text-white transition-colors">Documentation</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">API Reference</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Community</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6">Company</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Legal</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
                 </div>
             </div>
-            <div class="text-center mt-8 text-xs text-light">
-                InsightFlow is a demo project created to showcase dashboard design.
+
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div>&copy; 2025 InsightFlow Inc. All rights reserved.</div>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Cookie Policy</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- DEMO CONTACT MODAL -->
-    <div id="demoModal" class="modal" aria-hidden="true" role="dialog">
-        <div class="modal-backdrop" onclick="closeDemoModal()"></div>
-        <div class="modal-panel" role="document" aria-labelledby="demoTitle">
-            <button class="modal-close" onclick="closeDemoModal()" aria-label="Close">✕</button>
-            <h3 id="demoTitle">Request a demo</h3>
-            <form id="demoForm" action="https://formspree.io/f/xpwzzedn" method="POST">
-                <label><input name="name" placeholder="Your name" required></label>
-                <label><input name="email" type="email" placeholder="Email address" required></label>
-                <label><textarea name="message" rows="4"
-                        placeholder="Tell me about your use case (optional)"></textarea></label>
-                <button type="submit" class="btn primary">Request demo</button>
-                <p class="small">No spam — this is a demo site. I'll only use this to respond to your request.</p>
-            </form>
+    <!-- Video Modal -->
+    <div id="video-modal"
+        class="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div
+            class="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-slate-800">
+            <button onclick="closeVideoModal()" class="absolute top-4 right-4 text-white hover:text-indigo-400 z-10">
+                <i data-lucide="x" size="32"></i>
+            </button>
+            <div class="w-full h-full flex items-center justify-center text-slate-500">
+                <!-- Placeholder for actual video embed iFrame -->
+                <div class="text-center">
+                    <i data-lucide="play-circle" size="64" class="mx-auto mb-4 opacity-50"></i>
+                    <p>Demo Video Placeholder</p>
+                </div>
+            </div>
         </div>
     </div>
-    <button id="demoCTA" class="demo-cta" onclick="openDemoModal()" aria-label="Request demo">Request demo</button>
 
-    <script src="js/main.js"></script>
+    <!-- Scripts -->
     <script>
-        feather.replace();
+        lucide.createIcons();
 
-        // Request Demo Modal Logic
-        function openDemoModal() { const m = document.getElementById('demoModal'); m.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
-        function closeDemoModal() { const m = document.getElementById('demoModal'); m.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDemoModal(); });
+        // Mobile Menu
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('mobile-close-btn');
+        const menu = document.getElementById('mobile-menu');
+        const links = document.querySelectorAll('.mobile-link');
+
+        function toggleMenu() {
+            const isClosed = menu.classList.contains('translate-x-full');
+            if (isClosed) {
+                menu.classList.remove('translate-x-full');
+            } else {
+                menu.classList.add('translate-x-full');
+            }
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        closeBtn.addEventListener('click', toggleMenu);
+        links.forEach(l => l.addEventListener('click', toggleMenu));
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                navbar.classList.add('bg-white/90', 'backdrop-blur-md', 'shadow-sm');
+                navbar.classList.remove('py-4');
+                navbar.classList.add('py-3');
+            } else {
+                navbar.classList.remove('bg-white/90', 'backdrop-blur-md', 'shadow-sm', 'py-3');
+                navbar.classList.add('py-4');
+            }
+
+            // Stats Animate on Scroll
+            // ... (Simplified logic for brevity)
+        });
+
+        // Pricing Toggle
+        let isAnnual = false;
+        function togglePricing() {
+            isAnnual = !isAnnual;
+            const dot = document.getElementById('pricing-dot');
+            const toggle = document.getElementById('pricing-toggle');
+
+            if (isAnnual) {
+                dot.style.transform = 'translateX(100%)';
+                toggle.classList.replace('bg-indigo-600', 'bg-green-500');
+            } else {
+                dot.style.transform = 'translateX(0)';
+                toggle.classList.replace('bg-green-500', 'bg-indigo-600');
+            }
+
+            // Update prices
+            document.getElementById('price-starter').innerText = isAnnual ? pricingData.starter.yr : pricingData.starter.mo;
+            document.getElementById('price-growth').innerText = isAnnual ? pricingData.growth.yr : pricingData.growth.mo;
+            document.getElementById('price-business').innerText = isAnnual ? pricingData.business.yr : pricingData.business.mo;
+        }
+
+        // FAQ Toggle
+        function toggleFaq(btn) {
+            const item = btn.parentElement;
+            const content = item.querySelector('div');
+
+            // Close others if sidebar style accordion is desired (optional)
+            // For now, allow multiple
+
+            if (item.classList.contains('active')) {
+                item.classList.remove('active');
+                content.style.maxHeight = '0px';
+                btn.querySelector('i').style.transform = 'rotate(0deg)';
+            } else {
+                item.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + 'px';
+                btn.querySelector('i').style.transform = 'rotate(45deg)';
+            }
+        }
+
+        // Testimonial Logic
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.testimonial-slide');
+
+        function showSlide(index) {
+            slides.forEach((s, i) => {
+                if (i === index) {
+                    s.classList.remove('opacity-0', 'pointer-events-none');
+                    s.classList.add('opacity-100');
+                } else {
+                    s.classList.add('opacity-0', 'pointer-events-none');
+                    s.classList.remove('opacity-100');
+                }
+            });
+        }
+
+        function nextTestimonial() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        function prevTestimonial() {
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(currentSlide);
+        }
+
+        // Auto play
+        setInterval(nextTestimonial, 5000);
+
+        // Video Modal
+        function openVideoModal() {
+            document.getElementById('video-modal').classList.remove('hidden');
+        }
+        function closeVideoModal() {
+            document.getElementById('video-modal').classList.add('hidden');
+        }
+
+        // Intersection Observer for Animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.feature-card, .section-header').forEach((el) => {
+            el.classList.add('transition-all', 'duration-700', 'translate-y-4'); // Initial state set in CSS via opacity-0 class logic
+            observer.observe(el);
+        });
+
     </script>
 </body>
 
