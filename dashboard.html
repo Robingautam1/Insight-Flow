@@ -21,6 +21,24 @@
             background-color: #f8fafc;
         }
 
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
         #loader {
             position: fixed;
             inset: 0;
@@ -82,17 +100,21 @@
         };
 
         try {
-            // Environment Check
             status.textContent = "Checking Environment...";
             if (!window.React || !window.ReactDOM) throw new Error("React Framework failed to load");
             if (!window.htm) throw new Error("Templating engine failed to load");
 
             const { useState, useEffect } = React;
             const html = htm.bind(React.createElement);
-            const RC = window.Recharts || {};
+
+            // Safe Recharts Access
+            const RC = window.Recharts || window.Recharts.default || {};
+            const {
+                AreaChart, Area, LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, ComposedChart,
+                XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Brush
+            } = RC;
 
             // --- UI Components ---
-
             const Icon = ({ name, size = 20, className = "" }) => {
                 if (!window.lucide || !window.lucide.icons[name]) return null;
                 const [tag, attrs, children] = window.lucide.icons[name];
@@ -102,7 +124,6 @@
             };
 
             const MetricCard = ({ title, value, change, icon, color }) => {
-                // Pre-defined color maps for Tailwind
                 const colors = {
                     blue: { bg: 'bg-blue-50', text: 'text-blue-600' },
                     green: { bg: 'bg-green-50', text: 'text-green-600' },
@@ -111,13 +132,16 @@
                 };
                 const theme = colors[color] || colors.blue;
 
+                const isPositive = change.startsWith('+');
+                const changeColor = isPositive ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600';
+
                 return html`
                     <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
                         <div class="flex justify-between items-start mb-4">
                             <div class="p-3 rounded-xl ${theme.bg} ${theme.text}">
                                 <${Icon} name=${icon} size=${24} />
                             </div>
-                            <span class="text-xs font-bold px-2 py-1 rounded-full bg-green-50 text-green-600">${change}</span>
+                            <span class="text-xs font-bold px-2 py-1 rounded-full ${changeColor}">${change}</span>
                         </div>
                         <div class="text-slate-500 text-sm font-medium mb-1">${title}</div>
                         <div class="text-2xl font-bold text-slate-800">${value}</div>
@@ -145,21 +169,47 @@
             `;
 
             const Dashboard = () => {
+                const [dates, setDates] = useState('30days');
                 const [data] = useState(Array.from({ length: 30 }, (_, i) => ({
                     date: new Date(Date.now() - (29 - i) * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-                    revenue: Math.floor(Math.random() * 20000) + 15000
+                    revenue: Math.floor(Math.random() * 20000) + 15000,
+                    previous: Math.floor(Math.random() * 15000) + 10000
                 })));
+
+                const transactions = [
+                    { id: '#TRX-9812', user: 'Alex Morgan', amount: '₹12,400', status: 'Completed', date: 'Just now' },
+                    { id: '#TRX-9811', user: 'Sarah Lee', amount: '₹8,450', status: 'Processing', date: '2 min ago' },
+                    { id: '#TRX-9810', user: 'Mike Chen', amount: '₹4,200', status: 'Completed', date: '15 min ago' },
+                    { id: '#TRX-9809', user: 'Emma Davis', amount: '₹18,900', status: 'Failed', date: '1 hour ago' },
+                ];
+
+                const channels = [
+                    { name: 'Direct', value: 450, color: '#3b82f6' },
+                    { name: 'Social', value: 320, color: '#8b5cf6' },
+                    { name: 'Organic', value: 210, color: '#10b981' },
+                    { name: 'Referral', value: 150, color: '#f59e0b' }
+                ];
 
                 return html`
                     <div class="flex h-screen w-full bg-slate-50/50">
                         <${Sidebar} />
                         <div class="flex-1 flex flex-col h-full overflow-hidden">
                             <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0">
-                                <h1 class="text-lg font-bold text-slate-800">Dashboard</h1>
+                                <div class="flex items-center gap-4">
+                                    <h1 class="text-lg font-bold text-slate-800">Dashboard</h1>
+                                    <div class="hidden md:flex bg-slate-100 rounded-lg p-1">
+                                        ${['7d', '30days', '90days'].map(d => html`
+                                            <button onClick=${() => setDates(d)} class="px-3 py-1 text-xs font-semibold rounded-md transition-all ${dates === d ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500'}">
+                                                ${d}
+                                            </button>
+                                        `)}
+                                    </div>
+                                </div>
                                 <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white flex items-center justify-center text-xs font-bold">JD</div>
                             </header>
 
-                            <div class="flex-1 overflow-y-auto p-6">
+                            <div class="flex-1 overflow-y-auto p-6 scroll-smooth">
+                                <!-- Metrics Grid -->
                                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                                     <${MetricCard} title="Total Revenue" value="₹12.4L" change="+12%" icon="dollar-sign" color="blue" />
                                     <${MetricCard} title="Active Users" value="1,240" change="+5%" icon="users" color="green" />
@@ -167,27 +217,113 @@
                                     <${MetricCard} title="Bounce Rate" value="42%" change="-2%" icon="activity" color="orange" />
                                 </div>
 
-                                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm mb-8 h-[400px]">
-                                    <h3 class="text-lg font-bold text-slate-800 mb-4">Revenue Trends</h3>
-                                    <div class="w-full h-full">
-                                        ${RC.AreaChart
+                                <div class="flex flex-col xl:flex-row gap-6 mb-8">
+                                    <!-- Main Chart -->
+                                    <div class="flex-1 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm min-h-[400px]">
+                                        <div class="flex justify-between items-center mb-6">
+                                            <h3 class="text-lg font-bold text-slate-800">Revenue Trends</h3>
+                                            <button class="p-2 hover:bg-slate-50 rounded-lg text-slate-400"><${Icon} name="more-horizontal" size=${20} /></button>
+                                        </div>
+                                        <div class="w-full h-[320px]">
+                                            ${RC.AreaChart
                         ? html`<${RC.ResponsiveContainer} width="100%" height="100%">
-                                                <${RC.AreaChart} data=${data}>
-                                                    <${RC.defs || 'defs'}>
-                                                        <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                                                            <stop offset="5%" stopColor="#3B82F6" stopOpacity=${0.3}/>
-                                                            <stop offset="95%" stopColor="#3B82F6" stopOpacity=${0}/>
-                                                        </linearGradient>
-                                                    </${RC.defs || 'defs'}>
-                                                    <${RC.CartesianGrid} strokeDasharray="3 3" vertical=${false} />
-                                                    <${RC.XAxis} dataKey="date" />
-                                                    <${RC.YAxis} />
-                                                    <${RC.Tooltip} />
-                                                    <${RC.Area} type="monotone" dataKey="revenue" stroke="#3B82F6" fill="url(#colorRev)" strokeWidth=${3} />
-                                                </${RC.AreaChart}>
-                                            </${RC.ResponsiveContainer}>`
+                                                    <${RC.AreaChart} data=${data}>
+                                                        <${RC.defs || 'defs'}>
+                                                            <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                                                                <stop offset="5%" stopColor="#3B82F6" stopOpacity=${0.3}/>
+                                                                <stop offset="95%" stopColor="#3B82F6" stopOpacity=${0}/>
+                                                            </linearGradient>
+                                                        </${RC.defs || 'defs'}>
+                                                        <${RC.CartesianGrid} strokeDasharray="3 3" vertical=${false} />
+                                                        <${RC.XAxis} dataKey="date" axisLine=${false} tickLine=${false} tick=${{ fontSize: 12, fill: '#94a3b8' }} />
+                                                        <${RC.YAxis} axisLine=${false} tickLine=${false} tick=${{ fontSize: 12, fill: '#94a3b8' }} tickFormatter=${v => `₹${v / 1000}k`} />
+                                                        <${RC.Tooltip} contentStyle=${{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                                                        <${RC.Area} type="monotone" dataKey="revenue" stroke="#3B82F6" fill="url(#colorRev)" strokeWidth=${3} />
+                                                        <${RC.Area} type="monotone" dataKey="previous" stroke="#e2e8f0" fill="transparent" strokeWidth=${2} strokeDasharray="5 5" />
+                                                    </${RC.AreaChart}>
+                                                </${RC.ResponsiveContainer}>`
                         : html`<div class="flex items-center justify-center h-full text-red-500">Charts Unavailable</div>`
                     }
+                                        </div>
+                                    </div>
+
+                                    <!-- Side Widget -->
+                                    <div class="w-full xl:w-96 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                                        <h3 class="text-lg font-bold text-slate-800 mb-6">Traffic Sources</h3>
+                                        <div class="h-[200px] w-full relative">
+                                             ${RC.PieChart
+                        ? html`<${RC.ResponsiveContainer}>
+                                                    <${RC.PieChart}>
+                                                        <${RC.Pie} data=${channels} innerRadius=${60} outerRadius=${80} paddingAngle=${5} dataKey="value">
+                                                            ${channels.map((entry, index) => html`<${RC.Cell} key=${index} fill=${entry.color} />`)}
+                                                        </${RC.Pie}>
+                                                        <${RC.Tooltip} />
+                                                    </${RC.PieChart}>
+                                                </${RC.ResponsiveContainer}>`
+                        : null
+                    }
+                                             <!-- Center Text -->
+                                             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                                <div class="text-center">
+                                                    <div class="text-3xl font-bold text-slate-800">1.2k</div>
+                                                    <div class="text-xs text-slate-500 uppercase font-semibold">Visitors</div>
+                                                </div>
+                                             </div>
+                                        </div>
+                                        <div class="space-y-4 mt-6">
+                                            ${channels.map(c => html`
+                                                <div class="flex items-center justify-between group cursor-pointer">
+                                                    <div class="flex items-center gap-3">
+                                                        <div class="w-3 h-3 rounded-full" style=${{ backgroundColor: c.color }}></div>
+                                                        <span class="text-slate-600 font-medium group-hover:text-slate-900 transition-colors">${c.name}</span>
+                                                    </div>
+                                                    <span class="font-bold text-slate-800">${c.value}</span>
+                                                </div>
+                                            `)}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Transaction Table -->
+                                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                                    <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+                                        <h3 class="font-bold text-slate-800">Recent Transactions</h3>
+                                        <button class="text-sm text-blue-600 font-medium hover:text-blue-700">View All</button>
+                                    </div>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-left text-sm">
+                                            <thead class="bg-slate-50/50 text-slate-500">
+                                                <tr>
+                                                    <th class="px-6 py-4 font-medium">Transaction ID</th>
+                                                    <th class="px-6 py-4 font-medium">Customer</th>
+                                                    <th class="px-6 py-4 font-medium">Date</th>
+                                                    <th class="px-6 py-4 font-medium">Amount</th>
+                                                    <th class="px-6 py-4 font-medium text-right">Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-50">
+                                                ${transactions.map(t => html`
+                                                    <tr class="hover:bg-slate-50/50 transition-colors">
+                                                        <td class="px-6 py-4 font-mono text-xs text-slate-400">${t.id}</td>
+                                                        <td class="px-6 py-4">
+                                                            <div class="flex items-center gap-3">
+                                                                <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-slate-500">${t.user.charAt(0)}</div>
+                                                                <span class="font-medium text-slate-700">${t.user}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-6 py-4 text-slate-500">${t.date}</td>
+                                                        <td class="px-6 py-4 font-bold text-slate-800">${t.amount}</td>
+                                                        <td class="px-6 py-4 text-right">
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${t.status === 'Completed' ? 'bg-green-50 text-green-700' :
+                            t.status === 'Processing' ? 'bg-blue-50 text-blue-700' : 'bg-red-50 text-red-700'
+                        }">
+                                                                ${t.status}
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                `)}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -201,12 +337,11 @@
             const root = ReactDOM.createRoot(rootEl);
             root.render(html`<${Dashboard} />`);
 
-            // Force Loader Removal (Bypassing CSS Specificity Issues)
+            // Cleanup
             setTimeout(() => {
                 loader.style.opacity = '0';
                 loader.style.pointerEvents = 'none';
-                setTimeout(() => loader.style.display = 'none', 500); // Fully remove after fade
-
+                setTimeout(() => loader.style.display = 'none', 500);
                 rootEl.classList.remove('hidden');
             }, 800);
 
