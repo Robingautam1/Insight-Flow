@@ -220,6 +220,166 @@
         </div>
     </section>
 
+    <!-- Interactive Product Demo (New Section) -->
+    <section class="py-24 bg-white">
+        <div class="container mx-auto px-6 text-center">
+            <div class="max-w-3xl mx-auto mb-16">
+                <h2 class="text-4xl font-bold mb-6 font-display">Experience the power of <span
+                        class="gradient-text">Real-Time</span></h2>
+                <p class="text-lg text-slate-600">Explore how InsightFlow transforms raw data into actionable
+                    intelligence in seconds.</p>
+            </div>
+
+            <div class="bg-slate-900 rounded-2xl p-2 max-w-5xl mx-auto shadow-2xl overflow-hidden">
+                <div class="flex items-center gap-4 px-6 py-4 border-b border-slate-800">
+                    <div class="flex gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                    </div>
+                    <div class="flex items-center gap-8 ml-8 text-sm font-medium text-slate-400">
+                        <button class="text-white border-b-2 border-indigo-500 pb-4 -mb-4.5 px-2">Dashboard</button>
+                        <button class="hover:text-white transition-colors">Analytics</button>
+                        <button class="hover:text-white transition-colors">Customers</button>
+                    </div>
+                </div>
+
+                <div class="p-8 bg-slate-900 grid md:grid-cols-3 gap-6 text-left relative">
+                    <!-- Live Metric 1 -->
+                    <div
+                        class="bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-indigo-500 transition-colors group cursor-default">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="p-2 bg-indigo-500/10 rounded-lg text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
+                                <i data-lucide="activity"></i>
+                            </div>
+                            <span
+                                class="text-xs font-bold bg-green-500/20 text-green-400 px-2 py-1 rounded-full">+12.5%</span>
+                        </div>
+                        <div class="text-slate-400 text-sm mb-1">Live Revenue</div>
+                        <div class="text-3xl font-bold text-white mb-2" id="demo-revenue">$24,500</div>
+                        <div class="h-1 w-full bg-slate-700 rounded-full overflow-hidden">
+                            <div class="h-full bg-indigo-500 w-[65%] animate-pulse"></div>
+                        </div>
+                    </div>
+
+                    <!-- Live Metric 2 -->
+                    <div
+                        class="bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-blue-500 transition-colors group cursor-default">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="p-2 bg-blue-500/10 rounded-lg text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                                <i data-lucide="users"></i>
+                            </div>
+                            <span
+                                class="text-xs font-bold bg-blue-500/20 text-blue-400 px-2 py-1 rounded-full">Active</span>
+                        </div>
+                        <div class="text-slate-400 text-sm mb-1">Active Users</div>
+                        <div class="text-3xl font-bold text-white mb-2" id="demo-users">1,240</div>
+                        <div class="flex -space-x-2 mt-2">
+                            <div
+                                class="w-8 h-8 rounded-full bg-slate-600 border-2 border-slate-800 flex items-center justify-center text-xs">
+                                JD</div>
+                            <div
+                                class="w-8 h-8 rounded-full bg-slate-500 border-2 border-slate-800 flex items-center justify-center text-xs">
+                                AS</div>
+                            <div
+                                class="w-8 h-8 rounded-full bg-slate-400 border-2 border-slate-800 flex items-center justify-center text-xs">
+                                +</div>
+                        </div>
+                    </div>
+
+                    <!-- Live Metric 3 -->
+                    <div
+                        class="bg-slate-800 p-6 rounded-xl border border-slate-700 hover:border-purple-500 transition-colors group cursor-default">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="p-2 bg-purple-500/10 rounded-lg text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                                <i data-lucide="zap"></i>
+                            </div>
+                            <span
+                                class="text-xs font-bold bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full">98%</span>
+                        </div>
+                        <div class="text-slate-400 text-sm mb-1">System Health</div>
+                        <div class="text-3xl font-bold text-white mb-2">Optimal</div>
+                        <div class="text-xs text-slate-500 mt-2">Last check: Just now</div>
+                    </div>
+
+                    <!-- Chart Placeholder -->
+                    <div
+                        class="md:col-span-3 bg-slate-800 p-6 rounded-xl border border-slate-700 h-64 flex items-end justify-between gap-2 relative overflow-hidden group">
+                        <!-- Simulated Bars -->
+                        <div class="w-full bg-indigo-500/20 hover:bg-indigo-500/80 transition-all rounded-t-sm h-[40%]">
+                        </div>
+                        <div class="w-full bg-indigo-500/20 hover:bg-indigo-500/80 transition-all rounded-t-sm h-[60%]">
+                        </div>
+                        <div class="w-full bg-indigo-500/20 hover:bg-indigo-500/80 transition-all rounded-t-sm h-[30%]">
+                        </div>
+                        <div class="w-full bg-indigo-500/20 hover:bg-indigo-500/80 transition-all rounded-t-sm h-[80%]">
+                        </div>
+                        <div class="w-full bg-indigo-500/20 hover:bg-indigo-500/80 transition-all rounded-t-sm h-[50%]">
+                        </div>
+                        <div class="w-full bg-indigo-500/20 hover:bg-indigo-500/80 transition-all rounded-t-sm h-[70%]">
+                        </div>
+                        <div class="w-full bg-indigo-500/20 hover:bg-indigo-500/80 transition-all rounded-t-sm h-[90%]">
+                        </div>
+                        <div class="w-full bg-indigo-500/20 hover:bg-indigo-500/80 transition-all rounded-t-sm h-[65%]">
+                        </div>
+
+                        <div class="absolute top-6 left-6 text-white font-bold">Live Traffic</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-10">
+                <a href="dashboard.html"
+                    class="inline-flex items-center gap-2 text-indigo-600 font-bold hover:gap-3 transition-all">Interact
+                    with full demo <i data-lucide="arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Integrations Marquee -->
+    <section class="py-12 bg-slate-50 border-y border-slate-200 overflow-hidden">
+        <div class="container mx-auto px-6 mb-8 text-center">
+            <p class="text-sm font-bold text-slate-400 uppercase tracking-wider">Integrates with 50+ of your favorite
+                tools</p>
+        </div>
+
+        <div class="relative flex overflow-x-hidden">
+            <div class="py-4 animate-marquee whitespace-nowrap flex items-center gap-16 px-8">
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i
+                        data-lucide="shopping-cart"></i> Shopify</span>
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i
+                        data-lucide="credit-card"></i> Stripe</span>
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i data-lucide="slack"></i>
+                    Slack</span>
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i data-lucide="mail"></i>
+                    Mailchimp</span>
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i data-lucide="database"></i>
+                    Salesforce</span>
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i data-lucide="trello"></i>
+                    Trello</span>
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i data-lucide="figma"></i>
+                    Figma</span>
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i data-lucide="github"></i>
+                    GitHub</span>
+
+                <!-- Duplicate for seamless loop -->
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i
+                        data-lucide="shopping-cart"></i> Shopify</span>
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i
+                        data-lucide="credit-card"></i> Stripe</span>
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i data-lucide="slack"></i>
+                    Slack</span>
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i data-lucide="mail"></i>
+                    Mailchimp</span>
+                <span class="text-2xl font-bold text-slate-400 flex items-center gap-2"><i data-lucide="database"></i>
+                    Salesforce</span>
+            </div>
+        </div>
+    </section>
+
     <!-- Why Section / Features -->
     <section id="features" class="py-24 bg-slate-50 relative">
         <div class="container mx-auto px-6">
@@ -284,31 +444,54 @@
                 </div>
             </div>
 
-            <!-- Secondary Features -->
+            <!-- Secondary Features (Upgraded to Main Cards) -->
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="flex items-start gap-4 p-4 rounded-xl hover:bg-white hover:shadow-md transition-all">
-                    <div class="p-2 bg-slate-100 rounded-lg text-slate-600"><i data-lucide="mail"></i></div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 mb-1">Automated Reports</h4>
-                        <p class="text-sm text-slate-500">Schedule daily, weekly, or monthly PDF reports sent directly
-                            to your inbox.</p>
+                <!-- Card 4 -->
+                <div
+                    class="group bg-white rounded-2xl p-8 shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 feature-card opacity-0 delay-300">
+                    <div
+                        class="w-14 h-14 bg-green-50 rounded-xl flex items-center justify-center text-green-600 mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="mail" size="28"></i>
                     </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">Automated Reports</h3>
+                    <p class="text-slate-500 mb-6 leading-relaxed">Schedule daily, weekly, or monthly PDF reports sent
+                        directly to your inbox so you never miss a beat.</p>
+                    <a href="#"
+                        class="inline-flex items-center text-green-600 font-semibold text-sm hover:gap-2 transition-all group-hover:text-green-700">
+                        View Sample Report <i data-lucide="arrow-right" size="16" class="ml-1"></i>
+                    </a>
                 </div>
-                <div class="flex items-start gap-4 p-4 rounded-xl hover:bg-white hover:shadow-md transition-all">
-                    <div class="p-2 bg-slate-100 rounded-lg text-slate-600"><i data-lucide="target"></i></div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 mb-1">Goal Tracking</h4>
-                        <p class="text-sm text-slate-500">Set quarterly targets for your team and visualize progress
-                            with live meters.</p>
+
+                <!-- Card 5 -->
+                <div
+                    class="group bg-white rounded-2xl p-8 shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 feature-card opacity-0 delay-400">
+                    <div
+                        class="w-14 h-14 bg-red-50 rounded-xl flex items-center justify-center text-red-600 mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="target" size="28"></i>
                     </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">Goal Tracking</h3>
+                    <p class="text-slate-500 mb-6 leading-relaxed">Set quarterly targets for your team and visualize
+                        progress with live meters and variance analysis.</p>
+                    <a href="#"
+                        class="inline-flex items-center text-red-600 font-semibold text-sm hover:gap-2 transition-all group-hover:text-red-700">
+                        Set Goals <i data-lucide="arrow-right" size="16" class="ml-1"></i>
+                    </a>
                 </div>
-                <div class="flex items-start gap-4 p-4 rounded-xl hover:bg-white hover:shadow-md transition-all">
-                    <div class="p-2 bg-slate-100 rounded-lg text-slate-600"><i data-lucide="puzzle"></i></div>
-                    <div>
-                        <h4 class="font-bold text-slate-900 mb-1">50+ Integrations</h4>
-                        <p class="text-sm text-slate-500">Connect seamlessly with Shopify, Stripe, Salesforce, Slack,
-                            and more.</p>
+
+                <!-- Card 6 -->
+                <div
+                    class="group bg-white rounded-2xl p-8 shadow-sm border border-slate-200 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 feature-card opacity-0 delay-500">
+                    <div
+                        class="w-14 h-14 bg-orange-50 rounded-xl flex items-center justify-center text-orange-600 mb-6 group-hover:scale-110 transition-transform">
+                        <i data-lucide="puzzle" size="28"></i>
                     </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">50+ Integrations</h3>
+                    <p class="text-slate-500 mb-6 leading-relaxed">Connect seamlessly with Shopify, Stripe, Salesforce,
+                        Slack, and virtually any other tool you use.</p>
+                    <a href="#"
+                        class="inline-flex items-center text-orange-600 font-semibold text-sm hover:gap-2 transition-all group-hover:text-orange-700">
+                        Browse Integrations <i data-lucide="arrow-right" size="16" class="ml-1"></i>
+                    </a>
                 </div>
             </div>
         </div>
@@ -563,8 +746,19 @@
                                 class="text-green-500 shrink-0"></i> 5 User Accounts</li>
                         <li class="flex items-start gap-3"><i data-lucide="check" size="18"
                                 class="text-green-500 shrink-0"></i> Unlimited Data Sources</li>
-                        <li class="flex items-start gap-3"><i data-lucide="check" size="18"
-                                class="text-green-500 shrink-0"></i> Advanced AI Insights</li>
+                        <li class="flex items-start gap-3 relative group/tooltip">
+                            <i data-lucide="check" size="18" class="text-green-500 shrink-0"></i>
+                            <span class="cursor-help border-b border-dashed border-slate-300">Advanced AI
+                                Insights</span>
+                            <!-- Tooltip -->
+                            <div
+                                class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-slate-800 text-white text-xs rounded p-2 opacity-0 group-hover/tooltip:opacity-100 transition-opacity pointer-events-none z-20">
+                                Predictive revenue modeling and churn risk analysis.
+                                <div
+                                    class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800">
+                                </div>
+                            </div>
+                        </li>
                         <li class="flex items-start gap-3"><i data-lucide="check" size="18"
                                 class="text-green-500 shrink-0"></i> Priority Support</li>
                         <li class="flex items-start gap-3"><i data-lucide="check" size="18"
@@ -796,8 +990,30 @@
             // ... (Simplified logic for brevity)
         });
 
-        // Pricing Toggle
-        let isAnnual = false;
+        // Interactive Demo Animation
+        function animateDemo() {
+            const revenueEl = document.getElementById('demo-revenue');
+            const usersEl = document.getElementById('demo-users');
+
+            if (!revenueEl || !usersEl) return;
+
+            setInterval(() => {
+                // Randomly fluctuate revenue slightly
+                const currentRev = parseInt(revenueEl.innerText.replace(/[^0-9]/g, ''));
+                const change = Math.floor(Math.random() * 500) - 200; // -200 to +300
+                const newRev = currentRev + change;
+                revenueEl.innerText = '$' + newRev.toLocaleString();
+
+                // Randomly fluctuate active users
+                const currentUsers = parseInt(usersEl.innerText.replace(/,/g, ''));
+                const userChange = Math.floor(Math.random() * 5) - 2; // -2 to +3
+                const newUsers = currentUsers + userChange;
+                usersEl.innerText = newUsers.toLocaleString();
+
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', animateDemo);
         function togglePricing() {
             isAnnual = !isAnnual;
             const dot = document.getElementById('pricing-dot');
