@@ -168,19 +168,102 @@
                 </section>
 
                 <!-- File Upload -->
+                <!-- Raw Data Table -->
                 <section>
-                    <h3 class="text-lg font-bold mb-4">Manual Upload</h3>
-                    <div class="card border-dashed text-center p-8" id="file-upload-zone"
-                        style="border: 2px dashed var(--border); background: var(--bg-surface); cursor: pointer;">
-                        <div class="mb-4 text-primary">
-                            <i data-feather="upload-cloud" style="width: 48px; height: 48px;"></i>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold">Raw Data Preview</h3>
+                        <div class="flex gap-2">
+                            <input type="text" id="raw-data-search" placeholder="Search data..."
+                                class="p-2 border rounded" style="font-size: 0.875rem;">
+                            <button class="btn btn-secondary btn-sm" onclick="renderRawTable()">Refresh</button>
                         </div>
-                        <h4 class="font-bold text-lg mb-2">Drop your CSV or Excel files here</h4>
-                        <p class="text-muted mb-6">or click to browse from your computer</p>
-                        <button class="btn btn-primary">Select Files</button>
-                        <input type="file" id="file-input" accept=".csv" style="display: none;">
+                    </div>
+
+                    <div class="card" style="overflow-x: auto;">
+                        <table class="transactions-table" id="raw-data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Channel</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody id="raw-data-body">
+                                <tr>
+                                    <td colspan="7" class="text-center p-4">Loading data...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="p-4 flex justify-between items-center border-t border-slate-200">
+                            <span class="text-sm text-muted" id="raw-data-count">Showing 0 records</span>
+                            <div class="flex gap-2">
+                                <button class="btn btn-secondary btn-sm" disabled>Previous</button>
+                                <button class="btn btn-secondary btn-sm" disabled>Next</button>
+                            </div>
+                        </div>
                     </div>
                 </section>
+
+                <!-- Helper Script for this page specifically -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        // Wait for dataset.js to load
+                        setTimeout(() => {
+                            renderRawTable();
+                        }, 500);
+
+                        document.getElementById('raw-data-search').addEventListener('input', (e) => {
+                            renderRawTable(e.target.value);
+                        });
+                    });
+
+                    function renderRawTable(search = '') {
+                        const tbody = document.getElementById('raw-data-body');
+                        const countEl = document.getElementById('raw-data-count');
+
+                        // Use SEED_DATA if available, roughly
+                        let data = window.SEED_DATA || [];
+                        if (data.length === 0 && window.store) {
+                            data = window.store.getTransactions();
+                        }
+
+                        if (search) {
+                            const lower = search.toLowerCase();
+                            data = data.filter(r =>
+                                r.customer.toLowerCase().includes(lower) ||
+                                r.id.toLowerCase().includes(lower) ||
+                                r.status.toLowerCase().includes(lower)
+                            );
+                        }
+
+                        // Limit to 50 for performance in this preview
+                        const displayData = data.slice(0, 50);
+
+                        if (displayData.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4">No records found.</td></tr>';
+                            countEl.innerText = '0 records';
+                            return;
+                        }
+
+                        tbody.innerHTML = displayData.map(row => `
+                            <tr>
+                                <td class="font-mono text-xs">${row.id}</td>
+                                <td>${new Date(row.date).toLocaleDateString()}</td>
+                                <td class="font-medium">${row.customer}</td>
+                                <td>₹${Number(row.amount).toLocaleString()}</td>
+                                <td><span class="status ${row.status.toLowerCase()}">${row.status}</span></td>
+                                <td>${row.channel}</td>
+                                <td>${row.category || '-'}</td>
+                            </tr>
+                        `).join('');
+
+                        countEl.innerText = `Showing top ${displayData.length} of ${data.length} records`;
+                    }
+                </script>
             </div>
         </main>
     </div>

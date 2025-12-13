@@ -256,6 +256,31 @@ function updateDashboard() {
 
     // 5. Update Table
     updateTransactionsTable();
+
+    // 6. Generate AI Insights
+    generateAIInsights(selectedData, timeRange);
+}
+
+function generateAIInsights(data, range) {
+    const el = document.getElementById('ai-insight-text');
+    if (!el) return;
+
+    // Simulate simple analysis
+    const currentTotal = data.current.reduce((a, b) => a + b, 0);
+    const prevTotal = data.previous.reduce((a, b) => a + b, 0);
+    const growth = ((currentTotal - prevTotal) / prevTotal) * 100;
+
+    let insight = "";
+
+    if (growth > 10) {
+        insight = `Great job! Your revenue is trending up by <strong>${growth.toFixed(1)}%</strong> compared to the previous ${range} period. We detected a spike in 'Website' conversions.`;
+    } else if (growth > 0) {
+        insight = `Steady growth of <strong>${growth.toFixed(1)}%</strong>. Consider running a promotion to boost sales next week.`;
+    } else {
+        insight = `Revenue is down by <strong>${Math.abs(growth).toFixed(1)}%</strong>. We recommend checking your 'Mobile App' channel performance, as it seems to be lagging.`;
+    }
+
+    el.innerHTML = insight;
 }
 
 function animateValue(id, end, isCurrency = false) {
