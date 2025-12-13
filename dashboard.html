@@ -136,33 +136,32 @@
 
         // --- Lucide Icon Mapper for React ---
         // Dynamically create React components from Lucide's global definition
-        const LucideIcon = ({ iconName, size = 18, className = "", ...props }) => {
-            const iconData = lucide.icons[iconName];
-            if (!iconData) return null;
+        // --- Safer Icon Component ---
+        const Icon = ({ name, size = 18, className = "" }) => {
+            const iconRef = useRef(null);
 
-            const [tag, attrs, children] = iconData;
-            return React.createElement(
-                tag,
-                {
-                    ...attrs,
-                    width: size,
-                    height: size,
-                    className: `lucide lucide-${iconName} ${className}`,
-                    ...props
-                },
-                children.map(([childTag, childAttrs], index) =>
-                    React.createElement(childTag, { ...childAttrs, key: index })
-                )
-            );
+            useEffect(() => {
+                if (window.lucide) {
+                    window.lucide.createIcons({
+                        root: iconRef.current ? iconRef.current.parentNode : document,
+                        nameAttr: 'data-lucide',
+                        attrs: {
+                            class: `lucide lucide-${name} ${className}`,
+                            width: size,
+                            height: size
+                        }
+                    });
+                }
+            }, [name, size, className]);
+
+            // Convert PascalCase to kebab-case for data-lucide (e.g. DollarSign -> dollar-sign)
+            const kebabName = name.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+            return <i ref={iconRef} data-lucide={kebabName} className={className} width={size} height={size}></i>;
         };
 
-        // Create specific components for ease of use
+        // Proxy to handle <IconName /> usage
         const Icons = new Proxy({}, {
-            get: (target, prop) => (props) => {
-                // Convert PascalCase (HomeIcon) to kebab-case (home-icon) or match lucide expectations
-                // Lucide global keys are like "Activity", "AlertCircle"
-                return <LucideIcon iconName={prop} {...props} />;
-            }
+            get: (target, prop) => (props) => <Icon name={prop} {...props} />
         });
 
         // Destructure commonly used icons
@@ -488,7 +487,7 @@
                                                             <td className="px-6 py-4 font-semibold text-slate-900">₹{tx.amount.toLocaleString()}</td>
                                                             <td className="px-6 py-4">
                                                                 <span className={`px-2.5 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 ${tx.status === 'Paid' ? 'bg-green-100 text-green-700' :
-                                                                        tx.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
+                                                                    tx.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'
                                                                     }`}>
                                                                     <span className={`w-1.5 h-1.5 rounded-full ${tx.status === 'Paid' ? 'bg-green-500' : tx.status === 'Pending' ? 'bg-yellow-500' : 'bg-red-500'}`}></span>
                                                                     {tx.status}
