@@ -4,41 +4,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InsightFlow Dashboard</title>
+    <title>InsightFlow — Ultimate Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Dependencies -->
     <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
     <script src="https://unpkg.com/recharts@2.12.0/umd/Recharts.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+
     <style>
         body {
-            background-color: #e0f2fe;
-            /* Debug Blue */
-            font-family: sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
         }
 
         #loader {
-            fixed;
+            position: fixed;
             inset: 0;
             background: white;
-            z-index: 50;
+            z-index: 9999;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            width: 100vw;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- Loading Overlay -->
     <div id="loader">
-        <h1 class="text-2xl font-bold mb-4">Loading Dashboard...</h1>
-        <div id="status" class="text-gray-500">Initializing Scripts...</div>
-        <div id="error-disp" class="text-red-500 font-mono mt-4 text-sm whitespace-pre-wrap p-4 bg-red-50 hidden"></div>
+        <div class="spinner mb-4"></div>
+        <h2 class="text-xl font-bold text-slate-800">InsightFlow</h2>
+        <p id="status" class="text-slate-500 text-sm mt-2">Initializing Dashboard...</p>
+        <div id="error-disp"
+            class="hidden max-w-lg mt-4 p-4 bg-red-50 text-red-600 font-mono text-xs border border-red-200 rounded-lg whitespace-pre-wrap">
+        </div>
     </div>
+
+    <!-- App Root -->
     <div id="root" class="h-screen w-full hidden"></div>
 
     <script>
@@ -47,96 +74,146 @@
         const loader = document.getElementById('loader');
         const rootEl = document.getElementById('root');
 
+        // Robust Error Handler
         window.onerror = function (msg, url, line, col, error) {
             errorDisp.classList.remove('hidden');
-            errorDisp.textContent = `Global Error: ${msg}\nLine: ${line}`;
+            errorDisp.textContent = `Error: ${msg}\nLine: ${line}`;
             return false;
         };
 
         try {
-            status.textContent = "Checking Dependencies...";
-            if (!window.React) throw new Error("React missing");
-            if (!window.ReactDOM) throw new Error("ReactDOM missing");
-            if (!window.htm) throw new Error("htm missing");
+            // Environment Check
+            status.textContent = "Checking Environment...";
+            if (!window.React || !window.ReactDOM) throw new Error("React Framework failed to load");
+            if (!window.htm) throw new Error("Templating engine failed to load");
 
-            status.textContent = "Starting React...";
-            const html = htm.bind(React.createElement);
             const { useState, useEffect } = React;
+            const html = htm.bind(React.createElement);
             const RC = window.Recharts || {};
 
-            // --- Icons ---
+            // --- UI Components ---
+
             const Icon = ({ name, size = 20, className = "" }) => {
-                if (!window.lucide || !window.lucide.icons[name]) return html`<span>?</span>`;
+                if (!window.lucide || !window.lucide.icons[name]) return null;
                 const [tag, attrs, children] = window.lucide.icons[name];
                 return React.createElement(tag, { ...attrs, width: size, height: size, className: `lucide lucide-${name} ${className}` },
                     children && children.map(([t, a], i) => React.createElement(t, { ...a, key: i }))
                 );
             };
 
-            // --- Components ---
-            const Metric = ({ label, value, color }) => html`
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100 p-6">
-                    <div class="text-slate-500 text-sm font-medium mb-1">${label}</div>
-                    <div class="text-3xl font-bold text-slate-800">${value}</div>
-                    <div class="h-1 w-full bg-${color}-100 mt-4 rounded-full overflow-hidden">
-                        <div class="h-full bg-${color}-500 w-2/3"></div>
+            const MetricCard = ({ title, value, change, icon, color }) => {
+                // Pre-defined color maps for Tailwind
+                const colors = {
+                    blue: { bg: 'bg-blue-50', text: 'text-blue-600' },
+                    green: { bg: 'bg-green-50', text: 'text-green-600' },
+                    purple: { bg: 'bg-purple-50', text: 'text-purple-600' },
+                    orange: { bg: 'bg-orange-50', text: 'text-orange-600' }
+                };
+                const theme = colors[color] || colors.blue;
+
+                return html`
+                    <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="p-3 rounded-xl ${theme.bg} ${theme.text}">
+                                <${Icon} name=${icon} size=${24} />
+                            </div>
+                            <span class="text-xs font-bold px-2 py-1 rounded-full bg-green-50 text-green-600">${change}</span>
+                        </div>
+                        <div class="text-slate-500 text-sm font-medium mb-1">${title}</div>
+                        <div class="text-2xl font-bold text-slate-800">${value}</div>
                     </div>
-                </div>
+                `;
+            };
+
+            const Sidebar = () => html`
+                <aside class="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 h-full z-20">
+                    <div class="p-6">
+                        <div class="flex items-center gap-2 text-xl font-bold text-slate-800">
+                            <div class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center">
+                                <${Icon} name="activity" size=${20} />
+                            </div>
+                            InsightFlow
+                        </div>
+                    </div>
+                    <nav class="flex-1 px-4 space-y-1">
+                        <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-600 rounded-xl font-medium"><${Icon} name="layout-grid" size=${20} /> Dashboard</a>
+                        <a href="analytics.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium"><${Icon} name="bar-chart-2" size=${20} /> Analytics</a>
+                        <a href="data.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium"><${Icon} name="database" size=${20} /> Data Sources</a>
+                        <a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium"><${Icon} name="settings" size=${20} /> Settings</a>
+                    </nav>
+                </aside>
             `;
 
             const Dashboard = () => {
+                const [data] = useState(Array.from({ length: 30 }, (_, i) => ({
+                    date: new Date(Date.now() - (29 - i) * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                    revenue: Math.floor(Math.random() * 20000) + 15000
+                })));
+
                 return html`
-                    <div class="p-8 max-w-7xl mx-auto space-y-8">
-                        <div class="flex items-center justify-between">
-                            <h1 class="text-3xl font-bold text-slate-800">InsightFlow</h1>
-                            <div class="flex items-center gap-2">
-                                <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-bold">Authenticated</span>
-                                <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-full text-white flex items-center justify-center font-bold">JD</div>
-                            </div>
-                        </div>
+                    <div class="flex h-screen w-full bg-slate-50/50">
+                        <${Sidebar} />
+                        <div class="flex-1 flex flex-col h-full overflow-hidden">
+                            <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-10 shrink-0">
+                                <h1 class="text-lg font-bold text-slate-800">Dashboard</h1>
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white flex items-center justify-center text-xs font-bold">JD</div>
+                            </header>
 
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            <${Metric} label="Total Revenue" value="₹12.4L" color="blue" />
-                            <${Metric} label="Active Users" value="1,240" color="green" />
-                            <${Metric} label="New Orders" value="356" color="purple" />
-                            <${Metric} label="Bounce Rate" value="42%" color="orange" />
-                        </div>
-
-                        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 h-96 flex flex-col">
-                            <h3 class="text-lg font-bold text-slate-800 mb-6">Revenue Performance</h3>
-                            ${RC.AreaChart ? html`
-                                <div class="flex-1 w-full h-full">
-                                    <${RC.ResponsiveContainer} width="100%" height="100%">
-                                        <${RC.AreaChart} data=${Array.from({ length: 30 }, (_, i) => ({ name: i, val: Math.random() * 100 }))}>
-                                            <${RC.CartesianGrid} strokeDasharray="3 3" vertical=${false} />
-                                            <${RC.XAxis} dataKey="name" hide />
-                                            <${RC.YAxis} />
-                                            <${RC.Tooltip} />
-                                            <${RC.Area} type="monotone" dataKey="val" stroke="#3b82f6" fill="#eff6ff" strokeWidth=${3} />
-                                        </${RC.AreaChart}>
-                                    </${RC.ResponsiveContainer}>
+                            <div class="flex-1 overflow-y-auto p-6">
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                                    <${MetricCard} title="Total Revenue" value="₹12.4L" change="+12%" icon="dollar-sign" color="blue" />
+                                    <${MetricCard} title="Active Users" value="1,240" change="+5%" icon="users" color="green" />
+                                    <${MetricCard} title="New Orders" value="356" change="+8%" icon="shopping-bag" color="purple" />
+                                    <${MetricCard} title="Bounce Rate" value="42%" change="-2%" icon="activity" color="orange" />
                                 </div>
-                            ` : html`<div class="text-red-500">Recharts failed to load</div>`}
+
+                                <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm mb-8 h-[400px]">
+                                    <h3 class="text-lg font-bold text-slate-800 mb-4">Revenue Trends</h3>
+                                    <div class="w-full h-full">
+                                        ${RC.AreaChart
+                        ? html`<${RC.ResponsiveContainer} width="100%" height="100%">
+                                                <${RC.AreaChart} data=${data}>
+                                                    <${RC.defs || 'defs'}>
+                                                        <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                                                            <stop offset="5%" stopColor="#3B82F6" stopOpacity=${0.3}/>
+                                                            <stop offset="95%" stopColor="#3B82F6" stopOpacity=${0}/>
+                                                        </linearGradient>
+                                                    </${RC.defs || 'defs'}>
+                                                    <${RC.CartesianGrid} strokeDasharray="3 3" vertical=${false} />
+                                                    <${RC.XAxis} dataKey="date" />
+                                                    <${RC.YAxis} />
+                                                    <${RC.Tooltip} />
+                                                    <${RC.Area} type="monotone" dataKey="revenue" stroke="#3B82F6" fill="url(#colorRev)" strokeWidth=${3} />
+                                                </${RC.AreaChart}>
+                                            </${RC.ResponsiveContainer}>`
+                        : html`<div class="flex items-center justify-center h-full text-red-500">Charts Unavailable</div>`
+                    }
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
             };
 
             // --- Mount ---
-            status.textContent = "Mounting Root...";
+            status.textContent = "Mounting Application...";
             const root = ReactDOM.createRoot(rootEl);
             root.render(html`<${Dashboard} />`);
 
-            // Success
+            // Force Loader Removal (Bypassing CSS Specificity Issues)
             setTimeout(() => {
-                loader.classList.add('hidden');
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+                setTimeout(() => loader.style.display = 'none', 500); // Fully remove after fade
+
                 rootEl.classList.remove('hidden');
-            }, 600);
+            }, 800);
 
         } catch (e) {
             console.error(e);
             errorDisp.classList.remove('hidden');
-            errorDisp.textContent = `Script Error: ${e.message}\n${e.stack}`;
+            errorDisp.textContent = `Initialization Error: ${e.message}`;
         }
     </script>
 </body>
