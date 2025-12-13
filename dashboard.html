@@ -124,6 +124,11 @@
         <main id="react-root" class="flex-1 relative flex flex-col h-full overflow-hidden bg-slate-50/50"></main>
     </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (window.lucide) window.lucide.createIcons();
+        });
+    </script>
     <!-- React Logic -->
     <script type="text/babel">
         const { useState, useEffect, useRef, useMemo, useCallback } = React;
@@ -136,27 +141,27 @@
 
         // --- Lucide Icon Mapper for React ---
         // Dynamically create React components from Lucide's global definition
-        // --- Safer Icon Component ---
+        // --- Robust Icon Component ---
         const Icon = ({ name, size = 18, className = "" }) => {
-            const iconRef = useRef(null);
+            const lucide = window.lucide || {};
+            if (!lucide.icons) return null;
 
-            useEffect(() => {
-                if (window.lucide) {
-                    window.lucide.createIcons({
-                        root: iconRef.current ? iconRef.current.parentNode : document,
-                        nameAttr: 'data-lucide',
-                        attrs: {
-                            class: `lucide lucide-${name} ${className}`,
-                            width: size,
-                            height: size
-                        }
-                    });
-                }
-            }, [name, size, className]);
+            const iconData = lucide.icons[name];
+            if (!iconData) return null;
 
-            // Convert PascalCase to kebab-case for data-lucide (e.g. DollarSign -> dollar-sign)
-            const kebabName = name.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
-            return <i ref={iconRef} data-lucide={kebabName} className={className} width={size} height={size}></i>;
+            const [tag, attrs, children] = iconData;
+            return React.createElement(
+                tag,
+                {
+                    ...attrs,
+                    width: size,
+                    height: size,
+                    className: `lucide lucide-${name} ${className}`,
+                },
+                children.map(([childTag, childAttrs], index) =>
+                    React.createElement(childTag, { ...childAttrs, key: index })
+                )
+            );
         };
 
         // Proxy to handle <IconName /> usage
