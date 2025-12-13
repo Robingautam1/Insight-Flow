@@ -4,176 +4,757 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InsightFlow — Smart Business Dashboard</title>
-    <meta name="description"
-        content="InsightFlow — a clean interactive business dashboard demo for revenue, orders, channels and smart insights.">
+    <title>InsightFlow — Advanced Analytics</title>
+    <meta name="description" content="Deep-dive into trends, retention cohorts, CLV, and AI-powered insights.">
     <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="InsightFlow — Smart Business Dashboard">
-    <meta property="og:description" content="Make sense of your business in one clean dashboard.">
-    <meta property="og:image" content="assets/images/og-screenshot.png">
-    <meta property="og:url" content="https://robingautam1.github.io/Insight-Flow/">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-
+    <!-- Fonts, CSS, Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Chart.js (Using vanilla JS Charts as requested wrapper for "Recharts-like" feel) -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
 </head>
 
 <body>
     <div class="app-layout">
         <!-- Sidebar -->
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <a href="index.html" class="sidebar-logo logo">
-                <i data-feather="activity"></i>
+                <i data-lucide="activity"></i>
                 Insight<span>Flow</span>
             </a>
 
             <nav class="sidebar-menu">
                 <a href="dashboard.html" class="sidebar-item">
-                    <i data-feather="grid"></i>
+                    <i data-lucide="layout-grid"></i>
                     Dashboard
                 </a>
                 <a href="analytics.html" class="sidebar-item active">
-                    <i data-feather="bar-chart-2"></i>
+                    <i data-lucide="bar-chart-2"></i>
                     Analytics
                 </a>
                 <a href="data.html" class="sidebar-item">
-                    <i data-feather="database"></i>
+                    <i data-lucide="database"></i>
                     Data Sources
                 </a>
                 <a href="settings.html" class="sidebar-item">
-                    <i data-feather="settings"></i>
+                    <i data-lucide="settings"></i>
                     Settings
                 </a>
                 <a href="support.html" class="sidebar-item">
-                    <i data-feather="help-circle"></i>
+                    <i data-lucide="help-circle"></i>
                     Support
                 </a>
             </nav>
 
             <div class="mt-auto">
-                <div class="card" style="padding: 1rem; background-color: var(--bg-body); border: none;">
+                <div class="card bg-slate-50 border-none p-4">
                     <h5 class="font-bold mb-1">Pro Plan</h5>
                     <p class="text-xs text-muted mb-2">You have 12 days left in your trial.</p>
-                    <button class="btn btn-primary btn-sm w-full"
-                        style="width: 100%; font-size: 0.8rem;">Upgrade</button>
+                    <button class="btn btn-primary btn-sm w-full text-xs">Upgrade</button>
                 </div>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <main class="main-content animate-fade-in">
-            <!-- Top Bar -->
-            <header class="top-bar">
-                <div class="flex items-center gap-md">
-                    <button class="icon-btn mobile-menu-btn" id="sidebar-toggle">
-                        <i data-feather="menu"></i>
+        <main class="main-content flex flex-col h-screen overflow-hidden">
+            <!-- Top Bar (Static) -->
+            <header class="top-bar shrink-0 z-50 bg-white border-b border-slate-100">
+                <div class="flex items-center gap-4">
+                    <button class="mobile-menu-btn lg:hidden" id="sidebar-toggle">
+                        <i data-lucide="menu"></i>
                     </button>
-                    <h2 class="text-xl font-bold">Analytics</h2>
-                    <p class="page-subhead">Deep-dive into trends: retention, cohort and performance comparisons.
-                    </p>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">Advanced Analytics</h2>
+                        <p class="text-slate-500 text-sm">Deep-dive into your growth metrics.</p>
+                    </div>
                 </div>
 
-                <div class="flex items-center gap-lg">
-                    <div class="user-menu flex items-center gap-md">
-                        <!-- Theme Toggle -->
-                        <label class="flex items-center cursor-pointer relative">
-                            <input type="checkbox" id="theme-toggle" class="sr-only">
-                            <div class="toggle-bg bg-gray-200 border-2 border-gray-200 h-6 w-11 rounded-full"></div>
-                            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
-                                <i data-feather="moon" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
-                            </span>
-                        </label>
-                        <div class="avatar">JD</div>
+                <div class="flex items-center gap-6">
+                    <div class="user-menu flex items-center gap-4">
+                        <button id="themeToggle" class="text-slate-500 hover:text-slate-700 transition-colors">
+                            <i data-lucide="moon" size="20"></i>
+                        </button>
+                        <div
+                            class="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold border border-indigo-200">
+                            JD</div>
                     </div>
                 </div>
             </header>
 
+            <!-- Sticky Filter Bar -->
+            <div class="sticky-filters px-8 py-3 flex flex-col md:flex-row gap-4 items-center justify-between shrink-0">
+                <div class="flex items-center gap-3 w-full md:w-auto overflow-x-auto no-scrollbar">
+                    <!-- Date Picker -->
+                    <div class="relative group">
+                        <button
+                            class="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 hover:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all">
+                            <i data-lucide="calendar" size="16" class="text-slate-400"></i>
+                            <span id="date-range-label">Last 30 Days</span>
+                            <i data-lucide="chevron-down" size="16" class="text-slate-400"></i>
+                        </button>
+                        <!-- Dropdown (Hidden) -->
+                        <div
+                            class="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-slate-100 hidden group-hover:block z-50">
+                            <a href="#"
+                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600"
+                                onclick="updateRange('7d')">Last 7 Days</a>
+                            <a href="#"
+                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600 font-bold bg-slate-50"
+                                onclick="updateRange('30d')">Last 30 Days</a>
+                            <a href="#"
+                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600"
+                                onclick="updateRange('90d')">Last 90 Days</a>
+                            <a href="#"
+                                class="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-indigo-600"
+                                onclick="updateRange('1y')">Last Year</a>
+                        </div>
+                    </div>
 
-            <div class="card mb-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h4 class="font-bold">Revenue vs Orders</h4>
-                    <div class="flex gap-sm text-sm">
-                        <span class="flex items-center gap-xs"><span
-                                style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%;"></span>
-                            Revenue</span>
-                        <span class="flex items-center gap-xs"><span
-                                style="width: 8px; height: 8px; background: var(--success); border-radius: 50%;"></span>
-                            Orders</span>
+                    <!-- Segment Filter -->
+                    <div class="relative">
+                        <select
+                            class="appearance-none bg-white border border-slate-200 rounded-lg text-sm px-3 py-2 pr-8 focus:outline-none focus:border-indigo-500 cursor-pointer">
+                            <option>All Customers</option>
+                            <option>New Customers</option>
+                            <option>Returning</option>
+                            <option>VIP Segment</option>
+                            <option>At Risk</option>
+                        </select>
+                        <i data-lucide="chevron-down" size="16"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                    </div>
+
+                    <!-- Compare Toggle -->
+                    <div class="flex items-center gap-2 px-3 py-2 bg-slate-50 rounded-lg border border-slate-200">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="compare-toggle" class="sr-only peer" checked>
+                            <div
+                                class="w-9 h-5 bg-slate-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600">
+                            </div>
+                            <span class="ml-2 text-sm text-slate-600 font-medium">Compare</span>
+                        </label>
                     </div>
                 </div>
-                <div style="height: 300px; width: 100%;">
-                    <canvas id="comparisonChart"></canvas>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center gap-2">
+                    <button class="btn btn-outline-secondary btn-sm flex items-center gap-2"
+                        onclick="openReportModal()">
+                        <i data-lucide="download" size="16"></i> Export
+                    </button>
+                    <button class="btn btn-primary btn-sm flex items-center gap-2">
+                        <i data-lucide="share-2" size="16"></i> Share
+                    </button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-lg">
-                <div class="card">
-                    <h4 class="font-bold mb-4">Cohort Retention</h4>
-                    <!-- Simplified Cohort Table Visualization -->
-                    <div style="overflow-x: auto;">
-                        <table class="w-full text-sm" style="width: 100%; text-align: center;">
-                            <thead>
-                                <tr class="text-muted">
-                                    <th class="text-left p-2">Cohort</th>
-                                    <th class="p-2">Month 1</th>
-                                    <th class="p-2">Month 2</th>
-                                    <th class="p-2">Month 3</th>
+            <!-- Scrollable Content Area -->
+            <div class="overflow-y-auto flex-1 p-8 space-y-8 no-scrollbar scroll-smooth">
+
+                <!-- 1. Metric Cards Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Retention -->
+                    <div class="card p-5 hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer group">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="p-2 bg-green-50 rounded-lg text-green-600 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                                <i data-lucide="users" size="20"></i>
+                            </div>
+                            <span
+                                class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                                <i data-lucide="trending-up" size="12" class="mr-1"></i> +2.3%
+                            </span>
+                        </div>
+                        <div class="text-3xl font-bold text-slate-900 mb-1">68.5%</div>
+                        <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Avg. Retention Rate
+                        </div>
+                        <!-- Mini Sparkline (static svg for demo) -->
+                        <svg class="w-full h-8 mt-3 text-green-500 fill-green-500/10" viewBox="0 0 100 20"
+                            preserveAspectRatio="none">
+                            <path d="M0 15 Q 10 5, 20 12 T 40 10 T 60 14 T 80 5 T 100 12 V 20 H 0 Z"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </div>
+
+                    <!-- CLV -->
+                    <div class="card p-5 hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer group">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="p-2 bg-blue-50 rounded-lg text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <i data-lucide="dollar-sign" size="20"></i>
+                            </div>
+                            <span
+                                class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                                <i data-lucide="trending-up" size="12" class="mr-1"></i> +₹1,200
+                            </span>
+                        </div>
+                        <div class="text-3xl font-bold text-slate-900 mb-1">₹18,450</div>
+                        <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Customer Lifetime Value
+                        </div>
+                        <svg class="w-full h-8 mt-3 text-blue-500 fill-blue-500/10" viewBox="0 0 100 20"
+                            preserveAspectRatio="none">
+                            <path d="M0 18 Q 20 15, 40 8 T 70 12 T 100 5 V 20 H 0 Z" stroke="currentColor"
+                                stroke-width="2" />
+                        </svg>
+                    </div>
+
+                    <!-- Churn -->
+                    <div class="card p-5 hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer group">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="p-2 bg-red-50 rounded-lg text-red-600 group-hover:bg-red-600 group-hover:text-white transition-colors">
+                                <i data-lucide="user-x" size="20"></i>
+                            </div>
+                            <span
+                                class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                                <i data-lucide="trending-down" size="12" class="mr-1"></i> -1.8%
+                            </span>
+                        </div>
+                        <div class="text-3xl font-bold text-slate-900 mb-1">12.5%</div>
+                        <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Monthly Churn</div>
+                        <svg class="w-full h-8 mt-3 text-red-500 fill-red-500/10" viewBox="0 0 100 20"
+                            preserveAspectRatio="none">
+                            <path d="M0 5 Q 30 15, 60 10 T 100 18 V 20 H 0 Z" stroke="currentColor" stroke-width="2" />
+                        </svg>
+                    </div>
+
+                    <!-- Repeat Purchase -->
+                    <div class="card p-5 hover:-translate-y-1 hover:shadow-lg transition-all cursor-pointer group">
+                        <div class="flex justify-between items-start mb-4">
+                            <div
+                                class="p-2 bg-purple-50 rounded-lg text-purple-600 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                                <i data-lucide="refresh-cw" size="20"></i>
+                            </div>
+                            <span
+                                class="flex items-center text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded-full">
+                                <i data-lucide="trending-up" size="12" class="mr-1"></i> +3.5%
+                            </span>
+                        </div>
+                        <div class="text-3xl font-bold text-slate-900 mb-1">34.2%</div>
+                        <div class="text-xs text-slate-500 font-medium uppercase tracking-wide">Repeat Rate</div>
+                        <svg class="w-full h-8 mt-3 text-purple-500 fill-purple-500/10" viewBox="0 0 100 20"
+                            preserveAspectRatio="none">
+                            <path d="M0 15 Q 15 15, 30 8 T 60 12 T 100 6 V 20 H 0 Z" stroke="currentColor"
+                                stroke-width="2" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 2. Main Revenue vs Orders Chart -->
+                <div class="card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h3 class="text-lg font-bold">Performance Trends</h3>
+                            <p class="text-sm text-slate-500">Revenue (Left Axis) vs Orders (Right Axis)</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button
+                                class="px-3 py-1 rounded text-xs font-medium bg-blue-50 text-blue-600 border border-blue-200">Revenue</button>
+                            <button
+                                class="px-3 py-1 rounded text-xs font-medium bg-green-50 text-green-600 border border-green-200">Orders</button>
+                        </div>
+                    </div>
+                    <div class="chart-container-responsive">
+                        <canvas id="revOrderChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 3. AI Insights & Recommendations (Side by Side) -->
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <!-- AI Insights -->
+                    <div
+                        class="card p-6 bg-gradient-to-br from-indigo-50 to-blue-50 border-2 border-indigo-100/50 shadow-inner">
+                        <div class="flex items-center gap-3 mb-6">
+                            <div
+                                class="p-2 bg-yellow-400/20 text-yellow-600 rounded-lg shadow-sm border border-yellow-400/30">
+                                <i data-lucide="lightbulb" size="20"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800">AI-Powered Insights</h3>
+                        </div>
+                        <ul class="space-y-4">
+                            <li
+                                class="flex items-start gap-4 p-3 bg-white/60 rounded-xl border border-white/50 shadow-sm backdrop-blur-sm">
+                                <div class="mt-1 text-green-500 shrink-0"><i data-lucide="trending-up" size="18"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-800">Retention Improved</p>
+                                    <p class="text-xs text-slate-600">Your retention rates improved by <span
+                                            class="text-green-600 font-bold">3%</span> this quarter compared to last.
+                                    </p>
+                                </div>
+                            </li>
+                            <li
+                                class="flex items-start gap-4 p-3 bg-white/60 rounded-xl border border-white/50 shadow-sm backdrop-blur-sm">
+                                <div class="mt-1 text-blue-500 shrink-0"><i data-lucide="users" size="18"></i></div>
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-800">Strong Cohort Engagement</p>
+                                    <p class="text-xs text-slate-600">November cohort shows <span
+                                            class="text-blue-600 font-bold">8% better</span> engagement in Month 1.</p>
+                                </div>
+                            </li>
+                            <li
+                                class="flex items-start gap-4 p-3 bg-white/60 rounded-xl border border-white/50 shadow-sm backdrop-blur-sm">
+                                <div class="mt-1 text-red-500 shrink-0"><i data-lucide="alert-circle" size="18"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-slate-800">Risk Alert</p>
+                                    <p class="text-xs text-slate-600">October cohort drop-off at Month 3 is higher than
+                                        average. <a href="#" class="underline decoration-red-300">View Details</a></p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Smart Recommendations -->
+                    <div class="card p-6 border-l-4 border-l-yellow-400">
+                        <div class="flex items-center gap-3 mb-6">
+                            <i data-lucide="sparkles" size="20" class="text-yellow-500"></i>
+                            <h3 class="text-lg font-bold text-slate-800">Smart Recommendations</h3>
+                        </div>
+                        <div class="space-y-4">
+                            <!-- High Priority -->
+                            <div
+                                class="group flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100">
+                                <div
+                                    class="mt-1 w-2 h-2 rounded-full bg-red-500 shrink-0 shadow-[0_0_8px_rgba(239,68,68,0.6)]">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between">
+                                        <p class="text-sm font-bold text-slate-800">Launch re-engagement campaign</p>
+                                        <span
+                                            class="text-[10px] font-bold text-red-500 bg-red-50 px-2 rounded-full border border-red-100">HIGH</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-1">Target October cohort to mitigate churn risk.
+                                    </p>
+                                    <div class="flex items-center gap-4 mt-2">
+                                        <span class="text-xs font-semibold text-green-600">+5% est. retention</span>
+                                        <a href="#" class="text-xs text-indigo-600 hover:underline">View playbook</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Medium -->
+                            <div class="border-t border-slate-100 my-2"></div>
+                            <div
+                                class="group flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                                <div class="mt-1 w-2 h-2 rounded-full bg-yellow-500 shrink-0"></div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between">
+                                        <p class="text-sm font-bold text-slate-800">Extend welcome sequence</p>
+                                        <span
+                                            class="text-[10px] font-bold text-yellow-600 bg-yellow-50 px-2 rounded-full border border-yellow-100">MEDIUM</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-1">Add 2 more touchpoints for new users.</p>
+                                </div>
+                            </div>
+                            <!-- Low -->
+                            <div class="border-t border-slate-100 my-2"></div>
+                            <div
+                                class="group flex items-start gap-3 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+                                <div class="mt-1 w-2 h-2 rounded-full bg-blue-500 shrink-0"></div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between">
+                                        <p class="text-sm font-bold text-slate-800">Test discount offers</p>
+                                        <span
+                                            class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 rounded-full border border-blue-100">LOW</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-1">A/B test 10% vs 15% for Month 3 users.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Enhanced Cohort Retention Heatmap -->
+                <div class="card overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="text-lg font-bold">Cohort Retention Analysis</h3>
+                        <button
+                            class="text-xs font-medium text-slate-500 flex items-center gap-1 hover:text-indigo-600"><i
+                                data-lucide="download" size="14"></i> Download CSV</button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-center">
+                            <thead class="bg-slate-50 text-slate-500 font-medium">
+                                <tr>
+                                    <th
+                                        class="p-4 text-left w-32 sticky left-0 bg-slate-50 z-10 border-r border-slate-200">
+                                        Cohort</th>
+                                    <th class="p-4 w-24">Users</th>
+                                    <th class="p-4">Month 1</th>
+                                    <th class="p-4">Month 2</th>
+                                    <th class="p-4">Month 3</th>
+                                    <th class="p-4">Month 4</th>
+                                    <th class="p-4">Month 5</th>
+                                    <th class="p-4">Month 6</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="text-left p-2 font-medium">Oct 2024</td>
-                                    <td class="p-2 bg-primary text-white rounded">100%</td>
-                                    <td class="p-2 bg-primary-light text-primary rounded">65%</td>
-                                    <td class="p-2 bg-primary-light text-primary rounded" style="opacity: 0.7;">45%
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-left p-2 font-medium">Nov 2024</td>
-                                    <td class="p-2 bg-primary text-white rounded">100%</td>
-                                    <td class="p-2 bg-primary-light text-primary rounded">68%</td>
-                                    <td class="p-2 text-muted">-</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-left p-2 font-medium">Dec 2024</td>
-                                    <td class="p-2 bg-primary text-white rounded">100%</td>
-                                    <td class="p-2 text-muted">-</td>
-                                    <td class="p-2 text-muted">-</td>
-                                </tr>
+                            <tbody class="divide-y divide-slate-100" id="cohort-body">
+                                <!-- Populated via JS -->
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div class="card">
-                    <h4 class="font-bold mb-4">Summary</h4>
-                    <p class="text-muted mb-4">
-                        Your retention rates have improved by <strong>3%</strong> in the last quarter.
-                        The November cohort is showing particularly strong engagement, likely due to the Black
-                        Friday campaign.
-                    </p>
-                    <div class="p-4 bg-bg-body rounded border border-border">
-                        <h5 class="font-bold text-sm mb-2">Recommendation</h5>
-                        <p class="text-sm text-muted">Consider extending the "Welcome Back" email sequence to the
-                            October cohort to boost Month 3 retention.</p>
+
+                <!-- 5. Additional Charts (Churn, CLV, Breakdown) -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Churn Reasons donut -->
+                    <div class="card p-6">
+                        <h4 class="font-bold text-slate-800 mb-4">Churn Reasons</h4>
+                        <div class="relative h-48 w-full flex items-center justify-center">
+                            <canvas id="churnChart"></canvas>
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-slate-800">12.5%</div>
+                                    <div class="text-[10px] text-slate-400 uppercase tracking-widest">CHURN</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CLV Bar Chart -->
+                    <div class="card p-6 md:col-span-2">
+                        <h4 class="font-bold text-slate-800 mb-4">CLV by Cohort</h4>
+                        <div class="h-48 w-full">
+                            <canvas id="clvChart"></canvas>
+                        </div>
                     </div>
                 </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-8">
+                    <!-- Product Usage Heatmap (Simplified Visual) -->
+                    <div class="card p-6">
+                        <h4 class="font-bold text-slate-800 mb-4">Daily Active Usage (Last 90 Days)</h4>
+                        <div class="grid grid-cols-12 gap-1" id="usage-heatmap">
+                            <!-- Generated squares -->
+                        </div>
+                        <div class="flex justify-between items-center mt-4 text-xs text-slate-400">
+                            <span>Less</span>
+                            <div class="flex gap-1 h-3">
+                                <div class="w-3 bg-slate-100 rounded-sm"></div>
+                                <div class="w-3 bg-indigo-200 rounded-sm"></div>
+                                <div class="w-3 bg-indigo-400 rounded-sm"></div>
+                                <div class="w-3 bg-indigo-600 rounded-sm"></div>
+                                <div class="w-3 bg-indigo-800 rounded-sm"></div>
+                            </div>
+                            <span>More</span>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Breakdown Area -->
+                    <div class="card p-6">
+                        <h4 class="font-bold text-slate-800 mb-4">Revenue Breakdown</h4>
+                        <div class="h-48 w-full">
+                            <canvas id="stackedRevChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            </section>
         </main>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-slate-900/50 backdrop-blur-sm transition-opacity" onclick="closeReportModal()">
+        </div>
+        <div
+            class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-xl shadow-2xl animate-fade-in overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="font-bold text-lg">Generate Report</h3>
+                <button onclick="closeReportModal()"><i data-lucide="x" size="20" class="text-slate-400"></i></button>
+            </div>
+            <div class="p-6 space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Report Type</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label
+                            class="border p-3 rounded-lg cursor-pointer hover:bg-indigo-50 hover:border-indigo-300 transition-all peer-checked:bg-indigo-50">
+                            <input type="radio" name="rpt-type" class="mr-2" checked> Full Summary
+                        </label>
+                        <label
+                            class="border p-3 rounded-lg cursor-pointer hover:bg-indigo-50 hover:border-indigo-300 transition-all">
+                            <input type="radio" name="rpt-type" class="mr-2"> Retention Only
+                        </label>
+                        <label
+                            class="border p-3 rounded-lg cursor-pointer hover:bg-indigo-50 hover:border-indigo-300 transition-all">
+                            <input type="radio" name="rpt-type" class="mr-2"> Financials
+                        </label>
+                        <label
+                            class="border p-3 rounded-lg cursor-pointer hover:bg-indigo-50 hover:border-indigo-300 transition-all">
+                            <input type="radio" name="rpt-type" class="mr-2"> Custom
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Format</label>
+                    <select
+                        class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-100 focus:border-indigo-500">
+                        <option>PDF Document</option>
+                        <option>Excel Spreadsheet</option>
+                        <option>PowerPoint Presentation</option>
+                    </select>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="email-copy"
+                        class="rounded text-indigo-600 focus:ring-indigo-500 border-gray-300">
+                    <label for="email-copy" class="text-sm text-slate-600">Send a copy to my email
+                        (robin@example.com)</label>
+                </div>
+            </div>
+            <div class="p-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3">
+                <button class="btn btn-outline-secondary" onclick="closeReportModal()">Cancel</button>
+                <button class="btn btn-primary"
+                    onclick="closeReportModal(); alert('Report generation started!')">Generate Report</button>
+            </div>
+        </div>
     </div>
 
     <script src="js/data.js"></script>
     <script src="js/main.js"></script>
     <script>
-        feather.replace();
+        lucide.createIcons();
+
+        // --- 1. Top Chart (Revenue vs Orders) ---
+        const ctxRows = document.getElementById('revOrderChart').getContext('2d');
+
+        // Data Gen
+        const labels30d = Array.from({ length: 30 }, (_, i) => {
+            const d = new Date();
+            d.setDate(d.getDate() - (29 - i));
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        });
+        const revData = labels30d.map(() => Math.floor(Math.random() * (50000 - 30000) + 30000));
+        const orderData = labels30d.map(() => Math.floor(Math.random() * (80 - 40) + 40));
+
+        new Chart(ctxRows, {
+            type: 'line',
+            data: {
+                labels: labels30d,
+                datasets: [
+                    {
+                        label: 'Revenue (₹)',
+                        data: revData,
+                        yAxisID: 'y',
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 6
+                    },
+                    {
+                        label: 'Orders',
+                        data: orderData,
+                        yAxisID: 'y1',
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        borderDash: [5, 5], // Dashed for style distinction
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: false }, // Custom legend used
+                    tooltip: {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        titleColor: '#fff',
+                        bodyColor: '#cbd5e1',
+                        padding: 12,
+                        displayColors: true,
+                        callbacks: {
+                            label: (ctx) => {
+                                let label = ctx.dataset.label || '';
+                                let value = ctx.parsed.y;
+                                if (label.includes('Revenue')) return label + ': ₹' + value.toLocaleString();
+                                return label + ': ' + value;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { font: { size: 10 }, maxTicksLimit: 10 } },
+                    y: {
+                        type: 'linear', display: true, position: 'left', grid: { color: '#f1f5f9' },
+                        ticks: { callback: (val) => '₹' + (val / 1000) + 'k' }
+                    },
+                    y1: {
+                        type: 'linear', display: true, position: 'right', grid: { display: false },
+                        min: 0
+                    }
+                }
+            }
+        });
+
+        // --- 2. Cohort Logic ---
+        const cohorts = [
+            { name: 'Jul 2024', users: 1240, m1: 100, m2: 76, m3: 63, m4: 55, m5: 48, m6: 42 },
+            { name: 'Aug 2024', users: 1350, m1: 100, m2: 73, m3: 60, m4: 52, m5: 45, m6: null },
+            { name: 'Sep 2024', users: 1420, m1: 100, m2: 70, m3: 58, m4: 50, m5: null, m6: null },
+            { name: 'Oct 2024', users: 1580, m1: 100, m2: 65, m3: 45, m4: null, m5: null, m6: null },
+            { name: 'Nov 2024', users: 1800, m1: 100, m2: 68, m3: null, m4: null, m5: null, m6: null },
+            { name: 'Dec 2024', users: 2100, m1: 100, m2: null, m3: null, m4: null, m5: null, m6: null }
+        ];
+
+        const getBgColor = (pct) => {
+            if (pct === null) return 'bg-slate-50';
+            if (pct >= 80) return 'bg-green-600 text-white';
+            if (pct >= 60) return 'bg-green-400 text-white';
+            if (pct >= 40) return 'bg-yellow-300 text-yellow-900';
+            if (pct >= 20) return 'bg-orange-300 text-orange-900';
+            return 'bg-red-300 text-red-900';
+        };
+
+        const cohortBody = document.getElementById('cohort-body');
+        cohorts.forEach(c => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="p-4 text-left font-medium text-slate-700 sticky left-0 bg-white border-r border-slate-100">${c.name}</td>
+                <td class="p-4 text-slate-500">${c.users.toLocaleString()}</td>
+                ${[c.m1, c.m2, c.m3, c.m4, c.m5, c.m6].map(val => `
+                    <td class="p-1">
+                        <div class="w-full h-10 flex items-center justify-center rounded text-xs font-bold heatmap-cell ${getBgColor(val)}" title="${val ? val + '%' : 'N/A'}">
+                            ${val !== null ? val + '%' : '<span class="text-slate-200">-</span>'}
+                        </div>
+                    </td>
+                `).join('')}
+            `;
+            cohortBody.appendChild(tr);
+        });
+
+        // --- 3. Churn Donut Chart ---
+        new Chart(document.getElementById('churnChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Price', 'Alternative', 'Features', 'Support', 'Other'],
+                datasets: [{
+                    data: [35, 28, 22, 10, 5],
+                    backgroundColor: ['#EF4444', '#F59E0B', '#3B82F6', '#10B981', '#64748B'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                cutout: '75%',
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // --- 4. CLV Bar Chart ---
+        new Chart(document.getElementById('clvChart'), {
+            type: 'bar',
+            data: {
+                labels: cohorts.map(c => c.name),
+                datasets: [{
+                    label: 'CLV (₹)',
+                    data: [12000, 13500, 14200, 15000, 16800, 18450],
+                    backgroundColor: '#3B82F6',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { grid: { display: false }, ticks: { display: false } },
+                    x: { grid: { display: false } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // --- 5. Revenue Breakdown Area ---
+        new Chart(document.getElementById('stackedRevChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                    {
+                        label: 'New',
+                        data: [20, 25, 22, 30, 35, 45],
+                        backgroundColor: '#10B981',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 0,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'Returning',
+                        data: [50, 55, 60, 65, 70, 80],
+                        backgroundColor: '#3B82F6',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 0,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'Upsell',
+                        data: [10, 12, 15, 18, 22, 28],
+                        backgroundColor: '#8B5CF6',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 0,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { x: { display: false }, y: { display: false } },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // --- 6. Usage Heatmap Generation (Grid) ---
+        const heatmapContainer = document.getElementById('usage-heatmap');
+        for (let i = 0; i < 84; i++) { // 7 days * 12 weeks approx
+            const div = document.createElement('div');
+            div.className = 'w-full pt-[100%] rounded-sm relative';
+            // Random intensity
+            const int = Math.random();
+            let color = 'bg-slate-100';
+            if (int > 0.3) color = 'bg-indigo-200';
+            if (int > 0.6) color = 'bg-indigo-400';
+            if (int > 0.8) color = 'bg-indigo-600';
+            if (int > 0.95) color = 'bg-indigo-800';
+
+            div.classList.add(color);
+            heatmapContainer.appendChild(div);
+        }
+
+        // --- Modal & Logic ---
+        function openReportModal() {
+            document.getElementById('export-modal').classList.remove('hidden');
+        }
+        function closeReportModal() {
+            document.getElementById('export-modal').classList.add('hidden');
+        }
+        function updateRange(range) {
+            const label = {
+                '7d': 'Last 7 Days',
+                '30d': 'Last 30 Days',
+                '90d': 'Last 90 Days',
+                '1y': 'Last Year'
+            }[range];
+            document.getElementById('date-range-label').innerText = label;
+            // Here we would reload charts with new data range
+        }
     </script>
 </body>
 

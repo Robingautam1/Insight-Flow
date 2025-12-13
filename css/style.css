@@ -834,6 +834,36 @@ button {
     animation: float 6s ease-in-out infinite;
 }
 
+.sticky-filters {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+[data-theme="dark"] .sticky-filters {
+    background: rgba(15, 23, 42, 0.9);
+}
+
+.chart-container-responsive {
+    position: relative;
+    height: 350px;
+    width: 100%;
+}
+
+.heatmap-cell {
+    transition: all 0.2s ease;
+}
+
+.heatmap-cell:hover {
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
 @keyframes pulse-green {
 
     0%,
