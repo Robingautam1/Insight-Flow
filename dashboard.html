@@ -5,95 +5,227 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InsightFlow — Ultimate Dashboard</title>
-    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
 
-    <!-- Styles & Fonts -->
+    <!-- CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
 
-    <!-- Dependencies with Error Handlers -->
-    <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
-    <!-- Try Recharts 2.1.0 which is known to have stable UMD -->
-    <script src="https://unpkg.com/recharts@2.1.0/umd/Recharts.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: #f8fafc;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: { primary: '#3B82F6', secondary: '#6366F1' },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    animation: {
-                        'fade-in': 'fadeIn 0.5s ease-out',
-                        'slide-in': 'slideIn 0.3s ease-out',
-                        'bounce-slight': 'bounceSlight 1s infinite'
-                    },
-                    keyframes: {
-                        fadeIn: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-                        slideIn: { '0%': { transform: 'translateX(100%)' }, '100%': { transform: 'translateX(0)' } }
-                    }
-                }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
             }
         }
-    </script>
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+
+    <!-- Dependencies (UMD) -->
+    <script src="https://unpkg.com/react@18.2.0/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
+    <script src="https://unpkg.com/recharts@2.10.3/umd/Recharts.js"></script>
+    <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="bg-slate-50 text-slate-900 font-sans overflow-hidden">
-    <div class="flex h-screen w-full">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-20 shadow-sm">
-            <div class="p-6">
-                <a href="index.html" class="flex items-center gap-2 text-2xl font-bold text-slate-800">
-                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white"><i
-                            data-lucide="activity"></i></div>
-                    <span>Insight<span class="text-blue-600">Flow</span></span>
-                </a>
-            </div>
-            <nav class="flex-1 px-4 space-y-1">
-                <a href="dashboard.html"
-                    class="flex items-center gap-3 px-4 py-3 text-blue-600 bg-blue-50 rounded-xl font-medium transition-colors">
-                    <i data-lucide="layout-grid" size="20"></i> Dashboard
-                </a>
-                <a href="analytics.html"
-                    class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition-colors">
-                    <i data-lucide="bar-chart-2" size="20"></i> Analytics
-                </a>
-                <a href="data.html"
-                    class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition-colors">
-                    <i data-lucide="database" size="20"></i> Data Sources
-                </a>
-                <a href="settings.html"
-                    class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-xl font-medium transition-colors">
-                    <i data-lucide="settings" size="20"></i> Settings
-                </a>
-            </nav>
-            <div class="p-4 mt-auto">
-                <div class="bg-slate-900 text-white rounded-xl p-4 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-3 opacity-10"><i data-lucide="zap" size="48"></i></div>
-                    <h4 class="font-bold relative z-10">Pro Plan</h4>
-                    <p class="text-xs text-slate-400 mb-3 relative z-10">12 days remaining</p>
-                    <button
-                        class="w-full py-2 bg-blue-600 hover:bg-blue-500 rounded-lg text-xs font-bold transition-colors relative z-10">Upgrade
-                        Now</button>
-                </div>
-            </div>
-        </aside>
+<body>
 
-        <!-- Main Content -->
-        <main id="react-root" class="flex-1 relative flex flex-col h-full overflow-hidden bg-slate-50/50">
-            <div class="flex items-center justify-center h-full text-slate-400">Loading Dashboard System...</div>
-        </main>
+    <!-- Loading Screen -->
+    <div id="loader" class="loading-overlay">
+        <div class="spinner"></div>
+        <div class="mt-4 text-slate-500 font-medium text-sm">Initializing Dashboard...</div>
+        <div id="debug-log" class="mt-2 text-xs text-slate-400 font-mono"></div>
     </div>
 
-    <script src="js/dashboard-no-jsx.js"></script>
+    <!-- App Root -->
+    <div id="react-root" class="h-screen w-full flex overflow-hidden"></div>
+
+    <!-- Application Logic -->
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            if (window.lucide) window.lucide.createIcons();
-        });
+        // Debug Logger
+        const debug = (msg) => {
+            console.log('[Dashboard]', msg);
+            const logEl = document.getElementById('debug-log');
+            if (logEl) logEl.textContent = msg;
+        };
+
+        debug("Starting Scripts...");
+
+        // Ensure dependencies
+        if (!window.React || !window.ReactDOM || !window.htm) {
+            alert("Critical Error: React dependencies failed to load. Please check your connection.");
+        }
+
+        const { useState, useEffect, useMemo } = React;
+        const html = htm.bind(React.createElement);
+
+        // Safe Recharts Access
+        const RC = window.Recharts || {};
+        const {
+            AreaChart, Area, LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, ComposedChart,
+            XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
+        } = RC;
+
+        // --- Icon Component ---
+        const Icon = ({ name, size = 18, color, className = "" }) => {
+            const lucide = window.lucide || {};
+            if (!lucide.icons || !lucide.icons[name]) return null;
+
+            const [tag, attrs, children] = lucide.icons[name];
+
+            const createKids = (list) => list.map(([t, a], i) => React.createElement(t, { ...a, key: i }));
+
+            return React.createElement(tag, {
+                ...attrs,
+                width: size,
+                height: size,
+                stroke: color || "currentColor",
+                className: `lucide lucide-${name} ${className}`
+            }, createKids(children));
+        };
+
+        // --- Mock Data ---
+        const generateData = (count = 30) => Array.from({ length: count }, (_, i) => ({
+            date: new Date(Date.now() - (count - i) * 86400000).toLocaleDateString('en-US', { day: 'numeric', month: 'short' }),
+            revenue: Math.floor(Math.random() * 20000) + 10000,
+            previous: Math.floor(Math.random() * 15000) + 8000
+        }));
+
+        // --- Components ---
+        const MetricCard = ({ title, value, change, icon, color }) => html`
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 rounded-xl bg-${color}-50 text-${color}-600">
+                        <${Icon} name=${icon} size=${24} />
+                    </div>
+                    <span class="text-xs font-bold px-2 py-1 rounded-full bg-green-50 text-green-600">${change}</span>
+                </div>
+                <div class="text-slate-500 text-sm font-medium mb-1">${title}</div>
+                <div class="text-2xl font-bold text-slate-800">${value}</div>
+            </div>
+        `;
+
+        const Sidebar = () => html`
+            <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-20">
+                <div class="p-6">
+                    <div class="flex items-center gap-2 text-xl font-bold text-slate-800">
+                        <div class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center">
+                            <${Icon} name="activity" size=${20} />
+                        </div>
+                        InsightFlow
+                    </div>
+                </div>
+                <nav class="flex-1 px-4 space-y-1">
+                    <a href="dashboard.html" class="flex items-center gap-3 px-4 py-3 bg-blue-50 text-blue-600 rounded-xl font-medium"><${Icon} name="layout-grid" size=${20} /> Dashboard</a>
+                    <a href="analytics.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium"><${Icon} name="bar-chart-2" size=${20} /> Analytics</a>
+                    <a href="data.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium"><${Icon} name="database" size=${20} /> Data Sources</a>
+                    <a href="settings.html" class="flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-50 rounded-xl font-medium"><${Icon} name="settings" size=${20} /> Settings</a>
+                </nav>
+            </aside>
+        `;
+
+        const Dashboard = () => {
+            const [data] = useState(generateData(30));
+
+            return html`
+                <div class="flex h-full bg-slate-50/50 w-full">
+                    <${Sidebar} />
+                    <div class="flex-1 flex flex-col h-full overflow-hidden">
+                        <!-- Header -->
+                        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-10">
+                            <h1 class="text-lg font-bold text-slate-800">Dashboard</h1>
+                            <div class="flex items-center gap-4">
+                                <button class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200"><${Icon} name="bell" size=${18} /></button>
+                                <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white flex items-center justify-center text-xs font-bold">JD</div>
+                            </div>
+                        </header>
+
+                        <!-- Content -->
+                        <div class="flex-1 overflow-y-auto p-6">
+                            <!-- Metrics -->
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                                <${MetricCard} title="Total Revenue" value="₹12.4L" change="+12%" icon="dollar-sign" color="blue" />
+                                <${MetricCard} title="Active Users" value="1,240" change="+5%" icon="users" color="green" />
+                                <${MetricCard} title="New Orders" value="356" change="+8%" icon="shopping-bag" color="purple" />
+                                <${MetricCard} title="Bounce Rate" value="42%" change="-2%" icon="activity" color="orange" />
+                            </div>
+
+                            <!-- Chart -->
+                            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm mb-8 h-[400px]">
+                                <h3 class="text-lg font-bold text-slate-800 mb-4">Revenue Trends</h3>
+                                ${RC.AreaChart
+                    ? html`
+                                        <${ResponsiveContainer} width="100%" height="100%">
+                                            <${AreaChart} data=${data}>
+                                                <${RC.defs}>
+                                                    <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                                                        <stop offset="5%" stopColor="#3B82F6" stopOpacity=${0.3}/>
+                                                        <stop offset="95%" stopColor="#3B82F6" stopOpacity=${0}/>
+                                                    </linearGradient>
+                                                </${RC.defs}>
+                                                <${CartesianGrid} strokeDasharray="3 3" vertical=${false} />
+                                                <${XAxis} dataKey="date" />
+                                                <${YAxis} />
+                                                <${Tooltip} />
+                                                <${Area} type="monotone" dataKey="revenue" stroke="#3B82F6" fill="url(#colorRev)" strokeWidth=${3} />
+                                            </${AreaChart}>
+                                        </${ResponsiveContainer}>`
+                    : html`<div class="flex items-center justify-center h-full text-red-500">Chart Library Failed to Load</div>`
+                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        // --- Mount ---
+        debug("Mounting App...");
+        try {
+            const root = ReactDOM.createRoot(document.getElementById('react-root'));
+            root.render(html`<${Dashboard} />`);
+
+            // Hide loader after short delay to smooth transition
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                debug("Mounted Successfully.");
+            }, 500);
+
+        } catch (e) {
+            debug("Error: " + e.message);
+            document.getElementById('react-root').innerHTML = `<div class="p-10 text-red-600 font-bold">App Crash: ${e.message}</div>`;
+        }
     </script>
 </body>
 
