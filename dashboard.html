@@ -108,7 +108,9 @@
             const html = htm.bind(React.createElement);
 
             // Safe Recharts Access
-            const RC = window.Recharts || window.Recharts.default || {};
+            const RC = window.Recharts; // UMD build exposes 'Recharts' directly on window
+            if (!RC) throw new Error("Recharts library not loaded");
+
             const {
                 AreaChart, Area, LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, ComposedChart,
                 XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Brush
